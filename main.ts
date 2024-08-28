@@ -1,6 +1,12 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, requestUrl } from 'obsidian';
+import Anthropic from "@anthropic-ai/sdk";
+import axios from 'axios';
+import * as https from 'https';
 
-// Remember to rename these classes and interfaces!
+
+
+
+import { prompt } from './prompt';
 
 interface MyPluginSettings {
 	anthropicKey: string;
@@ -11,7 +17,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 }
 
 const getNamesToBacklinkFromFileContent = (t: string): string[] => {
-	const splitted = t.split("[[").map(s => s.split('|')[0].split(']]')[0]);
+	const splitted = t.split("[[").map(s => s.replace(/\\/g, "").split('|')[0].split(']]')[0]);
 	splitted.shift();
 	return splitted;
 }
@@ -46,6 +52,48 @@ export default class MyPlugin extends Plugin {
 				}
 			}
 		});
+
+		this.addCommand({
+			id: 'log-to-file',
+			name: 'dumps log to the current file',
+			editorCallback: async (editor: Editor, view: MarkdownView) => {
+				const file = view.file;
+
+				if (!file) {
+					new Notice('No file is currently open.');
+					return;
+				}
+
+				// // let a1 = 'woah';
+
+
+				// fetchUsingNodeHttps('verkaufen')
+				// 	.then(response => { a1 = JSON.stringify(response) })
+				// 	.catch(error => { a1 = JSON.stringify(error) });
+				
+					const a = await this.fetchTemplate1('verkaufen');
+
+
+				const appendContent = `\n\n${a}`; // Content to append const
+
+				try {
+					// Read the current content of the file
+					const currentContent = await this.app.vault.read(file);
+
+					// Append the new content
+					const newContent = currentContent + appendContent;
+
+					// Write the updated content back to the file
+					await this.app.vault.modify(file, newContent);
+
+					new Notice('Content appended to the current file successfully!');
+				} catch (error) {
+					new Notice(`Error appending to file: ${error.message}`);
+				}
+
+			}
+		});
+
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new SampleSettingTab(this.app, this));
@@ -113,6 +161,183 @@ export default class MyPlugin extends Plugin {
 
 		return null;
 	}
+
+	async fetchTemplate1(word: string) {
+		const url = 'https://api.anthropic.com/v1/messages';
+	
+		const headers = {
+			'Content-Type': 'application/json',
+			'x-api-key': this.settings.anthropicKey,
+			'anthropic-version': '2023-06-01',
+			// 'anthropic-beta': 'prompt-caching-2024-07-31'
+		};
+	
+		const body = {
+			"model": "claude-3-haiku-20240307",
+			"max_tokens": 1024,
+			// "system": [
+			// 	{
+			// 		"type": "text",
+			// 		"text": "test",
+			// 		"cache_control": { "type": "ephemeral" }
+			// 	}
+			// ],
+			"messages": [
+				{
+					"role": "user",
+					"content": word,
+				}
+			]
+		};
+
+		const other = {
+			method: 'POST',
+			headers: headers,
+			body: JSON.stringify(body)
+		};
+
+
+	
+		try {
+
+			const response = await requestUrl(		{
+				url,
+				method: 'POST',
+				contentType: "application/json",
+				body: JSON.stringify(body),
+				headers,
+			});
+
+			return JSON.stringify(response);
+		} catch (error) {
+			return error + '\n\n' + JSON.stringify(other);
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async fetchTemplate(word: string) {
+		const url = 'https://api.anthropic.com/v1/messages';
+	
+		const headers = {
+			'Content-Type': 'application/json',
+			'x-api-key': this.settings.anthropicKey,
+			'anthropic-version': '2023-06-01',
+			// 'anthropic-beta': 'prompt-caching-2024-07-31'
+		};
+	
+		const body = {
+			"model": "claude-3-haiku-20240307",
+			"max_tokens": 1024,
+			// "system": [
+			// 	{
+			// 		"type": "text",
+			// 		"text": "test",
+			// 		"cache_control": { "type": "ephemeral" }
+			// 	}
+			// ],
+			"messages": [
+				{
+					"role": "user",
+					"content": word,
+				}
+			]
+		};
+
+		const other = {
+			method: 'POST',
+			headers: headers,
+			body: JSON.stringify(body)
+		};
+	
+		try {
+
+			const response = await fetch(url, other);
+
+			return JSON.stringify(response) + '\n\n' + JSON.stringify(other);
+	
+			if (!response.ok) {
+				return response;
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+	
+			const data = await response.json();
+			console.log('Response data:', data);
+			return data;
+		} catch (error) {
+			return error + '\n\n' + JSON.stringify(other);
+			console.error('Error fetching data:', error);
+		}
+	}
+
+
+	async  fetchAxios(str: string) {
+    const url = 'https://api.anthropic.com/v1/messages';
+
+    const body = {
+        "model": "claude-3-haiku-20240307",
+        "max_tokens": 1024,
+        // "system": [
+        //     {
+        //         "type": "text",
+        //         "text": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n"
+        //     },
+        //     {
+        //         "type": "text",
+        //         "text": "<the entire contents of Pride and Prejudice>",
+        //         "cache_control": { "type": "ephemeral" }
+        //     }
+        // ],
+        "messages": [
+            {
+                "role": "user",
+                "content": str
+            }
+        ]
+    };
+
+    try {
+        const response = await axios.post(url, body, {
+            headers: {
+                'content-type': 'application/json',
+                'x-api-key': this.settings.anthropicKey,
+                'anthropic-version': '2023-06-01',
+                // 'anthropic-beta': 'prompt-caching-2024-07-31'
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return JSON.stringify(error);
+    }
+}
+
+
+	async fetchAnthropicResponse(txt: string) {
+		const anthropic = new Anthropic();
+
+		const msg = await anthropic.messages.create({
+			model: "claude-3-haiku-20240307",
+			max_tokens: 1000,
+			temperature: 0,
+			system: prompt,
+			messages: [
+				{
+				"role": "user",
+				"content": [
+					{
+					"type": "text",
+					"text": txt,
+					}
+				]
+				}
+			]
+		});
+		return msg;
+	}
+	
+	// Example usage
+	// const apiKey = 'your-api-key-here';
+	// fetchAnthropicResponse(apiKey);
 }
 
 class SampleModal extends Modal {
@@ -156,3 +381,57 @@ class SampleSettingTab extends PluginSettingTab {
 				}));
 	}
 }
+
+
+
+
+
+async function fetchUsingNodeHttps(str: string) {
+    const options = {
+        hostname: 'api.anthropic.com',
+        path: '/v1/messages',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': this.plugin.settings.anthropicKey,
+            'anthropic-version': '2023-06-01'
+        }
+    };
+
+    const body = JSON.stringify({
+        "model": "claude-3-haiku-20240307",
+        "max_tokens": 1024,
+        "messages": [
+            {
+                "role": "user",
+                "content": str
+            }
+        ]
+    });
+
+    return new Promise((resolve, reject) => {
+        const req = https.request(options, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                resolve(JSON.parse(data));
+            });
+        });
+
+        req.on('error', (error) => {
+            reject(error);
+        });
+
+        req.write(body);
+        req.end();
+    });
+}
+
+// Usage example
+fetchUsingNodeHttps('verkaufen')
+    .then(response => console.log('Response:', response))
+    .catch(error => console.error('Error:', error));
