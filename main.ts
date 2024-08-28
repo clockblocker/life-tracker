@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
@@ -10,61 +10,42 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 	anthropicKey: ''
 }
 
+const getNamesToBacklinkFromFileContent = (t: string): string[] => {
+	const splitted = t.split("[[").map(s => s.split('|')[0].split(']]')[0]);
+	splitted.shift();
+	return splitted;
+}
+
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
+	
 
 	async onload() {
 		await this.loadSettings();
 
-		// This creates an icon in the left ribbon.
-		// const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
-		// 	// Called when the user clicks the icon.
-		// 	new Notice('This is a notice!');
-		// });
-		// // Perform additional things with the ribbon
-		// ribbonIconEl.addClass('my-plugin-ribbon-class');
-
-		// // This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		// const statusBarItemEl = this.addStatusBarItem();
-		// statusBarItemEl.setText('Status Bar Text');
-
-		// This adds a simple command that can be triggered anywhere
-		// this.addCommand({
-		// 	id: 'open-sample-modal-simple',
-		// 	name: 'Open sample modal (simple)',
-		// 	callback: () => {
-		// 		new SampleModal(this.app).open();
-		// 	}
-		// });
-		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
-			id: 'sample-editor-command',
-			name: 'Sample editor command',
-			editorCallback: (editor: Editor, view: MarkdownView) => {
-				
-				console.log(editor.getDoc());
-				editor.replaceSelection(`value: , editor.getDoc().getValue()`);
+			id: 'backlink-all-to-current-file',
+			name: 'Add backlinks to the current file in all referenced files',
+			editorCallback: async (editor: Editor, view: MarkdownView) => {
+				const currentFileName = view.file?.name;
+				if (!currentFileName) {
+					new Notice('Current file is missing a title');
+					return;
+				} 
+
+				const contents = view.data;
+				const namesToBacklink = getNamesToBacklinkFromFileContent(contents);
+
+				for (const name of namesToBacklink) {
+					const path = `files/${name}.md`; // Specify the desired file name
+
+					const backlink = `[[${currentFileName.split('.')[0]}]]`; // Specify the content
+					if (!await this.doesFileContainContent(path, backlink)) {
+						await this.appendToFile(path, backlink)
+					}
+				}
 			}
 		});
-		// This adds a complex command that can check whether the current state of the app allows execution of the command
-		// this.addCommand({
-		// 	id: 'open-sample-modal-complex',
-		// 	name: 'Open sample modal (complex)',
-		// 	checkCallback: (checking: boolean) => {
-		// 		// Conditions to check
-		// 		const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		// 		if (markdownView) {
-		// 			// If checking is true, we're simply "checking" if the command can be run.
-		// 			// If checking is false, then we want to actually perform the operation.
-		// 			if (!checking) {
-		// 				new SampleModal(this.app).open();
-		// 			}
-
-		// 			// This command will only show up in Command Palette when the check function returns true
-		// 			return true;
-		// 		}
-		// 	}
-		// });
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new SampleSettingTab(this.app, this));
@@ -89,6 +70,48 @@ export default class MyPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	async appendToFile(path: string, content: string) {
+		const abstractFile = this.app.vault.getAbstractFileByPath(path);
+		
+		if (abstractFile) {
+			if (abstractFile instanceof TFile) {
+				try {
+					const currentContent = await this.app.vault.read(abstractFile);
+	
+					const newContent = currentContent + content;
+	
+					await this.app.vault.modify(abstractFile, newContent);
+	
+					new Notice(`Content appended to ${path} successfully!`);
+				} catch (error) {
+					new Notice(`Error appending to file: ${error.message}`);
+				}
+			} else {
+				new Notice(`File ${path} does not exist or is not a valid file!`);
+			}
+		} else {
+			try {
+				await this.app.vault.create(path, content);
+				new Notice(`File ${path} created successfully!`);
+			} catch (error) {
+				new Notice(`Error creating file: ${error.message}`);
+			}
+		}
+	}
+
+	async doesFileContainContent(path: string, content: string): Promise<boolean | null> {
+		const abstractFile = this.app.vault.getAbstractFileByPath(path);
+		
+		if (abstractFile) {
+			if (abstractFile instanceof TFile) {
+				const currentContent = await this.app.vault.read(abstractFile);
+				return currentContent.includes(content);
+			} 
+		}
+
+		return null;
 	}
 }
 
