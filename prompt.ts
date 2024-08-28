@@ -39,14 +39,15 @@ Morpheme: [[an]][[ruf]][[en]]
 #Verb #Trennbar
 
 ---
+
 | Person | Präsens | Präteritum | Imperativ | Konjunktiv I | Konjunktiv II |
 | --------- | ------------------- | --------------------- | --------------------------- | --------------------- | ----------------------- |
-| Ich | [[rufe an\|rufe]] | [[rief an\|rief]] | - | [[rufe an\|rufe]] | [[riefe an\|riefe]] |
-| Du | [[rufst an\|rufst]] | [[riefst an\|riefst]] | [[ruf an\|ruf]] | [[rufest an\|rufest]] | [[riefest an\|riefest]] |
-| Er/sie/es | [[ruft an\|ruft]] | [[rief an\|rief]] | - | [[rufe an\|rufe]] | [[riefe an\|riefe]] |
-| Wir | [[rufen an\|rufen]] | [[riefen an\|riefen]] | - | [[rufen an\|rufen]] | [[riefen an\|riefen]] |
-| Ihr | [[ruft an\|ruft]] | [[rieft an\|rieft]] | [[ruft an\|ruft]] | [[rufet an\|rufet]] | [[riefet an\|riefet]] |
-| Sie | [[rufen an\|rufen]] | [[riefen an\|riefen]] | [[rufen Sie an\|rufen Sie]] | [[rufen an\|rufen]] | [[riefen an\|riefen]] |
+| Ich | [[rufe an]] | [[rief an]] | - | [[rufe an]] | [[riefe an]] |
+| Du | [[rufst an]] | [[riefst an]] | [[ruf an]] | [[rufest an]] | [[riefest an]] |
+| Er/sie/es | [[ruft an]] | [[rief an]] | - | [[rufe an]] | [[riefe an]] |
+| Wir | [[rufen an]] | [[riefen an]] | - | [[rufen an]] | [[riefen an]] |
+| Ihr | [[ruft an]] | [[rieft an]] | [[ruft an]] | [[rufet an]] | [[riefet an]] |
+| Sie | [[rufen an]] | [[riefen an]] | [[rufen Sie an Sie]] | [[rufen an]] | [[riefen an]] |
 
 Partizip I: [[anrufend]], Partizip II: [[angerufen]]
 [[anrufen]] - [[an]] = [[rufen]]
@@ -75,6 +76,7 @@ Morpheme: [[be]][[komm]][[en]]
 #Verb #Untrennbar
 
 ---
+
 | Person | Präsens | Präteritum | Imperativ | Konjunktiv I | Konjunktiv II |
 | --------- | -------------------- | --------------------- | ----------------- | ---------------------- | ----------------------- |
 | Ich | [[bekomme]] | [[bekam]] | - | [[bekomme]] | [[bekäme]] |

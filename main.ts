@@ -57,39 +57,37 @@ export default class MyPlugin extends Plugin {
 			id: 'log-to-file',
 			name: 'dumps log to the current file',
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
-				const file = view.file;
+				const currentFileName = view.file?.name;
 
-				if (!file) {
-					new Notice('No file is currently open.');
+				if (!currentFileName) {
+					new Notice('Current file is missing a title');
 					return;
+				} 
+
+				const a = await this.fetchTemplate1(currentFileName);
+				const filledTemplate = (JSON.parse(a) as any)?.['json']?.["content"]?.[0]?.["text"]
+
+				let appendContent = ``; // Content to append const
+
+				if (filledTemplate) {
+					appendContent = filledTemplate;
+				} else {
+					appendContent = (JSON.parse(a) as any)?.['json']?.["content"]?.[0]?.["text"];
 				}
 
-				// // let a1 = 'woah';
+				view?.file?.path && this.appendToFile(view.file.path, appendContent);
 
+				// try {
+				// 	// const currentContent = await this.app.vault.read(file);
 
-				// fetchUsingNodeHttps('verkaufen')
-				// 	.then(response => { a1 = JSON.stringify(response) })
-				// 	.catch(error => { a1 = JSON.stringify(error) });
-				
-					const a = await this.fetchTemplate1('verkaufen');
+				// 	const newContent = currentContent + appendContent;
 
+				// 	await this.app.vault.modify(file, newContent);
 
-				const appendContent = `\n\n${a}`; // Content to append const
-
-				try {
-					// Read the current content of the file
-					const currentContent = await this.app.vault.read(file);
-
-					// Append the new content
-					const newContent = currentContent + appendContent;
-
-					// Write the updated content back to the file
-					await this.app.vault.modify(file, newContent);
-
-					new Notice('Content appended to the current file successfully!');
-				} catch (error) {
-					new Notice(`Error appending to file: ${error.message}`);
-				}
+				// 	new Notice('Content appended to the current file successfully!');
+				// } catch (error) {
+				// 	new Notice(`Error appending to file: ${error.message}`);
+				// }
 
 			}
 		});
@@ -127,11 +125,9 @@ export default class MyPlugin extends Plugin {
 			if (abstractFile instanceof TFile) {
 				try {
 					const currentContent = await this.app.vault.read(abstractFile);
-	
 					const newContent = currentContent + content;
 	
 					await this.app.vault.modify(abstractFile, newContent);
-	
 					new Notice(`Content appended to ${path} successfully!`);
 				} catch (error) {
 					new Notice(`Error appending to file: ${error.message}`);
@@ -169,19 +165,19 @@ export default class MyPlugin extends Plugin {
 			'Content-Type': 'application/json',
 			'x-api-key': this.settings.anthropicKey,
 			'anthropic-version': '2023-06-01',
-			// 'anthropic-beta': 'prompt-caching-2024-07-31'
+			'anthropic-beta': 'prompt-caching-2024-07-31'
 		};
 	
 		const body = {
 			"model": "claude-3-haiku-20240307",
 			"max_tokens": 1024,
-			// "system": [
-			// 	{
-			// 		"type": "text",
-			// 		"text": "test",
-			// 		"cache_control": { "type": "ephemeral" }
-			// 	}
-			// ],
+			"system": [
+				{
+					"type": "text",
+					"text": prompt,
+					"cache_control": { "type": "ephemeral" }
+				}
+			],
 			"messages": [
 				{
 					"role": "user",
@@ -196,10 +192,7 @@ export default class MyPlugin extends Plugin {
 			body: JSON.stringify(body)
 		};
 
-
-	
 		try {
-
 			const response = await requestUrl(		{
 				url,
 				method: 'POST',
@@ -211,128 +204,7 @@ export default class MyPlugin extends Plugin {
 			return JSON.stringify(response);
 		} catch (error) {
 			return error + '\n\n' + JSON.stringify(other);
-			console.error('Error fetching data:', error);
 		}
-	}
-
-	async fetchTemplate(word: string) {
-		const url = 'https://api.anthropic.com/v1/messages';
-	
-		const headers = {
-			'Content-Type': 'application/json',
-			'x-api-key': this.settings.anthropicKey,
-			'anthropic-version': '2023-06-01',
-			// 'anthropic-beta': 'prompt-caching-2024-07-31'
-		};
-	
-		const body = {
-			"model": "claude-3-haiku-20240307",
-			"max_tokens": 1024,
-			// "system": [
-			// 	{
-			// 		"type": "text",
-			// 		"text": "test",
-			// 		"cache_control": { "type": "ephemeral" }
-			// 	}
-			// ],
-			"messages": [
-				{
-					"role": "user",
-					"content": word,
-				}
-			]
-		};
-
-		const other = {
-			method: 'POST',
-			headers: headers,
-			body: JSON.stringify(body)
-		};
-	
-		try {
-
-			const response = await fetch(url, other);
-
-			return JSON.stringify(response) + '\n\n' + JSON.stringify(other);
-	
-			if (!response.ok) {
-				return response;
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-	
-			const data = await response.json();
-			console.log('Response data:', data);
-			return data;
-		} catch (error) {
-			return error + '\n\n' + JSON.stringify(other);
-			console.error('Error fetching data:', error);
-		}
-	}
-
-
-	async  fetchAxios(str: string) {
-    const url = 'https://api.anthropic.com/v1/messages';
-
-    const body = {
-        "model": "claude-3-haiku-20240307",
-        "max_tokens": 1024,
-        // "system": [
-        //     {
-        //         "type": "text",
-        //         "text": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n"
-        //     },
-        //     {
-        //         "type": "text",
-        //         "text": "<the entire contents of Pride and Prejudice>",
-        //         "cache_control": { "type": "ephemeral" }
-        //     }
-        // ],
-        "messages": [
-            {
-                "role": "user",
-                "content": str
-            }
-        ]
-    };
-
-    try {
-        const response = await axios.post(url, body, {
-            headers: {
-                'content-type': 'application/json',
-                'x-api-key': this.settings.anthropicKey,
-                'anthropic-version': '2023-06-01',
-                // 'anthropic-beta': 'prompt-caching-2024-07-31'
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        return JSON.stringify(error);
-    }
-}
-
-
-	async fetchAnthropicResponse(txt: string) {
-		const anthropic = new Anthropic();
-
-		const msg = await anthropic.messages.create({
-			model: "claude-3-haiku-20240307",
-			max_tokens: 1000,
-			temperature: 0,
-			system: prompt,
-			messages: [
-				{
-				"role": "user",
-				"content": [
-					{
-					"type": "text",
-					"text": txt,
-					}
-				]
-				}
-			]
-		});
-		return msg;
 	}
 	
 	// Example usage
@@ -382,56 +254,3 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 }
 
-
-
-
-
-async function fetchUsingNodeHttps(str: string) {
-    const options = {
-        hostname: 'api.anthropic.com',
-        path: '/v1/messages',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': this.plugin.settings.anthropicKey,
-            'anthropic-version': '2023-06-01'
-        }
-    };
-
-    const body = JSON.stringify({
-        "model": "claude-3-haiku-20240307",
-        "max_tokens": 1024,
-        "messages": [
-            {
-                "role": "user",
-                "content": str
-            }
-        ]
-    });
-
-    return new Promise((resolve, reject) => {
-        const req = https.request(options, (res) => {
-            let data = '';
-
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            res.on('end', () => {
-                resolve(JSON.parse(data));
-            });
-        });
-
-        req.on('error', (error) => {
-            reject(error);
-        });
-
-        req.write(body);
-        req.end();
-    });
-}
-
-// Usage example
-fetchUsingNodeHttps('verkaufen')
-    .then(response => console.log('Response:', response))
-    .catch(error => console.error('Error:', error));
