@@ -1,11 +1,4 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, requestUrl } from 'obsidian';
-import Anthropic from "@anthropic-ai/sdk";
-import axios from 'axios';
-import * as https from 'https';
-
-
-
-
 import { prompt } from './prompt';
 
 interface MyPluginSettings {
@@ -43,11 +36,11 @@ export default class MyPlugin extends Plugin {
 				const namesToBacklink = getNamesToBacklinkFromFileContent(contents);
 
 				for (const name of namesToBacklink) {
-					const path = `files/${name}.md`; // Specify the desired file name
+					const path = `Worter/${name}.md`; // Specify the desired file name
 
 					const backlink = `[[${currentFileName.split('.')[0]}]]`; // Specify the content
 					if (!await this.doesFileContainContent(path, backlink)) {
-						await this.appendToFile(path, backlink)
+						await this.appendToFile(path, `, ${backlink}`)
 					}
 				}
 			}
@@ -76,19 +69,6 @@ export default class MyPlugin extends Plugin {
 				}
 
 				view?.file?.path && this.appendToFile(view.file.path, appendContent);
-
-				// try {
-				// 	// const currentContent = await this.app.vault.read(file);
-
-				// 	const newContent = currentContent + appendContent;
-
-				// 	await this.app.vault.modify(file, newContent);
-
-				// 	new Notice('Content appended to the current file successfully!');
-				// } catch (error) {
-				// 	new Notice(`Error appending to file: ${error.message}`);
-				// }
-
 			}
 		});
 
@@ -206,10 +186,6 @@ export default class MyPlugin extends Plugin {
 			return error + '\n\n' + JSON.stringify(other);
 		}
 	}
-	
-	// Example usage
-	// const apiKey = 'your-api-key-here';
-	// fetchAnthropicResponse(apiKey);
 }
 
 class SampleModal extends Modal {
