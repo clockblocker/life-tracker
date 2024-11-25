@@ -59,6 +59,25 @@ export class MyPlugin extends Plugin {
             }
         });
 
+        this.addCommand({
+            id: 'get-infinitive-and-emoji',
+            name: 'Get infinitive form and emoji for current word',
+            editorCallback: async (editor: Editor, view: MarkdownView) => {
+                const fileName = view.file?.name;
+                if (!fileName) {
+                    new Notice('Current file is missing a title');
+                    return;
+                }
+
+                const response = await this.apiService.determineInfinitiveAndEmoji(fileName);
+                const content = this.extractContentFromResponse(response);
+
+                if (content && view?.file?.path) {
+                    await this.fileService.appendToFile(view.file.path, content);
+                }
+            }
+        });
+
         this.addSettingTab(new SettingsTab(this.app, this));
     }
 

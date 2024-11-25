@@ -1,11 +1,19 @@
 import { requestUrl } from 'obsidian';
-import { prompt } from './prompt';
+import { prompts } from './prompts';
 import { MyPluginSettings } from './settings';
 
 export class ApiService {
     constructor(private settings: MyPluginSettings) {}
 
     async fetchTemplate(word: string) {
+        return this.makeRequest(word, prompts.generate_dictionary_entry);
+    }
+
+    async determineInfinitiveAndEmoji(word: string) {
+        return this.makeRequest(word, prompts.determine_infinitive_and_pick_emoji);
+    }
+
+    private async makeRequest(word: string, promptText: string) {
         const url = 'https://api.anthropic.com/v1/messages';
     
         const headers = {
@@ -21,7 +29,7 @@ export class ApiService {
             "system": [
                 {
                     "type": "text",
-                    "text": prompt,
+                    "text": promptText,
                     "cache_control": { "type": "ephemeral" }
                 }
             ],
