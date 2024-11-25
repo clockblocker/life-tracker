@@ -1,10 +1,11 @@
 import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
-import { SettingsTab, DEFAULT_SETTINGS, MyPluginSettings } from './settings';
+import { SettingsTab } from './settings';
+import { DEFAULT_SETTINGS, MyPluginSettings } from './types';
 import { ApiService } from './api';
 import { FileService } from './file';
 import { extractBacklinks } from './utils';
 
-export class MyPlugin extends Plugin {
+export default class MyPlugin extends Plugin {
     settings: MyPluginSettings;
     apiService: ApiService;
     fileService: FileService;

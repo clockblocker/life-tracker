@@ -1,6 +1,6 @@
 import { requestUrl } from 'obsidian';
 import { prompts } from './prompts';
-import { MyPluginSettings } from './settings';
+import { MyPluginSettings } from './types';
 
 export class ApiService {
     constructor(private settings: MyPluginSettings) {}

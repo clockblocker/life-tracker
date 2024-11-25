@@ -1,20 +1,9 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
-import { MyPlugin } from './main';
-
-export interface MyPluginSettings {
-    anthropicKey: string;
-}
-
-export const DEFAULT_SETTINGS: MyPluginSettings = {
-    anthropicKey: ''
-}
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { MyPluginSettings } from './types';
 
 export class SettingsTab extends PluginSettingTab {
-    plugin: MyPlugin;
-
-    constructor(app: App, plugin: MyPlugin) {
+    constructor(app: App, private plugin: Plugin & { settings: MyPluginSettings, saveSettings: () => Promise<void> }) {
         super(app, plugin);
-        this.plugin = plugin;
     }
 
     display(): void {
