@@ -50,7 +50,7 @@ Partizip I: [[anrufend]], Partizip II: [[angerufen]]
 
 For Untrennbares verbs and verbs without prefixis, use: 
 '''
-<pick appropriate emoji for this word>📦 [[bekommen]] + Akk, [bəˈkɔmən]
+<pick appropriate emoji for this word>[[bekommen]] + Akk, [bəˈkɔmən]
 [[bekam]]
 haben [[bekommen]]
 
@@ -148,12 +148,7 @@ Einzigartige mögliche Formen: [[Hauses]], [[Hause]], [[Häuser]], [[Häusern]]
 #Substantiv #Maskulin
 '''
 
-
 for other parts of speech, come up with a simmilar template and fill it in.
 
-Start every message with: "Prosessed the word [insert prosessed word]. Identified it as [insert PART OF SPEACH]."
-
 Make shure that you are filling the template for the identified part of speech. 
-Make shure that you are filling the template for the prosessed word. 
-
-PLEASE MAKE SHURE THAT IDENTIFIED PART OF SPEACH MATCHES THE TEMPLATE. IF UNSURE, WHICH PART OF SPEACH TO USE, PICK ONE THAT IS SPELLED EXACTLY LIKE GIVEN OR PLEASE FILL 2 SEPARATE TEMPLATES. YOU ARE GOOD AT THIS YOU CAN DO IT! `;
+Make shure that you are filling the template for the prosessed word.`;
