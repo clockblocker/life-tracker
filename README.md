@@ -1,23 +1,23 @@
-# Custom dictionary builder (Obsidin plugin)
+# Custom Dictionary Builder (Obsidian Plugin)
 
-Open the file with a german text.
-For every unknown word in it, generate a structured vocabulary entry. Add to the entry context from the text.
+Open a file with German text.
+For every unknown word, generate a structured vocabulary entry with context from the text.
 Enjoy the web of your personal dictionary.
 
-![Full Entry Example](img/graph.png)
+![Graph View Example](img/graph.png)
 
 ## Overview
 
-This plugin helps you create and maintain a comprehensive German language learning system in Obsidian. It automatically generates structured entries for: Verbs, Nouns (with gender color-coding: 🔵 masculine, 🔴 feminine, 🟢 neuter), Adjectives, Other parts of speech
+This plugin helps you create and maintain a comprehensive German language learning system in Obsidian. It automatically generates structured entries for: Verbs, Nouns (with gender color-coding: 🔵 masculine, 🔴 feminine, 🟢 neuter), Adjectives, and other parts of speech.
 
-Once any form of a word is added to a dictionary, 
-![du_hast text](img/du_hast.png)
+Once any form of a word appears in your text:
+![Example Text with "du hast"](img/du_hast.png)
 
-it and all of it's other forms will be linked to it's infinite form.
-![gefragt file](img/gefragt.png)
+It and all of its other forms will be linked to its infinitive form:
+![Past Participle Entry Example](img/gefragt.png)
 
-The infinite form points to all the forms of the word, it's antonyms and synonyms.
-![fragen inf](img/fragen.png)
+The infinitive form points to all forms of the word, its antonyms, and synonyms:
+![Infinitive Form Example](img/fragen.png)
 
 
 ## Key Features
