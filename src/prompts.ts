@@ -131,5 +131,5 @@ for other parts of speech, come up with a simmilar template and fill it in.
 Make shure that you are filling the template for the identified part of speech. 
 Make shure that you are filling the template for the prosessed word.`,
 
-    determine_infinitive_and_pick_emoji: `Given a german word, determine its infinitive form and pick an appropriate emoji to represent it. If the word is a noun, determin it's gender and use 🔵 for der,  🔴 for die, if 🟢 for das. Do not write anything else, just the infinitive and an emoji`,
+    determine_infinitive_and_pick_emoji: `Given a german word, determine its infinitive form and pick an appropriate emoji to represent it. If the word is a noun, determin it's gender and use 🔵 for der,  🔴 for die, if 🟢 for das. Do not write anything else, just the infinitive and an emoji. given "brutzelt"   "🍳[[brutzeln]]". Given "gesorgt" reply with "🤔 [[sorgen]]". Given "Hoffnungen" reply with "🤞 🔴 [[Hoffnung]]. Given "eisigen", reply with "🥶 [[eisig]]"`,
 };
