@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, requestUrl } from 'obsidian';
+import { App, Editor, MarkdownView, Notice, Plugin, PluginSettingTab, Setting, TFile, requestUrl } from 'obsidian';
 import { prompt } from './prompt';
 
 interface MyPluginSettings {
@@ -17,7 +17,6 @@ const getNamesToBacklinkFromFileContent = (t: string): string[] => {
 
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
-	
 
 	async onload() {
 		await this.loadSettings();
@@ -36,9 +35,8 @@ export default class MyPlugin extends Plugin {
 				const namesToBacklink = getNamesToBacklinkFromFileContent(contents);
 
 				for (const name of namesToBacklink) {
-					const path = `Worter/${name}.md`; // Specify the desired file name
-
-					const backlink = `[[${currentFileName.split('.')[0]}]]`; // Specify the content
+					const path = `Worter/${name}.md`;
+					const backlink = `[[${currentFileName.split('.')[0]}]]`;
 					if (!await this.doesFileContainContent(path, backlink)) {
 						await this.appendToFile(path, `, ${backlink}`)
 					}
@@ -60,7 +58,7 @@ export default class MyPlugin extends Plugin {
 				const a = await this.fetchTemplate1(currentFileName);
 				const filledTemplate = (JSON.parse(a) as any)?.['json']?.["content"]?.[0]?.["text"]
 
-				let appendContent = ``; // Content to append const
+				let appendContent = ``;
 
 				if (filledTemplate) {
 					appendContent = filledTemplate;
@@ -72,22 +70,7 @@ export default class MyPlugin extends Plugin {
 			}
 		});
 
-
-		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
-	}
-
-	onunload() {
-
 	}
 
 	async loadSettings() {
@@ -147,7 +130,7 @@ export default class MyPlugin extends Plugin {
 		};
 	
 		const body = {
-			"model": "claude-3-haiku-20240307",
+			"model": "claude-3-5-haiku-latest",
 			"max_tokens": 1024,
 			"system": [
 				{
@@ -164,14 +147,8 @@ export default class MyPlugin extends Plugin {
 			]
 		};
 
-		const other = {
-			method: 'POST',
-			headers: headers,
-			body: JSON.stringify(body)
-		};
-
 		try {
-			const response = await requestUrl(		{
+			const response = await requestUrl({
 				url,
 				method: 'POST',
 				contentType: "application/json",
@@ -181,24 +158,8 @@ export default class MyPlugin extends Plugin {
 
 			return JSON.stringify(response);
 		} catch (error) {
-			return error + '\n\n' + JSON.stringify(other);
+			return error + '\n\n' + JSON.stringify({ url, method: 'POST', headers, body });
 		}
-	}
-}
-
-class SampleModal extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
-
-	onOpen() {
-		const {contentEl} = this;
-		contentEl.setText('Woah!');
-	}
-
-	onClose() {
-		const {contentEl} = this;
-		contentEl.empty();
 	}
 }
 
@@ -212,11 +173,11 @@ class SampleSettingTab extends PluginSettingTab {
 
 	display(): void {
 		const {containerEl} = this;
-
 		containerEl.empty();
+		containerEl.createEl('h2', {text: 'Settings'});
 
 		new Setting(containerEl)
-			.setName('Anthropic key')
+			.setName('Anthropic API Key')
 			.setDesc('Won`t leave your vault')
 			.addText(text => text
 				.setPlaceholder('Enter your key')
