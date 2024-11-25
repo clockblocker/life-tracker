@@ -1,127 +1,57 @@
-# Obsidian Backlink Filler Plugin
+# Obsidian German Language Learning Plugin
 
-An Obsidian plugin that automates the process of managing backlinks in your notes, particularly designed for language learning and vocabulary management.
+An Obsidian plugin designed to enhance your German language learning experience by creating structured vocabulary entries with automatic backlinks. Perfect for building an interconnected German vocabulary and grammar knowledge base.
 
-## Features
+## Overview
 
-- **Automatic Backlink Creation**: Automatically adds backlinks to referenced files in your vault
-- **Vocabulary Management**: Specifically designed to work with vocabulary notes in the "Worter" directory
-- **Bidirectional Linking**: Ensures that when you reference a note, the reference is reciprocated in the target note
-- **Duplicate Prevention**: Intelligently checks for existing backlinks to prevent duplicates
+This plugin helps you create and maintain a comprehensive German language learning system in Obsidian. It automatically generates structured entries for:
+- Verbs (both separable and inseparable)
+- Nouns (with gender color-coding: 🔵 masculine, 🔴 feminine, 🟢 neuter)
+- Adjectives
+- Other parts of speech
 
-## Entry Format Examples
+![Full Entry Example](img/full_entry_example.png)
 
-The plugin supports different templates for various parts of speech. Here are examples of how entries are structured:
+## Key Features
 
-### Trennbare Verben (Separable Verbs)
+### 1. Structured Entry Templates
+Each word type has a specialized template that includes:
+- Pronunciation
+- Conjugation/declension tables
+- Synonyms and antonyms
+- Translation
+- Morphological breakdown
+- Part of speech tagging
 
-```markdown
-📞 [[anrufen]] + Akk, [ˈanruːfn̩]
-[[rief an|rief an]]  
-haben [[angerufen]]
+![Verb Conjugation Example](img/verb_conjugation_example.png)
 
----
+### 2. Automatic Backlink Management
+The plugin automatically maintains bidirectional links between related words, helping you build a network of connected vocabulary:
+- Links between base verbs and their prefixed forms
+- Connections between synonyms and antonyms
+- References between related grammatical forms
 
----
-Synonyme: [[telefonieren]], [[kontaktieren]], [[anklingeln]], [[durchklingeln]], [[wählen]]
-Antonyme: [[auflegen]], [[ignorieren]], [[schweigen]]
+![Vocabulary Entry Example](img/vocabulary_entry_example.png)
 
----
-Übersetzung: to call (on the phone)
+### 3. Quick Access
+Access the plugin's features through Obsidian's command palette for quick entry creation and management.
 
----
-Morpheme: [[an]][[ruf]][[en]]
-#Verb #Trennbar
+![Command Palette Example](img/command_palette_example.png)
 
----
+## Usage
 
-| Person | Präsens | Präteritum | Imperativ | Konjunktiv I | Konjunktiv II |
-| --------- | ------------------- | --------------------- | --------------------------- | --------------------- | ----------------------- |
-| Ich | [[rufe an]] | [[rief an]] | - | [[rufe an]] | [[riefe an]] |
-| Du | [[rufst an]] | [[riefst an]] | [[ruf an]] | [[rufest an]] | [[riefest an]] |
-| Er/sie/es | [[ruft an]] | [[rief an]] | - | [[rufe an]] | [[riefe an]] |
-| Wir | [[rufen an]] | [[riefen an]] | - | [[rufen an]] | [[riefen an]] |
-| Ihr | [[ruft an]] | [[rieft an]] | [[ruft an]] | [[rufet an]] | [[riefet an]] |
-| Sie | [[rufen an]] | [[riefen an]] | [[rufen Sie an Sie]] | [[rufen an]] | [[riefen an]] |
-```
-
-### Substantive (Nouns)
-
-```markdown
-🔵 der [[Busch]], [ˈbʊʃ]
-die [[Büsche]]
-
----
-
----
-Synonyme:
-- [[Strauch]], [[Gebüsch]], [[Hecke]]
-
----
-Übersetzung: bush, shrub
-
----
-Morpheme:
-[[Busch]]
-
----
-Einzigartige mögliche Formen: [[Hauses]], [[Hause]], [[Häuser]], [[Häusern]]
-
----
-#Substantiv #Maskulin
-```
-
-### Adjektive (Adjectives)
-
-```markdown
-[[klein]], [ˈklaɪ̯n]
-nicht [[groß]]
-
----
-
----
-Synonyme: [[winzig]], [[gering]], [[niedrig]], [[schmal]], [[kurz]]
-Antonyme: [[groß]], [[riesig]], [[hoch]], [[weit]], [[lang]]
-
----
-**Übersetzung**:
-small, little
-
----
-#Adjective [[klein]]
-
----
-Morpheme:
-[[klein]]
-
----
-
-Einzigartige mögliche Formen: 
-[[klein]], [[kleiner]], [[kleine]], [[kleines]], [[kleinen]], [[kleinem]], [[kleiner]], [[kleinen]]
-[[kleiner]], [[kleinerer]], [[kleinere]], [[kleineres]], [[kleineren]], [[kleinerem]], [[kleinerer]], [[kleineren]]
-[[kleinsten]], [[kleinster]], [[kleinste]], [[kleinstes]], [[kleinsten]], [[kleinstem]], [[kleinster]], [[kleinsten]]
-```
+1. Create a new note in your vault
+2. Open the command palette (Cmd/Ctrl + P)
+3. Choose the appropriate template for your word type
+4. Fill in the basic information - the plugin will handle the formatting and linking
 
 ## Installation
 
 1. Open Obsidian Settings
 2. Navigate to Community Plugins and disable Safe Mode
-3. Click Browse and search for "Backlink Filler"
+3. Click Browse and search for "German Language Learning Plugin"
 4. Install the plugin
 5. Enable the plugin in your Community Plugins list
-
-## Usage
-
-The plugin adds a command "Add backlinks to the current file in all referenced files" that you can use to automatically create backlinks. Here's how to use it:
-
-1. Open a note that contains references to other notes (using the `[[]]` syntax)
-2. Open the command palette (Cmd/Ctrl + P)
-3. Run the "Add backlinks to the current file in all referenced files" command
-4. The plugin will automatically add backlinks in all referenced files
-
-## Configuration
-
-Currently, the plugin works with files in the "Worter" directory. Make sure your vocabulary notes are stored in this location.
 
 ## Development
 
@@ -135,7 +65,6 @@ If you want to contribute to the development:
 ## Requirements
 
 - Obsidian v1.0.0 or higher
-- Files should be organized with vocabulary notes in the "Worter" directory
 
 ## License
 
