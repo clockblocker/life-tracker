@@ -108,7 +108,6 @@ export default class MyPlugin extends Plugin {
 					const newContent = currentContent + content;
 	
 					await this.app.vault.modify(abstractFile, newContent);
-					new Notice(`Content appended to ${path} successfully!`);
 				} catch (error) {
 					new Notice(`Error appending to file: ${error.message}`);
 				}
@@ -118,7 +117,6 @@ export default class MyPlugin extends Plugin {
 		} else {
 			try {
 				await this.app.vault.create(path, content);
-				new Notice(`File ${path} created successfully!`);
 			} catch (error) {
 				new Notice(`Error creating file: ${error.message}`);
 			}
@@ -229,4 +227,3 @@ class SampleSettingTab extends PluginSettingTab {
 				}));
 	}
 }
-
