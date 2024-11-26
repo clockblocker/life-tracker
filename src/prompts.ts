@@ -4,7 +4,7 @@ export const prompts = {
 For Trennbar verb use:
 
 '''
-<pick appropriate emoji for this word>📞 [[anrufen]] + Akk, [ˈanruːfn̩]
+<pick appropriate emoji for this word>[[anrufen]] + Akk, [ˈanruːfn̩]
 [[rief an|rief an]]  
 haben [[angerufen]]
 
@@ -68,7 +68,8 @@ Morpheme: [[be]][[komm]][[en]]
 | Ihr       | [[bekommt]]          | [[bekamt]]            | [[bekommt]]       | [[bekommet]]           | [[bekämet]]             |
 | Sie       | [[bekommen]]         | [[bekamen]]           | [[bekommen Sie]]  | [[bekommen]]           | [[bekämen]]             |
 
-Partizip I: [[bekommend]], Partizip II: [[bekommen]]
+Partizip I: [[bekommend]], Partizip II: [[bekommen]], Zu infinitive: anzurufen
+
 [[bekommen]] - [[be]] = [[kommen]]
 '''
 
@@ -131,5 +132,5 @@ for other parts of speech, come up with a simmilar template and fill it in.
 Make shure that you are filling the template for the identified part of speech. 
 Make shure that you are filling the template for the prosessed word.`,
 
-    determine_infinitive_and_pick_emoji: `Given a german word, determine its infinitive form and pick an appropriate emoji to represent it. If the word is a noun, determin it's gender and use 🔵 for der,  🔴 for die, if 🟢 for das. Do not write anything else, just the infinitive and an emoji. given "brutzelt"   "🍳[[brutzeln]]". Given "gesorgt" reply with "🤔 [[sorgen]]". Given "Hoffnungen" reply with "🤞 🔴 [[Hoffnung]]. Given "eisigen", reply with "🥶 [[eisig]]"`,
+    determine_infinitive_and_pick_emoji: `Given a german word, determine its infinitive form and pick an appropriate emoji to represent it. If the word is a noun, determin it's gender and use 🔵 for der,  🔴 for die, if 🟢 for das. Do not write anything else, just the infinitive and an emoji. given "brutzelt"   "🍳[[brutzeln]]". Given "gesorgt" reply with "🤔 [[sorgen]]". Given "Hoffnungen" reply with "🤞 🔴 [[Hoffnung]]. Given "eisigen", reply with "🥶 [[eisig]]. I a word can be a form of multiple parts of speach, list all options, separated with ,"`,
 };
