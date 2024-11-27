@@ -9,11 +9,15 @@ export class ApiService {
         return this.makeRequest(word, prompts.generate_dictionary_entry);
     }
 
-    async determineInfinitiveAndEmoji(word: string) {
-        return this.makeRequest(word, prompts.determine_infinitive_and_pick_emoji);
+    async determineInfinitiveAndEmoji(text: string) {
+        return this.makeRequest(text, prompts.determine_infinitive_and_pick_emoji);
     }
 
-    private async makeRequest(word: string, promptText: string) {
+    async makeBrackets(text: string) {
+        return this.makeRequest(text, prompts.make_brackets);
+    }
+
+    private async makeRequest(text: string, prompt: string) {
         const url = 'https://api.anthropic.com/v1/messages';
     
         const headers = {
@@ -29,14 +33,14 @@ export class ApiService {
             "system": [
                 {
                     "type": "text",
-                    "text": promptText,
+                    "text": prompt,
                     "cache_control": { "type": "ephemeral" }
                 }
             ],
             "messages": [
                 {
                     "role": "user",
-                    "content": word,
+                    "content": text,
                 }
             ]
         };

@@ -79,6 +79,26 @@ export default class MyPlugin extends Plugin {
             }
         });
 
+        this.addCommand({
+            id: 'duplicate-selection',
+            name: 'Duplicate selected text and process with brackets',
+            editorCallback: async (editor: Editor) => {
+                const selection = editor.getSelection();
+                if (selection) {
+                    const cursor = editor.getCursor();
+                    const response = await this.apiService.makeBrackets(selection);
+                    const processedText = this.extractContentFromResponse(response);
+                    if (processedText) {
+                        editor.replaceSelection(selection + '\n' + processedText);
+                        editor.setCursor({
+                            line: cursor.line,
+                            ch: cursor.ch + selection.length
+                        });
+                    }
+                }
+            }
+        });
+
         this.addSettingTab(new SettingsTab(this.app, this));
     }
 
