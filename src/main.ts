@@ -99,6 +99,26 @@ export default class MyPlugin extends Plugin {
             }
         });
 
+        this.addCommand({
+            id: 'translate-selection',
+            name: 'Translate selected text and show below',
+            editorCallback: async (editor: Editor) => {
+                const selection = editor.getSelection();
+                if (selection) {
+                    const cursor = editor.getCursor();
+                    const response = await this.apiService.translateText(selection);
+                    const translatedText = this.extractContentFromResponse(response);
+                    if (translatedText) {
+                        editor.replaceSelection(selection + '\n' + translatedText);
+                        editor.setCursor({
+                            line: cursor.line,
+                            ch: cursor.ch + selection.length
+                        });
+                    }
+                }
+            }
+        });
+
         this.addSettingTab(new SettingsTab(this.app, this));
     }
 

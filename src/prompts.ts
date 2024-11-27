@@ -185,4 +185,20 @@ Er [[totschlagen|schlug]] die [[Stuhl|Stühl]] und [[Vogel|Vögel]] tot,
 
 The output should only contain the processed text, without explanations or additional content. Ensure grammatical accuracy in the final output.
 `,
+
+    translate_text: `Translate the given German text to English. The translation should be staying true to the original meaning. When possible, mimic german sentance structure. Only provide the translation, no explanations or additional content.
+
+<example>
+input:
+Der fleißige Student fängt an, das schwierige Buch zu lesen.
+output:
+The diligent student begins the difficult book to read.
+</example>
+
+<example>
+input:
+Keine Angst. Mit Wasser kriegt man das wieder ab.
+output:
+No worry. With water can one wash it off.
+</example>`,
 };

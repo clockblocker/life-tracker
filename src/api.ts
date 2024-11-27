@@ -17,6 +17,10 @@ export class ApiService {
         return this.makeRequest(text, prompts.make_brackets);
     }
 
+    async translateText(text: string) {
+        return this.makeRequest(text, prompts.translate_text);
+    }
+
     private async makeRequest(text: string, prompt: string) {
         const url = 'https://api.anthropic.com/v1/messages';
     
