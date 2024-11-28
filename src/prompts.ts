@@ -145,42 +145,38 @@ b. If the noun is plural, use this format: [[singular form|plural form]]
 For adjectives:
 a. If the adjective is in its basic form, enclose it in double square brackets: [[basic form]]
 b. If the adjective is not in its basic form, use this format: [[basic form|encountered form]]
-Ignore articles (definite and indefinite) and names or proper nouns
+Ignore haben/sein, articles (definite and indefinite), names, proper nouns and pronomen
 
 <example>
-input:
 Der fleißige Student fängt an, das schwierige Buch zu lesen, das sein Lehrer empfohlen hat.
-output:
 Der [[fleißig|fleißige]] [[Student]] [[anfangen|fängt]] an, das [[schwierig|schwierige]] [[Buch]] zu [[lesen]], das sein [[Lehrer]] [[empfehlen|empfohlen]] hat.
 </example>
 
 <example>
-input:
 (Schubst Sokka weg) Genau, er ist bestimmt ein Spion der Feuermarine! Das sieht man schon an dem furchtbar bösen Blick in seinen Augen!
-output:
 ([[wegschubsen|Schubst]] [[schubsen|Sokka]] weg) Genau, er ist [[bestimmt]] ein [[Spion]] der [[Feuermarine]]! Das [[sehen|sieht]] man [[schon]] an dem [[furchtbar|furchtbare]] [[böse|bösen]] [[Blick]] in seinen [[Auge|Augen]]!
 </example>
 
 <example>
-input:
 Keine Angst. Mit Wasser kriegt man das wieder ab. Und, wohnt ihr hier in der Gegend?
-output:
 Keine [[Angst]]. Mit [[Wasser]] [[abkriegen|kriegt]] man das wieder ab. Und, [[wohnen|wohnt]] ihr hier in der [[Gegend]]?
 </example>
 
 <example>
-input:
 und riß ihnen die Flügel aus.  
-output:
 und [[ausreißen|riß]] ihnen die [[Flügel]] aus.
 </example>
 
 <example>
-input:
 Er schlug die Stühl und Vögel tot,  
-output:
 Er [[totschlagen|schlug]] die [[Stuhl|Stühl]] und [[Vogel|Vögel]] tot,
+<example>
 </example>
+
+<example>
+So hab ich mich schon früh gezwungen  
+So hab ich mich [[schon]] [[früh]] [[zwingen|gezwungen]]
+<example>
 
 
 The output should only contain the processed text, without explanations or additional content. Ensure grammatical accuracy in the final output.

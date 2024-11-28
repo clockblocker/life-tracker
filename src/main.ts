@@ -89,7 +89,7 @@ export default class MyPlugin extends Plugin {
                     const response = await this.apiService.makeBrackets(selection);
                     const processedText = this.extractContentFromResponse(response);
                     if (processedText) {
-                        editor.replaceSelection(selection + '\n' + processedText);
+                        editor.replaceSelection(selection + '\n\n' + processedText + '\n');
                         editor.setCursor({
                             line: cursor.line,
                             ch: cursor.ch + selection.length
@@ -109,7 +109,7 @@ export default class MyPlugin extends Plugin {
                     const response = await this.apiService.translateText(selection);
                     const translatedText = this.extractContentFromResponse(response);
                     if (translatedText) {
-                        editor.replaceSelection(selection + '\n' + translatedText);
+                        editor.replaceSelection(selection + '\n\n' + translatedText + '\n');
                         editor.setCursor({
                             line: cursor.line,
                             ch: cursor.ch + selection.length
