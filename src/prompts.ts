@@ -3,7 +3,7 @@ export const prompts = {
 
 For Trennbar verb use:
 
-'''
+<example>
 <pick appropriate emoji for this word>[[anrufen]] + Akk, [ˈanruːfn̩]
 [[rief an|rief an]]  
 haben [[angerufen]]
@@ -31,13 +31,58 @@ Morpheme: [[an]][[ruf]][[en]]
 | Ihr | [[ruft an]] | [[rieft an]] | [[ruft an]] | [[rufet an]] | [[riefet an]] |
 | Sie | [[rufen an]] | [[riefen an]] | [[rufen Sie an]] | [[rufen an]] | [[riefen an]] |
 
-Partizip I: [[anrufend]], Partizip II: [[angerufen]]
+Partizip I: [[anrufend]], 
+Partizip II: [[angerufen]]
+Zu+infinifive: [[anzurufen]]
+
 [[anrufen]] - [[an]] = [[rufen]]
-'''
+
+for non-prefixed verbs use:
+<example>
+🌿 [[pflegen]] + Akk, [ˈpfleːɡən]
+[[pflegte]]
+haben [[gepflegt]]
+
+---
+
+
+---
+Synonyme: [[betreuen]], [[versorgen]], [[kümmern]], [[umsorgen]], [[behandeln]]
+Antonyme: [[vernachlässigen]], [[ignorieren]], [[missachten]]
+
+---
+Übersetzung: to care for, to nurse, to maintain
+
+---
+Morpheme: [[pfleg]][[en]]
+ #Verb  #Untrennbar
+
+---
+
+| Person    | Präsens              | Präteritum            | Imperativ         | Konjunktiv I           | Konjunktiv II           |
+| --------- | -------------------- | --------------------- | ----------------- | ---------------------- | ----------------------- |
+| Ich       | [[pflege]]           | [[pflegte]]           | -                 | [[pflege]]             | [[pflegte]]             |
+| Du        | [[pflegst]]          | [[pflegtest]]         | [[pflege]]        | [[pflegest]]           | [[pflegtest]]           |
+| Er/sie/es | [[pflegt]]           | [[pflegte]]           | -                 | [[pflege]]             | [[pflegte]]             |
+| Wir       | [[pflegen]]          | [[pflegten]]          | -                 | [[pflegen]]            | [[pflegten]]            |
+| Ihr       | [[pflegt]]           | [[pflegtet]]          | [[pflegt]]        | [[pfleget]]            | [[pflegtet]]            |
+| Sie       | [[pflegen]]          | [[pflegten]]          | [[pflegen Sie]]   | [[pflegen]]            | [[pflegten]]            |
+
+Partizip I: [[pflegend]], 
+Partizip II: [[gepflegt]]
+| Form       | Positive            | Comparative             | Superlative              |
+| ---------- | ------------------- | ----------------------- | ------------------------ |
+| Nominative | [[gepflegt]]        | [[gepflegter]]          | [[gepflegtester]]        |
+| Accusative | [[gepflegten]]      | [[gepflegteren]]        | [[gepflegtesten]]        |
+| Genitive   | [[gepflegter]]      | [[gepflegterer]]        | [[gepflegtester]]        |
+| Dative     | [[gepflegtem]]      | [[gepflegterem]]        | [[gepflegtestem]]        |
+| Feminine   | [[gepflegte]]       | [[gepflegtere]]         | [[gepflegteste]]         |
+| Neuter     | [[gepflegtes]]      | [[gepflegteres]]        | [[gepflegtestes]]        |
+| Plural     | [[gepflegten]]      | [[gepflegteren]]        | [[gepflegtesten]]        |
 
 
 For Untrennbares verbs and verbs without prefixis, use: 
-'''
+<example>
 <pick appropriate emoji for this word>[[bekommen]] + Akk, [bəˈkɔmən]
 [[bekam]]
 haben [[bekommen]]
@@ -68,14 +113,16 @@ Morpheme: [[be]][[komm]][[en]]
 | Ihr       | [[bekommt]]          | [[bekamt]]            | [[bekommt]]       | [[bekommet]]           | [[bekämet]]             |
 | Sie       | [[bekommen]]         | [[bekamen]]           | [[bekommen Sie]]  | [[bekommen]]           | [[bekämen]]             |
 
-Partizip I: [[bekommend]], Partizip II: [[bekommen]], Zu infinitive: anzurufen
+Partizip I: [[bekommend]], 
+Partizip II: [[bekommen]], 
+Zu infinitive: [[zubekommen]]
 
 [[bekommen]] - [[be]] = [[kommen]]
-'''
+</example>
 
 For adjectives use:
 
-'''
+<example>
 klein, [ˈklaɪ̯n]
 nicht [[groß]]
 
@@ -95,13 +142,19 @@ small, little
 
 
 Einzigartige mögliche Formen: 
-[[klein]], [[kleiner]], [[kleine]], [[kleines]], [[kleinen]], [[kleinem]], [[kleiner]], [[kleinen]]
-[[kleiner]], [[kleinerer]], [[kleinere]], [[kleineres]], [[kleineren]], [[kleinerem]], [[kleinerer]], [[kleineren]]
-[[kleinsten]], [[kleinster]], [[kleinste]], [[kleinstes]], [[kleinsten]], [[kleinstem]], [[kleinster]], [[kleinsten]]
-'''
+| Form       | Positive           | Comparative          | Superlative          |
+| ---------- | ------------------ | -------------------- | -------------------- |
+| Nominative | [[klein]]          | [[kleiner]]          | [[kleinster]]        |
+| Accusative | [[kleinen]]        | [[kleineren]]        | [[kleinsten]]        |
+| Genitive   | [[kleiner]]        | [[kleinerer]]        | [[kleinster]]        |
+| Dative     | [[kleinem]]        | [[kleinerem]]        | [[kleinstem]]        |
+| Feminine   | [[kleine]]         | [[kleinere]]         | [[kleinste]]         |
+| Neuter     | [[kleines]]        | [[kleineres]]        | [[kleinstes]]        |
+| Plural     | [[kleinen]]        | [[kleineren]]        | [[kleinsten]]        |
+</example>
 
 For nouns, use the template below. For feminin words, use 🔴, for neutral use 🟢, for Maskulin use 🔵
-'''
+<example>
 🔵 der [[Busch]], [ˈbʊʃ]
 die [[Büsche]]
 
@@ -121,16 +174,23 @@ Morpheme:
 [[Busch]]
 
 ---
-Einzigartige mögliche Formen: [[Hauses]], [[Hause]], [[Häuser]], [[Häusern]]
+Einzigartige mögliche Formen: 
+
+| Case        | Singular ([[Busch]]) | Plural ([[Büsche]]) |
+| ----------- | --------------------- | ------------------- |
+| Nominative  | der [[Busch]]         | die [[Büsche]]      |
+| Accusative  | den [[Busch]]         | die [[Büsche]]      |
+| Genitive    | des [[Busches]]       | der [[Büsche]]      |
+| Dative      | dem [[Busch]]         | den [[Büschen]]     |
 
 ---
 #Substantiv #Maskulin
-'''
+</example>
 
 for other parts of speech, come up with a simmilar template and fill it in.
 
 Make shure that you are filling the template for the identified part of speech. 
-Make shure that you are filling the template for the prosessed word.`,
+Do not add any text that is not in the template.`,
 
     determine_infinitive_and_pick_emoji: `Given a german word, determine its infinitive form and pick an appropriate emoji to represent it. If the word is a noun, determin it's gender and use 🔵 for der,  🔴 for die, if 🟢 for das. Do not write anything else, just the infinitive and an emoji. given "brutzelt"   "🍳[[brutzeln]]". Given "gesorgt" reply with "🤔 [[sorgen]]". Given "Hoffnungen" reply with "🤞 🔴 die [[Hoffnung]]. Given "eisigen", reply with "🥶 [[eisig]]. I a word can be a form of multiple parts of speach, list all options, separated with |. For expample, given "vergangene", reply with "🕰️, [[vergangen]] | 🕰️, [[vergehen]]. Given "Nieser", reply with "🤧 [[niesen]] | 🔵 🤧 der [[Nieser]]. Gigen "klares", reply with "😌 [[klären]] | 😌 [[klar]] | 😌 🟢 das [[Klare]]"`,
     make_brackets: `Process the given German text and generate output following these rules:
