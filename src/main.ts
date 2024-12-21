@@ -42,8 +42,8 @@ export default class MyPlugin extends Plugin {
         });
 
         this.addCommand({
-            id: 'log-to-file',
-            name: 'dumps log to the current file',
+            id: 'fill-template',
+            name: 'Fill the template for the word in the title of the file',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
                 const fileName = view.file?.name;
                 if (!fileName) {

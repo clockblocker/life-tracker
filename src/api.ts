@@ -28,11 +28,10 @@ export class ApiService {
             'Content-Type': 'application/json',
             'x-api-key': this.settings.anthropicKey,
             'anthropic-version': '2023-06-01',
-            'anthropic-beta': 'prompt-caching-2024-07-31'
         };
     
         const body = {
-            "model": "claude-3-5-haiku-latest",
+            "model": "claude-3-5-haiku-20241022",
             "max_tokens": 1024,
             "system": [
                 {

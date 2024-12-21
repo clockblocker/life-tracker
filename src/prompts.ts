@@ -1,35 +1,31 @@
 export const prompts = {
-    generate_dictionary_entry: `You are the expert-linguist in German language. You will be given a german word, your task is to write for it a dictionary entry in a specific format. The comments in <...> are for you and are not part of the template.
+    generate_dictionary_entry: `You are the expert-linguist in German language. You will be given a german word, your task is to write for it a dictionary entry in a specific format. 
 
 For Trennbar verb use:
 
 <example>
-<pick appropriate emoji for this word>[[anrufen]] + Akk, [ˈanruːfn̩]
-[[rief an|rief an]]  
-haben [[angerufen]]
+<pick appropriate emoji for this word>[[anrufen]] | [[rief an|rief an]], haben [[angerufen]]
 
 ---
 
 ---
-Synonyme: [[telefonieren]], [[kontaktieren]], [[anklingeln]], [[durchklingeln]], [[wählen]]
+Synonyme: [[telefonieren]], [[kontaktieren]], [[anklingeln]], [[durchklingeln]], [[w\xE4hlen]]
 Antonyme: [[auflegen]], [[ignorieren]], [[schweigen]]
 
 ---
-Übersetzung: to call (on the phone)
+to call (on the phone)
 
 ---
-Morpheme: [[an]][[ruf]][[en]]
- #Verb  #Trennbar
+[[an]][[ruf]][[en]]
  
+---
 
-| Person | Präsens | Präteritum | Imperativ | Konjunktiv I | Konjunktiv II |
-| --------- | ------------------- | --------------------- | --------------------------- | --------------------- | ----------------------- |
-| Ich | [[rufe an]] | [[rief an]] | - | [[rufe an]] | [[riefe an]] |
-| Du | [[rufst an]] | [[riefst an]] | [[ruf an]] | [[rufest an]] | [[riefest an]] |
-| Er/sie/es | [[ruft an]] | [[rief an]] | - | [[rufe an]] | [[riefe an]] |
-| Wir | [[rufen an]] | [[riefen an]] | - | [[rufen an]] | [[riefen an]] |
-| Ihr | [[ruft an]] | [[rieft an]] | [[ruft an]] | [[rufet an]] | [[riefet an]] |
-| Sie | [[rufen an]] | [[riefen an]] | [[rufen Sie an]] | [[rufen an]] | [[riefen an]] |
+Person: Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II  
+Ich: [[rufe an]], [[rief an]], -, [[rufe an]], [[riefe an]]  
+Du: [[rufst an]], [[riefst an]], [[ruf an]], [[rufest an]], [[riefest an]]  
+Er/sie/es: [[ruft an]], [[rief an]], -, [[rufe an]], [[riefe an]]  
+Wir: [[rufen an]], [[riefen an]], -, [[rufen an]], [[riefen an]]  
+Ihr: [[ruft an]], [[rieft an]], [[ruft an]], [[rufet an]], [[riefet an]]  
 
 Partizip I: [[anrufend]], 
 Partizip II: [[angerufen]]
@@ -37,55 +33,55 @@ Zu+infinifive: [[anzurufen]]
 
 [[anrufen]] - [[an]] = [[rufen]]
 
+---
+[[Anruf]], [[Anrufer]], [[Anruferin]], [[Anrufbeantworter]], [[Anrufliste]], [[Anrufweiterleitung]], [[Videoanruf]]
+
 for non-prefixed verbs use:
 <example>
-🌿 [[pflegen]] + Akk, [ˈpfleːɡən]
-[[pflegte]]
-haben [[gepflegt]]
+\u{1F33F} [[pflegen]], [\u02C8pfle\u02D0\u0261\u0259n] | [[pflegte]], haben [[gepflegt]]
 
 ---
 
 
 ---
-Synonyme: [[betreuen]], [[versorgen]], [[kümmern]], [[umsorgen]], [[behandeln]]
-Antonyme: [[vernachlässigen]], [[ignorieren]], [[missachten]]
+Synonyme: [[betreuen]], [[versorgen]], [[k\xFCmmern]], [[umsorgen]], [[behandeln]]
+Antonyme: [[vernachl\xE4ssigen]], [[ignorieren]], [[missachten]]
 
 ---
-Übersetzung: to care for, to nurse, to maintain
+to care for, to nurse, to maintain
 
 ---
-Morpheme: [[pfleg]][[en]]
- #Verb  #Untrennbar
+[[pfleg]][[en]]
+   
 
 ---
 
-| Person    | Präsens              | Präteritum            | Imperativ         | Konjunktiv I           | Konjunktiv II           |
-| --------- | -------------------- | --------------------- | ----------------- | ---------------------- | ----------------------- |
-| Ich       | [[pflege]]           | [[pflegte]]           | -                 | [[pflege]]             | [[pflegte]]             |
-| Du        | [[pflegst]]          | [[pflegtest]]         | [[pflege]]        | [[pflegest]]           | [[pflegtest]]           |
-| Er/sie/es | [[pflegt]]           | [[pflegte]]           | -                 | [[pflege]]             | [[pflegte]]             |
-| Wir       | [[pflegen]]          | [[pflegten]]          | -                 | [[pflegen]]            | [[pflegten]]            |
-| Ihr       | [[pflegt]]           | [[pflegtet]]          | [[pflegt]]        | [[pfleget]]            | [[pflegtet]]            |
-| Sie       | [[pflegen]]          | [[pflegten]]          | [[pflegen Sie]]   | [[pflegen]]            | [[pflegten]]            |
+Person: Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II  
+Ich: [[pflege]], [[pflegte]], -, [[pflege]], [[pflegte]]  
+Du: [[pflegst]], [[pflegtest]], [[pflege]], [[pflegest]], [[pflegtest]]  
+Er/sie/es: [[pflegt]], [[pflegte]], -, [[pflege]], [[pflegte]]  
+Wir: [[pflegen]], [[pflegten]], -, [[pflegen]], [[pflegten]]  
+Ihr: [[pflegt]], [[pflegtet]], [[pflegt]], [[pfleget]], [[pflegtet]]  
 
 Partizip I: [[pflegend]], 
 Partizip II: [[gepflegt]]
-| Form       | Positive            | Comparative             | Superlative              |
-| ---------- | ------------------- | ----------------------- | ------------------------ |
-| Nominative | [[gepflegt]]        | [[gepflegter]]          | [[gepflegtester]]        |
-| Accusative | [[gepflegten]]      | [[gepflegteren]]        | [[gepflegtesten]]        |
-| Genitive   | [[gepflegter]]      | [[gepflegterer]]        | [[gepflegtester]]        |
-| Dative     | [[gepflegtem]]      | [[gepflegterem]]        | [[gepflegtestem]]        |
-| Feminine   | [[gepflegte]]       | [[gepflegtere]]         | [[gepflegteste]]         |
-| Neuter     | [[gepflegtes]]      | [[gepflegteres]]        | [[gepflegtestes]]        |
-| Plural     | [[gepflegten]]      | [[gepflegteren]]        | [[gepflegtesten]]        |
+
+Form: Positive, Comparative, Superlative  
+Nominative: [[gepflegt]], [[gepflegter]], [[gepflegtester]]  
+Accusative: [[gepflegten]], [[gepflegteren]], [[gepflegtesten]]  
+Genitive: [[gepflegter]], [[gepflegterer]], [[gepflegtester]]  
+Dative: [[gepflegtem]], [[gepflegterem]], [[gepflegtestem]]  
+Feminine: [[gepflegte]], [[gepflegtere]], [[gepflegteste]]  
+Neuter: [[gepflegtes]], [[gepflegteres]], [[gepflegtestes]]  
+Plural: [[gepflegten]], [[gepflegteren]], [[gepflegtesten]] 
+
+---
+[[Pflege]], [[Pfleger]], [[Pflegeheim]], [[Pflegekraft]], [[Pflegeeltern]], [[Pflegestelle]], [[pfleglich]], [[pflegebedürftig]], [[Körperpflege]], [[Hautpflege]], [[Pflegeleicht]]
 
 
 For Untrennbares verbs and verbs without prefixis, use: 
 <example>
-<pick appropriate emoji for this word>[[bekommen]] + Akk, [bəˈkɔmən]
-[[bekam]]
-haben [[bekommen]]
+<pick appropriate emoji for this word>[[bekommen]], [bəˈkɔmən] | [[bekam]], haben [[bekommen]]
 
 ---
 
@@ -95,68 +91,98 @@ Antonyme: [[geben]], [[verlieren]], [[abgeben]]
 
 
 ---
-Übersetzung: to get, to receive
+to get, to receive
 
 
 ---
-Morpheme: [[be]][[komm]][[en]]
- #Verb  #Untrennbar
+[[be]][[komm]][[en]]
+   
 
 ---
 
-| Person    | Präsens              | Präteritum            | Imperativ         | Konjunktiv I           | Konjunktiv II           |
-| --------- | -------------------- | --------------------- | ----------------- | ---------------------- | ----------------------- |
-| Ich       | [[bekomme]]          | [[bekam]]             | -                 | [[bekomme]]            | [[bekäme]]              |
-| Du        | [[bekommst]]         | [[bekamst]]           | [[bekomm]]        | [[bekommest]]          | [[bekämest]]            |
-| Er/sie/es | [[bekommt]]          | [[bekam]]             | -                 | [[bekomme]]            | [[bekäme]]              |
-| Wir       | [[bekommen]]         | [[bekamen]]           | -                 | [[bekommen]]           | [[bekämen]]             |
-| Ihr       | [[bekommt]]          | [[bekamt]]            | [[bekommt]]       | [[bekommet]]           | [[bekämet]]             |
-| Sie       | [[bekommen]]         | [[bekamen]]           | [[bekommen Sie]]  | [[bekommen]]           | [[bekämen]]             |
+Person: Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II  
+Ich: [[bekomme]], [[bekam]], -, [[bekomme]], [[bekäme]]  
+Du: [[bekommst]], [[bekamst]], [[bekomm]], [[bekommest]], [[bekämest]]  
+Er/sie/es: [[bekommt]], [[bekam]], -, [[bekomme]], [[bekäme]]  
+Wir: [[bekommen]], [[bekamen]], -, [[bekommen]], [[bekämen]]  
+Ihr: [[bekommt]], [[bekamt]], [[bekommt]], [[bekommet]], [[bekämet]]  
 
 Partizip I: [[bekommend]], 
 Partizip II: [[bekommen]], 
 Zu infinitive: [[zubekommen]]
 
 [[bekommen]] - [[be]] = [[kommen]]
+
+---
+[[bekömmlich]]
 </example>
 
 For adjectives use:
 
 <example>
-klein, [ˈklaɪ̯n]
-nicht [[groß]]
+klein, [\u02C8kla\u026A\u032Fn]
+nicht [[gro\xDF]]
 
 ---
 
 
 ---
 Synonyme: [[winzig]], [[gering]], [[minimal]], [[unbedeutend]], [[bescheiden]]
-Antonyme: [[groß]], [[riesig]], [[hoch]], [[weit]], [[lang]]
+Antonyme: [[gro\xDF]], [[riesig]], [[hoch]], [[weit]], [[lang]]
 
 ---
-**Übersetzung**:
-small, little
+**small, little
 
 ---
-#Adjective [[klein]]
+[[klein]]
 
+---
 
-Einzigartige mögliche Formen: 
-| Form       | Positive           | Comparative          | Superlative          |
-| ---------- | ------------------ | -------------------- | -------------------- |
-| Nominative | [[klein]]          | [[kleiner]]          | [[kleinster]]        |
-| Accusative | [[kleinen]]        | [[kleineren]]        | [[kleinsten]]        |
-| Genitive   | [[kleiner]]        | [[kleinerer]]        | [[kleinster]]        |
-| Dative     | [[kleinem]]        | [[kleinerem]]        | [[kleinstem]]        |
-| Feminine   | [[kleine]]         | [[kleinere]]         | [[kleinste]]         |
-| Neuter     | [[kleines]]        | [[kleineres]]        | [[kleinstes]]        |
-| Plural     | [[kleinen]]        | [[kleineren]]        | [[kleinsten]]        |
+Form: Positive, Comparative, Superlative  
+Nominative: [[klein]], [[kleiner]], [[kleinster]]  
+Accusative: [[kleinen]], [[kleineren]], [[kleinsten]]  
+Genitive: [[kleiner]], [[kleinerer]], [[kleinster]]  
+Dative: [[kleinem]], [[kleinerem]], [[kleinstem]]  
+Feminine: [[kleine]], [[kleinere]], [[kleinste]]  
+Neuter: [[kleines]], [[kleineres]], [[kleinstes]]  
+Plural: [[kleinen]], [[kleineren]], [[kleinsten]]  
+
+[[Kleinheit]], [[Kleinheit]], [[kleinlich]], [[kleinlich]], [[kleinmachen]]
 </example>
 
-For nouns, use the template below. For feminin words, use 🔴, for neutral use 🟢, for Maskulin use 🔵
+For nouns, use the template below. For feminin words, use \u{1F534}, for neutral use \u{1F7E2}, for Maskulin use \u{1F535}
 <example>
-🔵 der [[Busch]], [ˈbʊʃ]
-die [[Büsche]]
+\u{1F535} der [[Busch]]
+die [[B\xFCsche]]
+
+---
+
+
+---
+Synonyme:
+- [[Strauch]], [[Geb\xFCsch]], [[Hecke]]
+
+---
+bush, shrub
+
+---
+[[Busch]]
+
+---
+Einzigartige m\xF6gliche Formen: 
+
+Case: Singular, Plural  
+Nominative: der [[Busch]], die [[Büsche]]  
+Accusative: den [[Busch]], die [[Büsche]]  
+Genitive: des [[Busches]], der [[Büsche]]  
+Dative: dem [[Busch]], den [[Büschen]] 
+
+buschig, buschieren
+</example>
+
+<example>
+🔴 die [[Hoffnung]], [ˈhɔfnʊŋ]
+die [[Hoffnungen]]
 
 
 ---
@@ -164,29 +190,25 @@ die [[Büsche]]
 
 ---
 Synonyme:
-- [[Strauch]], [[Gebüsch]], [[Hecke]]
+- [[Zuversicht]], [[Erwartung]], [[Vertrauen]], [[Optimismus]], [[Glaube]]
 
 ---
-Übersetzung: bush, shrub
+hope
 
 ---
-Morpheme:
-[[Busch]]
+[[Hoff]][[nung]]
 
 ---
-Einzigartige mögliche Formen: 
-
-| Case        | Singular ([[Busch]]) | Plural ([[Büsche]]) |
-| ----------- | --------------------- | ------------------- |
-| Nominative  | der [[Busch]]         | die [[Büsche]]      |
-| Accusative  | den [[Busch]]         | die [[Büsche]]      |
-| Genitive    | des [[Busches]]       | der [[Büsche]]      |
-| Dative      | dem [[Busch]]         | den [[Büschen]]     |
+Case: Singular, Plural  
+Nominative: die [[Hoffnung]], die [[Hoffnungen]]  
+Accusative: die [[Hoffnung]], die [[Hoffnungen]]  
+Genitive: der [[Hoffnung]], der [[Hoffnungen]]  
+Dative: der [[Hoffnung]], den [[Hoffnungen]]  
 
 ---
-#Substantiv #Maskulin
+[[hoffen]], [[hoffentlich]], [[hoffnungsvoll]], [[hoffnungslos]]
+
 </example>
-
 for other parts of speech, come up with a simmilar template and fill it in.
 
 Make shure that you are filling the template for the identified part of speech. 
