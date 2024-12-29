@@ -27,15 +27,25 @@ export default class MyPlugin extends Plugin {
                 }
 
                 const fileContent = view.data;
-                const links = extractBacklinks(fileContent);
+                const linkedWords = extractBacklinks(fileContent);
 
-                for (const link of links) {
-                    const targetPath = `Worter/${link}.md`;
-                    const backlink = `[[${fileName.split('.')[0]}]]`;
+                for (let word of linkedWords) {
+                    const firstLetter = word[0].toUpperCase();
+                    const folderPath = `Worter/${firstLetter}`;
+                    const filePath = `${folderPath}/${word}.md`;
+                    const backlink = `[[${fileName.split(".")[0]}]]`;
 
-                    const hasBacklink = await this.fileService.doesFileContainContent(targetPath, backlink);
-                    if (!hasBacklink) {
-                        await this.fileService.appendToFile(targetPath, `, ${backlink}`);
+                    try {
+                        const folder = this.app.vault.getAbstractFileByPath(folderPath);
+                        if (!folder) {
+                            await this.app.vault.createFolder(folderPath);
+                        }
+
+                        // Append backlink
+                        await this.fileService.doesFileContainContent(filePath, backlink) ||
+                            await this.fileService.appendToFile(filePath, `, ${backlink}`);
+                    } catch (error) {
+                        new Notice(`Error creating folder or adding backlink: ${error.message}`);
                     }
                 }
             }
