@@ -172,11 +172,10 @@ export default class MyPlugin extends Plugin {
                 const fileContent = editor.getValue();
                 const maxNumber = this.findHighestNumber(fileContent);
                 const nextNumber = maxNumber + 1;
-
-                const formattedText = `###### ${nextNumber}\n${selection} [[${currentFileName}######${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
+                const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
                 
-                await navigator.clipboard.writeText(selection + ` [[${currentFileName}######${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]\n`);
-                editor.replaceSelection(`\n${formattedText}\n###### . \n\n`);
+                await navigator.clipboard.writeText(`${selection} ${formattedBacklink} \n`);
+                editor.replaceSelection(`${formattedBacklink}\n${selection} ^${nextNumber}\n`);
             }
         });
 
@@ -202,14 +201,14 @@ export default class MyPlugin extends Plugin {
     }
 
     private findHighestNumber(content: string): number {
-		const matches = content.match(/###### (\d+)/g);
-		if (!matches) return 0;
+        const matches = content.match(/#\^(\d+)/g);
+        if (!matches) return 0;
 
-		const numbers = matches.map(match => {
-			const num = match.replace('###### ', '');
-			return parseInt(num, 10);
-		});
+        const numbers = matches.map(match => {
+            const num = match.replace('#^', '');
+            return parseInt(num, 10);
+        });
 
-		return Math.max(0, ...numbers);
-	}
+        return Math.max(0, ...numbers);
+    }
 }
