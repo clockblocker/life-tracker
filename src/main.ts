@@ -173,10 +173,10 @@ export default class MyPlugin extends Plugin {
                 const maxNumber = this.findHighestNumber(fileContent);
                 const nextNumber = maxNumber + 1;
 
-                const formattedText = `\n###### ${nextNumber}\n${selection} [[${currentFileName}######${nextNumber}|source]]\n`;
+                const formattedText = `###### ${nextNumber}\n${selection} [[${currentFileName}######${nextNumber}|source]]`;
                 
                 await navigator.clipboard.writeText(formattedText);
-                editor.replaceSelection(formattedText);
+                editor.replaceSelection(`\n${formattedText}\n`);
             }
         });
 
