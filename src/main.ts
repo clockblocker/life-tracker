@@ -175,7 +175,7 @@ export default class MyPlugin extends Plugin {
 
                 const formattedText = `###### ${nextNumber}\n${selection} [[${currentFileName}######${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
                 
-                await navigator.clipboard.writeText(formattedText + "\n");
+                await navigator.clipboard.writeText(selection + ` [[${currentFileName}######${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]\n`);
                 editor.replaceSelection(`\n${formattedText}\n###### . \n\n`);
             }
         });
