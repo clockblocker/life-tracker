@@ -83,7 +83,9 @@ export default class MyPlugin extends Plugin {
                     return;
                 }
 
-                const response = await this.apiService.fetchTemplate(fileName);
+                const word = fileName.slice(0, -3)
+
+                const response = await this.apiService.fetchTemplate(word);
                 const content = this.extractContentFromResponse(response);
 
                 if (content && view?.file?.path) {
@@ -151,6 +153,31 @@ export default class MyPlugin extends Plugin {
             }
         });
 
+        this.addCommand({
+            id: 'format-selection-with-number',
+            name: 'Format selection with next number and source link',
+            editorCallback: async (editor: Editor, view: MarkdownView) => {
+                const selection = editor.getSelection();
+                if (!selection) {
+                    new Notice('No text selected');
+                    return;
+                }
+
+                const currentFileName = view.file?.name;
+                if (!currentFileName) {
+                    new Notice('Current file is missing a title');
+                    return;
+                }
+
+                const fileContent = editor.getValue();
+                const maxNumber = this.findHighestNumber(fileContent);
+                const nextNumber = maxNumber + 1;
+
+                const formattedText = `\n###### ${nextNumber}\n${selection} [[${currentFileName}######${nextNumber}|source]]\n`;
+                editor.replaceSelection(formattedText);
+            }
+        });
+
         this.addSettingTab(new SettingsTab(this.app, this));
     }
 
@@ -171,4 +198,16 @@ export default class MyPlugin extends Plugin {
             return '';
         }
     }
+
+    private findHighestNumber(content: string): number {
+		const matches = content.match(/###### (\d+)/g);
+		if (!matches) return 0;
+
+		const numbers = matches.map(match => {
+			const num = match.replace('###### ', '');
+			return parseInt(num, 10);
+		});
+
+		return Math.max(0, ...numbers);
+	}
 }
