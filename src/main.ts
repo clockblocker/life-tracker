@@ -174,6 +174,8 @@ export default class MyPlugin extends Plugin {
                 const nextNumber = maxNumber + 1;
 
                 const formattedText = `\n###### ${nextNumber}\n${selection} [[${currentFileName}######${nextNumber}|source]]\n`;
+                
+                await navigator.clipboard.writeText(formattedText);
                 editor.replaceSelection(formattedText);
             }
         });
