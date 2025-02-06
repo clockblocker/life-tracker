@@ -217,6 +217,52 @@ export default class MyPlugin extends Plugin {
             }
         });
 
+        this.addCommand({
+            id: 'translate-ru-to-de',
+            name: 'Translate Russian text to German',
+            editorCallback: async (editor: Editor) => {
+                const selection = editor.getSelection();
+                if (!selection) {
+                    new Notice('No text selected');
+                    return;
+                }
+
+                try {
+                    const response = await this.apiService.translateRuToDe(selection);
+                    if (response) {
+                        editor.replaceSelection(selection + '\n' + response + '\n');
+                    }
+                } catch (error) {
+                    new Notice(`Error: ${error.message}`);
+                }
+            }
+        });
+
+        this.addCommand({
+            id: 'check-ru-de-translation',
+            name: 'Check Russian-German translation',
+            editorCallback: async (editor: Editor) => {
+                console.log('Starting check-ru-de-translation command');
+                const selection = editor.getSelection();
+                console.log('Selection:', selection);
+                if (!selection) {
+                    new Notice('No text selected');
+                    return;
+                }
+
+                try {
+                    const response = await this.apiService.checkRuDeTranslation(selection);
+                    console.log('Got API response:', response);
+                    if (response) {
+                        editor.replaceSelection(selection + '\n' + response + '\n');
+                    }
+                } catch (error) {
+                    console.error('Error in check-ru-de-translation:', error);
+                    new Notice(`Error: ${error.message}`);
+                }
+            }
+        });
+
         this.addSettingTab(new SettingsTab(this.app, this));
     }
 

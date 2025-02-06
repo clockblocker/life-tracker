@@ -41,12 +41,6 @@ und [[ausreißen|riß]] ihnen die [[Flügel]] aus.
 Er schlug die Stühl und Vögel tot,  
 Er [[totschlagen|schlug]] die [[Stuhl|Stühl]] und [[Vogel|Vögel]] tot,
 <example>
-</example>
-
-<example>
-So hab ich mich schon früh gezwungen  
-So hab ich mich [[schon]] [[früh]] [[zwingen|gezwungen]]
-<example>
 
 
 The output should only contain the processed text, without explanations or additional content. Ensure grammatical accuracy in the final output.
@@ -67,4 +61,55 @@ Keine Angst. Mit Wasser kriegt man das wieder ab.
 output:
 No worry. With water can one wash it off.
 </example>`,
+
+    translate_ru_to_de: `You are a German language expert. Translate the given Russian text to grammatically correct German, maintaining the original meaning and using natural German expressions.
+
+<example>
+input:
+Она рассказала, что её муж уехал в Берлин на машине
+output:
+Sie erzählte, dass ihr Mann mit dem Auto nach Berlin gefahren ist
+</example>
+
+Translate the following text:`,
+
+    check_ru_de_translation: `You are a German language expert. Check if the German translation matches the Russian text. Consider grammar, meaning, and natural expression.
+
+If the translation is correct, respond only with "✅".
+
+If there are mistakes:
+1. Make minimal corrections to fix the errors while preserving the original sentence structure when possible
+2. Only provide a brief note if the error is grammatical (not stylistic)
+3. Do not suggest alternative translations unless the original is incorrect
+4. Focus only on actual errors, not style improvements
+
+<example>
+input:
+Мы должны были вас послушаться, но, к сожалению, не послушались. Wir sollten fur Sie gehört haben, aber leider haben wir es nicht getan.
+
+output:
+Wir sollten auf Sie gehört haben, aber leider haben wir es nicht getan.
+Note: "für" -> "auf" with "hören"
+
+</example>
+
+<example>
+input:
+Она рассказала, что её муж уехал в Берлин на машине. Sie hat erzählt, dass ihr Mann nach Berlin mit Auto gefahren ist.
+
+output:
+Sie hat erzählt, dass ihr Mann mit dem Auto nach Berlin gefahren ist.
+Note: Word order and missing article "dem"
+
+</example>
+
+<example>
+input:
+Она рассказала, что её муж уехал в Берлин на машине. Sie erzählte, dass ihr Mann mit dem Auto nach Berlin gefahren ist.
+
+output:
+✅
+</example>
+
+Check the following translation:`,
 };

@@ -9,8 +9,10 @@ export class ApiService {
     private logFile = "gemini-api.md";
 
     constructor(private settings: MyPluginSettings, private vault: Vault) {
+        console.log('Initializing API service');
         this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
-        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite-preview-02-05" });
+        console.log('API key length:', this.settings.googleApiKey?.length);
+        this.model = this.genAI.getGenerativeModel({ model: "gemini-pro" });
         this.ensureLogFile();
     }
 
@@ -85,5 +87,27 @@ ${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : 
 
     async translateText(text: string): Promise<string> {
         return this.generateContent(prompts.translate_text + '\n' + text);
+    }
+
+    async translateRuToDe(text: string): Promise<string> {
+        return this.generateContent(prompts.translate_ru_to_de + '\n' + text);
+    }
+
+    async checkRuDeTranslation(text: string): Promise<string> {
+        console.log('API: Starting checkRuDeTranslation');
+        const prompt = prompts.check_ru_de_translation + '\n' + text;
+        console.log('API: Generated prompt:', prompt);
+        try {
+            const result = await this.model.generateContent(prompt);
+            console.log('API: Raw result:', result);
+            const response = result.response.text();
+            console.log('API: Response text:', response);
+            await this.appendToLog(prompt, response);
+            return response;
+        } catch (error) {
+            console.error('API: Error in checkRuDeTranslation:', error);
+            await this.appendToLog(prompt, "", error);
+            throw error;
+        }
     }
 }
