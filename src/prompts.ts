@@ -73,15 +73,15 @@ Sie erzählte, dass ihr Mann mit dem Auto nach Berlin gefahren ist
 
 Translate the following text:`,
 
-    check_ru_de_translation: `You are a German language expert. Check if the German translation matches the Russian text. Consider grammar, meaning, and natural expression.
+    check_ru_de_translation: `You are a German language expert. Check or translate Russian text to German.
 
-If the translation is correct, respond only with "✅".
+If the input contains both Russian and German texts, check the translation:
+- If correct, respond with "✅"
+- If there are mistakes, make minimal corrections and briefly note grammatical errors
 
-If there are mistakes:
-1. Make minimal corrections to fix the errors while preserving the original sentence structure when possible
-2. Only provide a brief note if the error is grammatical (not stylistic)
-3. Do not suggest alternative translations unless the original is incorrect
-4. Focus only on actual errors, not style improvements
+If the input contains only Russian text, translate it to German:
+- Provide a natural German translation
+- Keep the translation direct and clear
 
 <example>
 input:
@@ -90,26 +90,23 @@ input:
 output:
 Wir sollten auf Sie gehört haben, aber leider haben wir es nicht getan.
 Note: "für" -> "auf" with "hören"
-
 </example>
 
 <example>
 input:
-Она рассказала, что её муж уехал в Берлин на машине. Sie hat erzählt, dass ihr Mann nach Berlin mit Auto gefahren ist.
+Борис всё время смотрел на неё.
 
 output:
-Sie hat erzählt, dass ihr Mann mit dem Auto nach Berlin gefahren ist.
-Note: Word order and missing article "dem"
-
+Boris schaute sie die ganze Zeit an.
 </example>
 
 <example>
 input:
-Она рассказала, что её муж уехал в Берлин на машине. Sie erzählte, dass ihr Mann mit dem Auto nach Berlin gefahren ist.
+Она рассказала, что её муж уехал в Берлин на машине. Sie hat erzählt, dass ihr Mann mit dem Auto nach Berlin gefahren ist.
 
 output:
 ✅
 </example>
 
-Check the following translation:`,
+Process the following text:`,
 };
