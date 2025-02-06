@@ -118,8 +118,8 @@ export default class MyPlugin extends Plugin {
                     
                     const response = await this.apiService.determineInfinitiveAndEmoji(selection);
                     if (response) {
-                        const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
-                        const formattedText = `${formattedBacklink}\n${selection} ${response} ^${nextNumber}\n\n`;
+                        const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(q)]]`;
+                        const formattedText = `${formattedBacklink} ${selection} ${response} ^${nextNumber}\n`;
                         const clipboardText = `${selection} ${response} ${formattedBacklink}\n`;
                         
                         editor.replaceSelection(formattedText);
@@ -154,8 +154,8 @@ export default class MyPlugin extends Plugin {
                     
                     const response = await this.apiService.makeBrackets(selection);
                     if (response) {
-                        const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
-                        const formattedText = `${formattedBacklink}\n${response} ^${nextNumber}\n`;
+                        const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(q)]]`;
+                        const formattedText = `${formattedBacklink} ${response.trim()} ^${nextNumber}\n`;
                         
                         editor.replaceSelection(formattedText);
                     }
@@ -210,10 +210,10 @@ export default class MyPlugin extends Plugin {
                 const fileContent = editor.getValue();
                 const maxNumber = this.findHighestNumber(fileContent);
                 const nextNumber = maxNumber + 1;
-                const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
+                const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(q)]]`;
                 
-                await navigator.clipboard.writeText(`${selection} ${formattedBacklink} \n`);
-                editor.replaceSelection(`${formattedBacklink}\n${selection} ^${nextNumber}\n`);
+                await navigator.clipboard.writeText(`${selection} ${formattedBacklink}\n`);
+                editor.replaceSelection(`${formattedBacklink} ${selection} ^${nextNumber}\n`);
             }
         });
 
