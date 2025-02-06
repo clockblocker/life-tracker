@@ -13,7 +13,8 @@ export default class MyPlugin extends Plugin {
     async onload() {
         await this.loadSettings();
         
-        this.apiService = new ApiService(this.settings);
+        console.log('Plugin loading...');
+        this.apiService = new ApiService(this.settings, this.app.vault);
         this.fileService = new FileService(this.app.vault);
 
         this.addCommand({
@@ -77,19 +78,25 @@ export default class MyPlugin extends Plugin {
             id: 'fill-template',
             name: 'Fill the template for the word in the title of the file',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
+                console.log('Executing fill-template command...');
                 const fileName = view.file?.name;
                 if (!fileName) {
                     new Notice('Current file is missing a title');
                     return;
                 }
 
-                const word = fileName.slice(0, -3)
+                const word = fileName.slice(0, -3);
+                console.log('Fetching template for word:', word);
 
-                const response = await this.apiService.fetchTemplate(word);
-                const content = this.extractContentFromResponse(response);
-
-                if (content && view?.file?.path) {
-                    await this.fileService.appendToFile(view.file.path, content);
+                try {
+                    const response = await this.apiService.fetchTemplate(word);
+                    console.log('Got response:', response);
+                    if (response && view?.file?.path) {
+                        await this.fileService.appendToFile(view.file.path, response);
+                    }
+                } catch (error) {
+                    console.error('Error in fill-template:', error);
+                    new Notice(`Error: ${error.message}`);
                 }
             }
         });
@@ -98,17 +105,22 @@ export default class MyPlugin extends Plugin {
             id: 'get-infinitive-and-emoji',
             name: 'Get infinitive form and emoji for current word',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
+                console.log('Executing get-infinitive-and-emoji command...');
                 const fileName = view.file?.name;
                 if (!fileName) {
                     new Notice('Current file is missing a title');
                     return;
                 }
 
-                const response = await this.apiService.determineInfinitiveAndEmoji(fileName);
-                const content = this.extractContentFromResponse(response);
-
-                if (content && view?.file?.path) {
-                    await this.fileService.appendToFile(view.file.path, content);
+                try {
+                    const response = await this.apiService.determineInfinitiveAndEmoji(fileName);
+                    console.log('Got response:', response);
+                    if (response && view?.file?.path) {
+                        await this.fileService.appendToFile(view.file.path, response);
+                    }
+                } catch (error) {
+                    console.error('Error in get-infinitive-and-emoji:', error);
+                    new Notice(`Error: ${error.message}`);
                 }
             }
         });

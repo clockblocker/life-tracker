@@ -21,5 +21,16 @@ export class SettingsTab extends PluginSettingTab {
                     this.plugin.settings.anthropicKey = value;
                     await this.plugin.saveSettings();
                 }));
+
+        new Setting(containerEl)
+            .setName('Google API Key')
+            .setDesc('Won`t leave your vault')
+            .addText(text => text
+                .setPlaceholder('Enter your key')
+                .setValue(this.plugin.settings.googleApiKey)
+                .onChange(async (value) => {
+                    this.plugin.settings.googleApiKey = value;
+                    await this.plugin.saveSettings();
+                }));
     }
 }

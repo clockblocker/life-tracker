@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "src",
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "ESNext",
@@ -15,7 +15,14 @@
       "DOM",
       "ES5",
       "ES6",
-      "ES7"
+      "ES7",
+      "ES2021"
+    ],
+    "skipLibCheck": true,
+    "types": [
+      "node",
+      "codemirror",
+      "tern"
     ]
   },
   "include": [

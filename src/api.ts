@@ -1,65 +1,90 @@
-import { requestUrl } from 'obsidian';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { MyPluginSettings } from "./types";
+import { TFile, Vault } from 'obsidian';
 import { prompts } from './prompts';
-import { MyPluginSettings } from './types';
 
 export class ApiService {
-    constructor(private settings: MyPluginSettings) {}
+    private genAI: GoogleGenerativeAI;
+    private model: any; // Using any for now since types might not be available
+    private logFile = "gemini-api.md";
 
-    async fetchTemplate(word: string) {
-        return this.makeRequest(word, prompts.generate_dictionary_entry);
+    constructor(private settings: MyPluginSettings, private vault: Vault) {
+        this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
+        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite-preview-02-05" });
+        this.ensureLogFile();
     }
 
-    async determineInfinitiveAndEmoji(text: string) {
-        return this.makeRequest(text, prompts.determine_infinitive_and_pick_emoji);
-    }
-
-    async makeBrackets(text: string) {
-        return this.makeRequest(text, prompts.make_brackets);
-    }
-
-    async translateText(text: string) {
-        return this.makeRequest(text, prompts.translate_text);
-    }
-
-    private async makeRequest(text: string, prompt: string) {
-        const url = 'https://api.anthropic.com/v1/messages';
-    
-        const headers = {
-            'Content-Type': 'application/json',
-            'x-api-key': this.settings.anthropicKey,
-            'anthropic-version': '2023-06-01',
-        };
-    
-        const body = {
-            "model": "claude-3-5-haiku-20241022",
-            "max_tokens": 1024,
-            "system": [
-                {
-                    "type": "text",
-                    "text": prompt,
-                    "cache_control": { "type": "ephemeral" }
-                }
-            ],
-            "messages": [
-                {
-                    "role": "user",
-                    "content": text,
-                }
-            ]
-        };
-
+    private async ensureLogFile() {
         try {
-            const response = await requestUrl({
-                url,
-                method: 'POST',
-                contentType: "application/json",
-                body: JSON.stringify(body),
-                headers,
-            });
-
-            return JSON.stringify(response);
+            if (!(await this.vault.adapter.exists(this.logFile))) {
+                await this.vault.create(this.logFile, "# Gemini API Logs\n\n");
+            }
         } catch (error) {
-            return error + '\n\n' + JSON.stringify({ url, method: 'POST', headers, body });
+            console.error('Error creating log file:', error);
         }
+    }
+
+    private async appendToLog(prompt: string, response: string, error?: any) {
+        try {
+            const timestamp = new Date().toISOString();
+            const logEntry = `
+## ${timestamp}
+### Prompt:
+\`\`\`
+${prompt}
+\`\`\`
+
+### Response:
+\`\`\`
+${response}
+\`\`\`
+${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : ''}
+---
+`;
+            
+            const file = this.vault.getAbstractFileByPath(this.logFile) as TFile;
+            if (file) {
+                const currentContent = await this.vault.read(file);
+                await this.vault.modify(file, currentContent + logEntry);
+            } else {
+                await this.ensureLogFile();
+                const newFile = this.vault.getAbstractFileByPath(this.logFile) as TFile;
+                if (newFile) {
+                    await this.vault.modify(newFile, logEntry);
+                }
+            }
+        } catch (error) {
+            console.error('Error appending to log:', error);
+        }
+    }
+
+    private async generateContent(prompt: string): Promise<string> {
+        try {
+            const result = await this.model.generateContent(prompt);
+            const response = result.response.text();
+            await this.appendToLog(prompt, response);
+            return response;
+        } catch (error) {
+            await this.appendToLog(prompt, "", error);
+            console.error('Error generating content:', error);
+            throw error;
+        }
+    }
+
+    async fetchTemplate(word: string): Promise<string> {
+        const prompt = prompts.generate_dictionary_entry.replace('{{german_word}}', word);
+        return this.generateContent(prompt);
+    }
+
+    async determineInfinitiveAndEmoji(word: string): Promise<string> {
+        return this.generateContent(prompts.determine_infinitive_and_pick_emoji + '\n' + word);
+    }
+
+    async makeBrackets(text: string): Promise<string> {
+        return this.generateContent(prompts.make_brackets + '\n' + text);
+    }
+
+    async translateText(text: string): Promise<string> {
+        return this.generateContent(prompts.translate_text + '\n' + text);
     }
 }
