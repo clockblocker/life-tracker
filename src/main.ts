@@ -13,7 +13,6 @@ export default class MyPlugin extends Plugin {
     async onload() {
         await this.loadSettings();
         
-        console.log('Plugin loading...');
         this.apiService = new ApiService(this.settings, this.app.vault);
         this.fileService = new FileService(this.app.vault);
 
@@ -78,7 +77,6 @@ export default class MyPlugin extends Plugin {
             id: 'fill-template',
             name: 'Fill the template for the word in the title of the file',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
-                console.log('Executing fill-template command...');
                 const fileName = view.file?.name;
                 if (!fileName) {
                     new Notice('Current file is missing a title');
@@ -86,16 +84,12 @@ export default class MyPlugin extends Plugin {
                 }
 
                 const word = fileName.slice(0, -3);
-                console.log('Fetching template for word:', word);
-
                 try {
                     const response = await this.apiService.fetchTemplate(word);
-                    console.log('Got response:', response);
                     if (response && view?.file?.path) {
                         await this.fileService.appendToFile(view.file.path, response);
                     }
                 } catch (error) {
-                    console.error('Error in fill-template:', error);
                     new Notice(`Error: ${error.message}`);
                 }
             }
@@ -105,7 +99,6 @@ export default class MyPlugin extends Plugin {
             id: 'get-infinitive-and-emoji',
             name: 'Get infinitive form and emoji for current word',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
-                console.log('Executing get-infinitive-and-emoji command...');
                 const fileName = view.file?.name;
                 if (!fileName) {
                     new Notice('Current file is missing a title');
@@ -114,12 +107,10 @@ export default class MyPlugin extends Plugin {
 
                 try {
                     const response = await this.apiService.determineInfinitiveAndEmoji(fileName);
-                    console.log('Got response:', response);
                     if (response && view?.file?.path) {
                         await this.fileService.appendToFile(view.file.path, response);
                     }
                 } catch (error) {
-                    console.error('Error in get-infinitive-and-emoji:', error);
                     new Notice(`Error: ${error.message}`);
                 }
             }
@@ -130,17 +121,23 @@ export default class MyPlugin extends Plugin {
             name: 'Duplicate selected text and process with brackets',
             editorCallback: async (editor: Editor) => {
                 const selection = editor.getSelection();
-                if (selection) {
+                if (!selection) {
+                    new Notice('No text selected');
+                    return;
+                }
+
+                try {
                     const cursor = editor.getCursor();
                     const response = await this.apiService.makeBrackets(selection);
-                    const processedText = this.extractContentFromResponse(response);
-                    if (processedText) {
-                        editor.replaceSelection(selection + '\n\n' + processedText + '\n');
+                    if (response) {
+                        editor.replaceSelection(selection + '\n\n' + response + '\n');
                         editor.setCursor({
                             line: cursor.line,
                             ch: cursor.ch + selection.length
                         });
                     }
+                } catch (error) {
+                    new Notice(`Error: ${error.message}`);
                 }
             }
         });
@@ -150,17 +147,23 @@ export default class MyPlugin extends Plugin {
             name: 'Translate selected text and show below',
             editorCallback: async (editor: Editor) => {
                 const selection = editor.getSelection();
-                if (selection) {
+                if (!selection) {
+                    new Notice('No text selected');
+                    return;
+                }
+
+                try {
                     const cursor = editor.getCursor();
                     const response = await this.apiService.translateText(selection);
-                    const translatedText = this.extractContentFromResponse(response);
-                    if (translatedText) {
-                        editor.replaceSelection(selection + '\n\n' + translatedText + '\n');
+                    if (response) {
+                        editor.replaceSelection(selection + '\n\n' + response + '\n');
                         editor.setCursor({
                             line: cursor.line,
                             ch: cursor.ch + selection.length
                         });
                     }
+                } catch (error) {
+                    new Notice(`Error: ${error.message}`);
                 }
             }
         });
@@ -200,16 +203,6 @@ export default class MyPlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings);
-    }
-
-    private extractContentFromResponse(response: string): string {
-        try {
-            const parsedResponse = JSON.parse(response);
-            return parsedResponse?.json?.content?.[0]?.text || 
-                   parsedResponse?.json?.content?.[0]?.text || '';
-        } catch {
-            return '';
-        }
     }
 
     private findHighestNumber(content: string): number {
