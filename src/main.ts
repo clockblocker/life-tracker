@@ -99,16 +99,31 @@ export default class MyPlugin extends Plugin {
             id: 'get-infinitive-and-emoji',
             name: 'Get infinitive form and emoji for current word',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
-                const fileName = view.file?.name;
-                if (!fileName) {
+                const selection = editor.getSelection();
+                if (!selection) {
+                    new Notice('No text selected');
+                    return;
+                }
+
+                const currentFileName = view.file?.name;
+                if (!currentFileName) {
                     new Notice('Current file is missing a title');
                     return;
                 }
 
                 try {
-                    const response = await this.apiService.determineInfinitiveAndEmoji(fileName);
-                    if (response && view?.file?.path) {
-                        await this.fileService.appendToFile(view.file.path, response);
+                    const fileContent = editor.getValue();
+                    const maxNumber = this.findHighestNumber(fileContent);
+                    const nextNumber = maxNumber + 1;
+                    
+                    const response = await this.apiService.determineInfinitiveAndEmoji(selection);
+                    if (response) {
+                        const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
+                        const formattedText = `${formattedBacklink}\n${selection} ${response} ^${nextNumber}\n\n`;
+                        const clipboardText = `${selection} ${response} ${formattedBacklink}\n`;
+                        
+                        editor.replaceSelection(formattedText);
+                        await navigator.clipboard.writeText(clipboardText);
                     }
                 } catch (error) {
                     new Notice(`Error: ${error.message}`);
@@ -119,22 +134,30 @@ export default class MyPlugin extends Plugin {
         this.addCommand({
             id: 'duplicate-selection',
             name: 'Duplicate selected text and process with brackets',
-            editorCallback: async (editor: Editor) => {
+            editorCallback: async (editor: Editor, view: MarkdownView) => {
                 const selection = editor.getSelection();
                 if (!selection) {
                     new Notice('No text selected');
                     return;
                 }
 
+                const currentFileName = view.file?.name;
+                if (!currentFileName) {
+                    new Notice('Current file is missing a title');
+                    return;
+                }
+
                 try {
-                    const cursor = editor.getCursor();
+                    const fileContent = editor.getValue();
+                    const maxNumber = this.findHighestNumber(fileContent);
+                    const nextNumber = maxNumber + 1;
+                    
                     const response = await this.apiService.makeBrackets(selection);
                     if (response) {
-                        editor.replaceSelection(selection + '\n\n' + response + '\n');
-                        editor.setCursor({
-                            line: cursor.line,
-                            ch: cursor.ch + selection.length
-                        });
+                        const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(Quelle: ${currentFileName.replace('.md', '')})]]`;
+                        const formattedText = `${formattedBacklink}\n${response} ^${nextNumber}\n`;
+                        
+                        editor.replaceSelection(formattedText);
                     }
                 } catch (error) {
                     new Notice(`Error: ${error.message}`);

@@ -5,7 +5,7 @@ import { prompts } from './prompts';
 
 export class ApiService {
     private genAI: GoogleGenerativeAI;
-    private model: any; // Using any for now since types might not be available
+    private model: any;
     private logFile = "gemini-api.md";
 
     constructor(private settings: MyPluginSettings, private vault: Vault) {
@@ -66,7 +66,6 @@ ${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : 
             return response;
         } catch (error) {
             await this.appendToLog(prompt, "", error);
-            console.error('Error generating content:', error);
             throw error;
         }
     }
