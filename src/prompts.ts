@@ -107,6 +107,5 @@ input:
 output:
 ✅
 </example>
-
 Process the following text:`,
 };
