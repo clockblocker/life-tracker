@@ -101,31 +101,19 @@ export default class MyPlugin extends Plugin {
                 id: 'get-infinitive-and-emoji',
                 name: 'Get infinitive form and emoji for current word',
                 editorCallback: async (editor: Editor, view: MarkdownView) => {
-                    const selection = editor.getSelection();
-                    if (!selection) {
-                        new Notice('No text selected');
-                        return;
-                    }
-
-                    const currentFileName = view.file?.name;
-                    if (!currentFileName) {
+                    const fileName = view.file?.name;
+                    if (!fileName) {
                         new Notice('Current file is missing a title');
                         return;
                     }
 
+                    const word = fileName.slice(0, -3); // Remove .md extension
+
                     try {
-                        const fileContent = editor.getValue();
-                        const maxNumber = this.findHighestNumber(fileContent);
-                        const nextNumber = maxNumber + 1;
-
-                        const response = await this.apiService.determineInfinitiveAndEmoji(selection);
+                        const response = await this.apiService.determineInfinitiveAndEmoji(word);
                         if (response) {
-                            const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(q)]]`;
-                            const formattedText = `${formattedBacklink} ${selection} ${response} ^${nextNumber}\n`;
-                            const clipboardText = `${selection} ${response} ${formattedBacklink}\n`;
-
+                            const formattedText = `${response}\n`;
                             editor.replaceSelection(formattedText);
-                            await navigator.clipboard.writeText(clipboardText);
                         }
                     } catch (error) {
                         new Notice(`Error: ${error.message}`);
