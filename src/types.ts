@@ -7,5 +7,5 @@ export interface MyPluginSettings {
 export const DEFAULT_SETTINGS: MyPluginSettings = {
     deepseekApiKey: '',
     googleApiKey: '',
-    apiProvider: 'deepseek'
+    apiProvider: 'google'
 };

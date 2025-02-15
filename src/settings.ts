@@ -37,8 +37,8 @@ export class SettingsTab extends PluginSettingTab {
             .setName('API Provider')
             .setDesc('Choose which API provider to use')
             .addDropdown(dropdown => {
-                dropdown.addOption('deepseek', 'DeepSeek');
                 dropdown.addOption('google', 'Google');
+                dropdown.addOption('deepseek', 'DeepSeek');
                 dropdown.setValue(this.plugin.settings.apiProvider);
                 dropdown.onChange(async (value: 'deepseek' | 'google') => {
                     this.plugin.settings.apiProvider = value;
