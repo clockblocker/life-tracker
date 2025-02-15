@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, Notice } from 'obsidian';
+import { Editor, MarkdownView } from 'obsidian';
 import MyPlugin from '../main';
 import { fillTemplate as fillTemplateFn } from './functions';
 

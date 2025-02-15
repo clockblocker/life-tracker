@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, Notice, TFile } from 'obsidian';
+import { Editor, MarkdownView, Notice } from 'obsidian';
 import MyPlugin from '../main';
 
 export async function fillTemplate(plugin: MyPlugin, editor: Editor, view: MarkdownView) {

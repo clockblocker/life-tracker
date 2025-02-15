@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, Notice } from 'obsidian';
+import { Editor } from 'obsidian';
 import MyPlugin from '../main';
 import { checkRuDeTranslation as checkRuDeTranslationFn } from './functions';
 

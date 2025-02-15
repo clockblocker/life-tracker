@@ -1,12 +1,13 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, GenerationConfig, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { MyPluginSettings } from "./types";
 import { TFile, Vault, Notice } from 'obsidian';
 import { prompts } from './prompts';
 
 export class ApiService {
     private genAI: GoogleGenerativeAI | null = null;
-    private model = "deepseek-chat";
+    private model = "gemini-2.0-flash-lite-preview-02-05";
     private logFile = "api-logs.md";
+    private chatSessions: { [key: string]: any } = {};
 
     constructor(private settings: MyPluginSettings, private vault: Vault) {
         try {
@@ -32,14 +33,14 @@ export class ApiService {
         }
     }
 
-    private async appendToLog(prompt: string, response: string, error?: any) {
+    private async appendToLog(systemPrompt: string, response: string, error?: any) {
         try {
             const timestamp = new Date().toISOString();
             const logEntry = `
 ## ${timestamp}
 ### Prompt:
 \`\`\`
-${prompt}
+${systemPrompt}
 \`\`\`
 
 ### Response:
@@ -66,9 +67,11 @@ ${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : 
         }
     }
 
-    private async generateContent(prompt: string): Promise<string> {
+    private async generateContent(systemPrompt: string, userInput: string): Promise<string> {
         try {
             let response: string | null = null;
+            const fullPrompt = systemPrompt + '\n' + userInput;
+
             if (this.settings.apiProvider === 'deepseek') {
                 if (!this.settings.deepseekApiKey) {
                     throw new Error('DeepSeek API key not configured.');
@@ -82,7 +85,8 @@ ${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : 
                 const body = JSON.stringify({
                     model: this.model,
                     messages: [
-                        { role: "user", content: prompt }
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: userInput }
                     ],
                     stream: false
                 });
@@ -107,46 +111,65 @@ ${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : 
                 if (!this.genAI) {
                     this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
                 }
-                const model = this.genAI.getGenerativeModel({ model: "gemini-pro" });
-                const result = await model.generateContent(prompt);
+
+                const generationConfig: GenerationConfig = {
+                    temperature: 0,
+                    topP: 0.95,
+                    topK: 64,
+                    maxOutputTokens: 8192,
+                };
+
+                const chatKey = systemPrompt;
+                if (!this.chatSessions[chatKey]) {
+                    const model = this.genAI.getGenerativeModel({
+                        model: this.model,
+                        systemInstruction: systemPrompt
+                    });
+                    this.chatSessions[chatKey] = model.startChat({
+                        generationConfig: generationConfig,
+                        history: [],
+                    });
+                }
+
+                const chatSession = this.chatSessions[chatKey];
+                const result = await chatSession.sendMessage(userInput);
                 response = result.response.text();
+
             } else {
                 throw new Error('API provider not configured correctly.');
             }
 
-            // Check if response is null and convert to empty string
             const logResponse = response === null ? "" : response;
-            await this.appendToLog(prompt, logResponse);
+            await this.appendToLog(systemPrompt, logResponse);
             return logResponse;
         } catch (error: any) {
-            await this.appendToLog(prompt, "", error);
+            await this.appendToLog(systemPrompt, "", error);
             console.error('Error generating content:', error);
             throw new Error(error.message);
         }
     }
 
     async fetchTemplate(word: string): Promise<string> {
-        const prompt = prompts.generate_dictionary_entry.replace('{{german_word}}', word);
-        return this.generateContent(prompt);
+        return this.generateContent(prompts.generate_dictionary_entry, word);
     }
 
     async determineInfinitiveAndEmoji(word: string): Promise<string> {
-        return this.generateContent(prompts.determine_infinitive_and_pick_emoji + '\n' + word);
+        return this.generateContent(prompts.determine_infinitive_and_pick_emoji, word);
     }
 
     async makeBrackets(text: string): Promise<string> {
-        return this.generateContent(prompts.make_brackets + '\n' + text);
+        return this.generateContent(prompts.make_brackets, text);
     }
 
     async translateText(text: string): Promise<string> {
-        return this.generateContent(prompts.translate_text + '\n' + text);
+        return this.generateContent(prompts.translate_text, text);
     }
 
     async translateRuToDe(text: string): Promise<string> {
-        return this.generateContent(prompts.translate_ru_to_de + '\n' + text);
+        return this.generateContent(prompts.translate_ru_to_de, text);
     }
 
     async checkRuDeTranslation(text: string): Promise<string> {
-        return this.generateContent(prompts.check_ru_de_translation + '\n' + text);
+        return this.generateContent(prompts.check_ru_de_translation, text);
     }
 }

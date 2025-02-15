@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, Notice } from 'obsidian';
+import { Editor, MarkdownView } from 'obsidian';
 import MyPlugin from '../main';
 import { duplicateSelection as duplicateSelectionFn } from './functions';
 
