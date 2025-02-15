@@ -1,9 +1,11 @@
 export interface MyPluginSettings {
-    anthropicKey: string;
+    deepseekApiKey: string;
     googleApiKey: string;
+    apiProvider: 'deepseek' | 'google';
 }
 
 export const DEFAULT_SETTINGS: MyPluginSettings = {
-    anthropicKey: '',
-    googleApiKey: ''
+    deepseekApiKey: '',
+    googleApiKey: '',
+    apiProvider: 'deepseek'
 };

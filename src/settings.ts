@@ -12,13 +12,13 @@ export class SettingsTab extends PluginSettingTab {
         containerEl.createEl('h2', {text: 'Settings'});
 
         new Setting(containerEl)
-            .setName('Anthropic API Key')
+            .setName('DeepSeek API Key')
             .setDesc('Won`t leave your vault')
             .addText(text => text
                 .setPlaceholder('Enter your key')
-                .setValue(this.plugin.settings.anthropicKey)
+                .setValue(this.plugin.settings.deepseekApiKey)
                 .onChange(async (value) => {
-                    this.plugin.settings.anthropicKey = value;
+                    this.plugin.settings.deepseekApiKey = value;
                     await this.plugin.saveSettings();
                 }));
 
@@ -32,5 +32,18 @@ export class SettingsTab extends PluginSettingTab {
                     this.plugin.settings.googleApiKey = value;
                     await this.plugin.saveSettings();
                 }));
+
+        new Setting(containerEl)
+            .setName('API Provider')
+            .setDesc('Choose which API provider to use')
+            .addDropdown(dropdown => {
+                dropdown.addOption('deepseek', 'DeepSeek');
+                dropdown.addOption('google', 'Google');
+                dropdown.setValue(this.plugin.settings.apiProvider);
+                dropdown.onChange(async (value: 'deepseek' | 'google') => {
+                    this.plugin.settings.apiProvider = value;
+                    await this.plugin.saveSettings();
+                });
+            });
     }
 }
