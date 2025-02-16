@@ -3,29 +3,23 @@ import { Notice, TFile, Vault } from 'obsidian';
 export class FileService {
     constructor(private vault: Vault) {}
 
-    async appendToFile(path: string, content: string) {
-        const file = this.vault.getAbstractFileByPath(path);
-        
-        if (!file) {
-            try {
-                await this.vault.create(path, content);
-            } catch (error) {
-                new Notice(`Error creating file: ${error.message}`);
-            }
-            return;
-        }
-
-        if (!(file instanceof TFile)) {
-            new Notice(`File ${path} does not exist or is not a valid file!`);
-            return;
-        }
-
+    async appendToFile(filePath: string, text: string): Promise<void> {
         try {
-            const currentContent = await this.vault.read(file);
-            const newContent = currentContent + content;
-            await this.vault.modify(file, newContent);
+            const abstractFile = await this.vault.getAbstractFileByPath(filePath);
+
+            if (!abstractFile || !(abstractFile instanceof TFile)) {
+                console.error(`File "${filePath}" not found.`);
+                return;
+            }
+
+            let fileContent = await this.vault.read(abstractFile);
+            if (!fileContent.endsWith('\n')) {
+                text = '\n' + text;
+            }
+            await this.vault.append(abstractFile, text);
         } catch (error) {
-            new Notice(`Error appending to file: ${error.message}`);
+            console.error(`Failed to append to file ${filePath}: ${error}`);
+            throw error;
         }
     }
 

@@ -1,49 +1,48 @@
 export const prompts = {
-    generate_dictionary_entry: `You are an expert linguist specializing in the German language. Your task is to create a detailed dictionary entry for a given German word. Here's the word you need to analyze:
-    
-    <german_word>
-    {{german_word}}
-    </german_word>
-    
-    Before creating the entry, analyze the word and plan your approach. Break down the word inside <word_breakdown> tags:
-    
-    1. Identify the part of speech of the word.
-    2. If it's a verb:
-       - Determine if it's trennbar (separable) or untrennbar (inseparable).
-       - Identify its tense forms (present, past, perfect).
-       - Note any irregular conjugations. -Fill the list of cojugations (Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II) 
-    3. For nouns:
-       - Identify the gender (masculine, feminine, or neuter).
-       - Determine the declension pattern.
-    4. For adjectives:
-       - Note the comparative and superlative forms.
-    5. Identify and list examples of each morpheme in the word.
-    6. Plan which template you'll use based on the part of speech.
-    7. List the key information you'll need to include in the entry (e.g., pronunciation, conjugations, synonyms, antonyms, translations, morphemes).
-    
-    It's OK for this section to be quite long.
-    
-    Now, create the dictionary entry using the appropriate template based on your analysis. Strictly adhere to the format provided in the examples, ensuring no additional text is included that isn't present in the templates. Use the following guidelines:
-    
-    1. For trennbar verbs:
-       - Start with an appropriate emoji
-       - Include pronunciation, conjugations, synonyms, antonyms, English and Russian translations, morpheme breakdown, and a conjugation table
-    
-    2. For untrennbar verbs and verbs without prefixes:
-       - Follow a similar format to trennbar verbs, adjusting the conjugation details as needed
-    
-    3. For adjectives:
-       - Start with an appropriate emoji
-       - Include pronunciation, antonyms, synonyms, English and Russian translations, and unique possible forms
-    
-    4. For nouns:
-       - Use 🔴 for feminine, 🟢 for neuter, and 🔵 for masculine nouns
-       - Include plural form, synonyms, English and Russian translations, morpheme breakdown, and unique possible forms
-    
-    5. For other parts of speech:
-       - Create a similar template, adapting the information as appropriate for the specific part of speech
-    
-    Present only your final entry. Do not present the user with word_breakdown. Do not write to the user your thought process.
+generate_dictionary_entry: `You are an expert linguist specializing in the German language. Your task is to create a detailed dictionary entry for a given German word. Here's the word you need to analyze:
+<german_word>
+{{german_word}}
+</german_word>
+
+Before creating the entry, analyze the word and plan your approach. Break down the word inside <word_breakdown> tags:
+
+1. Identify the part of speech of the word.
+2. If it's a verb:
+- Determine if it's trennbar (separable) or untrennbar (inseparable).
+- Identify its tense forms (present, past, perfect).
+- Note any irregular conjugations. -Fill the list of cojugations (Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II) 
+3. For nouns:
+- Identify the gender (masculine, feminine, or neuter).
+- Determine the declension pattern.
+4. For adjectives:
+- Note the comparative and superlative forms.
+5. Identify and list examples of each morpheme in the word.
+6. Plan which template you'll use based on the part of speech.
+7. List the key information you'll need to include in the entry (e.g., pronunciation, conjugations, synonyms, antonyms, translations, morphemes).
+
+It's OK for this section to be quite long.
+
+Now, create the dictionary entry using the appropriate template based on your analysis. Strictly adhere to the format provided in the examples, ensuring no additional text is included that isn't present in the templates. Use the following guidelines:
+
+1. For trennbar verbs:
+- Start with an appropriate emoji
+- Include pronunciation, conjugations, synonyms, antonyms, English and Russian translations, morpheme breakdown, and a conjugation table
+
+2. For untrennbar verbs and verbs without prefixes:
+- Follow a similar format to trennbar verbs, adjusting the conjugation details as needed
+
+3. For adjectives:
+- Start with an appropriate emoji
+- Include pronunciation, antonyms, synonyms, English and Russian translations, and unique possible forms
+
+4. For nouns:
+- Use 🔴 for feminine, 🟢 for neuter, and 🔵 for masculine nouns
+- Include plural form, synonyms, English and Russian translations, morpheme breakdown, and unique possible forms
+
+5. For other parts of speech:
+- Create a similar template, adapting the information as appropriate for the specific part of speech
+
+Present only your final entry. Do not present the user with word_breakdown. Do not write to the user your thought process.
 <examples>
 <example>
 <german_word>
@@ -495,51 +494,87 @@ D: dem [[Rechercheergbnis]], den [[Rechercheergbnissen]]
 </examples>
 `,
 
-    determine_infinitive_and_pick_emoji: `Given a german word, determine its infinitive form and pick an appropriate emoji to represent it. If the word is a noun, determin it's gender and use 🔵 for der,  🔴 for die, if 🟢 for das. Do not write anything else, just the infinitive and an emoji. given "brutzelt"   "🍳[[brutzeln]]". Given "gesorgt" reply with "🤔 [[sorgen]]". Given "Hoffnungen" reply with "🤞 🔴 die [[Hoffnung]]. Given "eisigen", reply with "🥶 [[eisig]]. I a word can be a form of multiple parts of speach, list all options, separated with |. For expample, given "vergangene", reply with "🕰️, [[vergangen]] | 🕰️, [[vergehen]]. Given "Nieser", reply with "🤧 [[niesen]] | 🔵 🤧 der [[Nieser]]. Gigen "klares", reply with "😌 [[klären]] | 😌 [[klar]] | 😌 🟢 das [[Klare]]"`,
-    make_brackets: `Process the given German text and generate output following these rules:
+determine_infinitive_and_pick_emoji: `Given a german word, determine its infinitive form and pick an appropriate emoji to represent it. If the word is a noun, determin it's gender and use 🔵 for der,  🔴 for die, if 🟢 for das. Do not write anything else, just the infinitive and an emoji. given "brutzelt" reply with "🍳 [[brutzeln]]". Given "gesorgt" reply with "🤔 [[sorgen]]". Given "Hoffnungen" reply with "🔴 die [[Hoffnung]] 🕊️". Given "eisigen", reply with "🥶 [[eisig]]". If a word can be a form of multiple parts of speach, list all options, separated with |. For expample, given "vergangene", reply with "🕰️ [[vergangen]] | 🕰️ [[vergehen]]". Given "Nieser", reply with "🤧 [[niesen]] | 🔵 der [[Nieser]] 🤧". Given "klares", reply with "😌 [[klären]] | 😌 [[klar]] | 🟢 das [[Klare]] 😌. Given "zweiteste", reply with "2️⃣ [[zwei]]". The output should be compact, without extra spaces or newlines.`,
+make_brackets: `you are a highly advanced linguistic parser trained in **german syntax analysis**. your task is to process sentences by identifying their grammatical structure and annotating key elements using bracketed notation.
 
-For verbs:
-a. If the verb is in its basic form (infinitive), enclose it in double square brackets: [[infinitive]]
-b. If the verb is not in its basic form, use this format: [[infinitive|encountered form]]
-b. If the verb is trenbarren, add the prefix to the infinitive: [[prefixed infinitive|encountered form]]
-For nouns:
-a. If the noun is singular, enclose it in double square brackets: [[singular form]]
-b. If the noun is plural, use this format: [[singular form|plural form]]
-For adjectives:
-a. If the adjective is in its basic form, enclose it in double square brackets: [[basic form]]
-b. If the adjective is not in its basic form, use this format: [[basic form|encountered form]]
-Ignore haben/sein, articles (definite and indefinite), names, proper nouns and pronomen
+## <instructions>
+1. **normalize all words to their base form**:
+   - *brutzelt* → [[brutzeln]]
+   - *gesorgt* → [[sorgen]]
+   - *Hoffnungen* → [[Hoffnung]]
+   - *eisigen* → [[eisig]]
+   - *zweiteste* → [[zwei]]
+2. **identify and tag verbs** with their infinitive forms, keeping their conjugation visible**:
+   - *hat* → [[haben|hat]]
+   - *ließ* → [[lassen|ließ]]
+   - *werden verbunden* → [[verbinden|werden]] ... [[verbinden|verbunden]]
+3. **handle separable verbs properly** by tagging both parts:
+   - *hängst auf* → [[aufhängen|hängst]] ... [[aufhängen|auf]]
+   - *weiterhelfen* → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
+   - *vorbeikommen* → [[vorbeikommen]]
+4. **convert numerals and ordinal numbers properly**:
+   - *zweiteste* → [[zwei]]
+   - *drittes* → [[drei]]
+5. **convert abbreviations to their expanded form where applicable**:
+   - *z.B.* → [[zum Beispiel|z.B.]]
+6. **preserve sentence structure** without removing punctuation or altering meaning.
+7. **ensure names and proper nouns remain untouched**:
+   - *Georgia Institute of Technology* remains as-is.
+   - **Avoid introducing typos in names** (e.g., *Laupsien* must not become *Laupien*).
 
-<example>
-Der fleißige Student fängt an, das schwierige Buch zu lesen, das sein Lehrer empfohlen hat.
-Der [[fleißig|fleißige]] [[Student]] [[anfangen|fängt]] an, das [[schwierig|schwierige]] [[Buch]] zu [[lesen]], das sein [[Lehrer]] [[empfehlen|empfohlen]] hat.
-</example>
+## <examples>
+### Example 1
+#### <user_input>
+Vincke: Oh schön, sehr schön. Da wird sich Leon freuen. Wann können wir denn mal vorbeikommen?
+#### <ideal_output>
+Vincke: Oh [[schön]], sehr [[schön]]. Da [[freuen|wird]] sich Leon [[freuen|freuen]]. Wann [[können|können]] wir denn mal [[vorbeikommen]]?
 
-<example>
-(Schubst Sokka weg) Genau, er ist bestimmt ein Spion der Feuermarine! Das sieht man schon an dem furchtbar bösen Blick in seinen Augen!
-([[wegschubsen|Schubst]] [[schubsen|Sokka]] weg) Genau, er ist [[bestimmt]] ein [[Spion]] der [[Feuermarine]]! Das [[sehen|sieht]] man [[schon]] an dem [[furchtbar|furchtbare]] [[böse|bösen]] [[Blick]] in seinen [[Auge|Augen]]!
-</example>
+### Example 2
+#### <user_input>
+Mr und Mrs Dursley im Ligusterweg Nummer 4 waren stolz darauf, ganz und gar normal zu sein, sehr stolz sogar.
+#### <ideal_output>
+Mr und Mrs Dursley im Ligusterweg [[Nummer]] 4 [[sein|waren]] [[stolz]] [[darauf]], [[ganz und gar]] normal zu [[sein]], [[sehr]] [[stolz]] [[sogar]].
 
-<example>
-Keine Angst. Mit Wasser kriegt man das wieder ab. Und, wohnt ihr hier in der Gegend?
-Keine [[Angst]]. Mit [[Wasser]] [[abkriegen|kriegt]] man das wieder ab. Und, [[wohnen|wohnt]] ihr hier in der [[Gegend]]?
-</example>
+### Example 3
+#### <user_input>
+So hat jeder seine Sorgen... Ehe ich's vergesse: heute Abend läßt du dir von Tante Martha einen Kleiderbügel geben und hängst den Anzug ordentlich auf.
+#### <ideal_output>
+So [[Sorgen haben|hat]] jeder seine [[Sorgen]]... [[Ehe]] ich's [[vergessen|vergesse]]: [[heute]] [[Abend]] [[geben lassen|läßt]] du dir von Tante Martha einen [[Kleiderbügel]] [[geben lassen|geben]] und [[aufhängen|hängst]] den [[Anzug]] [[ordentlich]] [[aufhängen|auf]].
 
-<example>
-und riß ihnen die Flügel aus.  
-und [[ausreißen|riß]] ihnen die [[Flügel]] aus.
-</example>
+## **additional notes**
+- **pronouns and function words** (e.g., *ich, du, wir, dass, weil*) are **not tagged** unless they form part of a phrase.
+- **negations** (*nicht, kein*) remain untagged.
+- **modal verbs** (*können, müssen, sollen*) should be tagged when conjugated:
+  - *kann gehen* → [[können|kann]] [[gehen]]
+- **separable verbs must be tagged in both parts**, even when split:
+  - *weiterhelfen* → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
+- **names must remain unchanged and correctly spelled**.
 
-<example>
-Er schlug die Stühl und Vögel tot,  
-Er [[totschlagen|schlug]] die [[Stuhl|Stühl]] und [[Vogel|Vögel]] tot,
-<example>
+## Example 4
+#### <user_input>
+Einen interessanten Ansatz haben z.B. Forscher des Georgia Institute of Technology.  
+#### <ideal_output>
+Einen [[interessant|interessanten]] [[Ansatz]] [[haben]] [[zum Beispiel|z.B.]] [[Forscher]] des Georgia Institute of Technology.
 
+## Example 5
+#### <user_input>
+Bei der Herstellung der Plastikalternative werden Chitinschichten aus Krabbenschalen und Zellulose von Baumfasern miteinander verbunden.   
+#### <ideal_output>
+Bei der [[Herstellung]] der [[Plastikalternative]] [[verbinden|werden]] [[Chitinschicht|Chitinschichten]] aus [[Krabbenschal|Krabbenschalen]] und [[Zellulose]] von [[Baumfasern]] [[miteinander]] [[verbinden|verbunden]].
 
-The output should only contain the processed text, without explanations or additional content. Ensure grammatical accuracy in the final output.
-`,
+## Example 6
+#### <user_input>
+**Laupsien:** Das ist doch schön. Tiere sind für Kinder immer gut, fördern Sozialkompetenz, Verantwortungsbewusstsein ...
+#### <ideal_output>
+[[Laupsien]]: Das ist doch [[schön]]. [[Tiere]] [[sein|sind]] für [[Kind]] [[gut]], [[fördern]] [[Sozialkompetenz]], [[Verantwortungsbewusstsein]]...
 
-    translate_text: `Translate the given German text to English. The translation should be staying true to the original meaning. When possible, mimic german sentance structure. Only provide the translation, no explanations or additional content.
+## Example 7
+#### <user_input>
+**Vincke:** Guten Tag, Herr Laupsien, mein Name ist Vincke. Ich habe ein Problem, vielleicht können Sie mir da weiterhelfen.
+#### <ideal_output>
+Vincke: [[Guten Tag]], Herr [[Laupsien]], [[mein]] [[Name]] [[sein|ist]] [[Vincke]]. Ich [[haben|habe]] ein [[Problem]], [[vielleicht]] [[können|können]] Sie mir da [[weiterhelfen|weiterhelfen]].`,
+
+translate_text: `Translate the given German text to English. The translation should be staying true to the original meaning. When possible, mimic german sentance structure. Only provide the translation, no explanations or additional content.
 
 <example>
 input:
@@ -555,7 +590,7 @@ output:
 No worry. With water can one wash it off.
 </example>`,
 
-    translate_ru_to_de: `You are a German language expert. Translate the given Russian text to grammatically correct German, maintaining the original meaning and using natural German expressions.
+translate_ru_to_de: `You are a German language expert. Translate the given Russian text to grammatically correct German, maintaining the original meaning and using natural German expressions.
 
 <example>
 input:
@@ -566,7 +601,7 @@ Sie erzählte, dass ihr Mann mit dem Auto nach Berlin gefahren ist
 
 Translate the following text:`,
 
-    check_ru_de_translation: `**Eingabe:** Der Agent erhält Texteingaben in einem der folgenden Formate:
+check_ru_de_translation: `**Eingabe:** Der Agent erhält Texteingaben in einem der folgenden Formate:
 
 1. **Deutsch (DE):** Eine Textzeichenfolge in deutscher Sprache.
 2. **Russisch (RU):** Eine Textzeichenfolge in russischer Sprache.

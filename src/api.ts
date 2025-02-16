@@ -70,7 +70,6 @@ export class ApiService {
     private async generateContent(systemPrompt: string, userInput: string): Promise<string> {
         try {
             let response: string | null = null;
-            const fullPrompt = systemPrompt + '\n' + userInput;
 
             if (this.settings.apiProvider === 'deepseek') {
                 if (!this.settings.deepseekApiKey) {
