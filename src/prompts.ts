@@ -298,6 +298,104 @@ P: [[ständigen]], [[ständigeren]], [[ständigsten]]
 [[stehen]], [[Ständigkeit]], [[zuständig]], [[anständig]], [[beständig]], [[aufständig]]
 </ideal_output>
 </example>
+
+<example>
+<german_word>
+zweiteres
+</german_word>
+<ideal_output>
+2️⃣ [[zwei]], [t͡svaɪ̯]  
+
+---
+
+---
+= [[doppelt]], [[beide]], [[paar]]  
+≈ [[ein paar]], [[mehrere]], [[einige]]  
+≠ [[eins]], [[drei]], [[keiner]]  
+
+---
+two  
+два  
+
+---
+[[zwei]]  
+
+---
+N: [[zwei]]  
+A: [[zwei]]  
+G: [[zweier]]  
+D: [[zweien]]  
+
+---
+📏 **Konjugierte Ordinalzahlen**  
+N: [[zweite]], [[zweiter]], [[zweites]], [[zweiten]]  
+A: [[zweiten]], [[zweiteren]], [[zweiten]]  
+G: [[zweiten]], [[zweiterer]], [[zweiten]]  
+D: [[zweitem]], [[zweiterem]], [[zweiten]]  
+F: [[zweite]], [[zweitere]], [[zweiteste]]  
+N: [[zweites]], [[zweiteres]], [[zweitestes]]  
+P: [[zweiten]], [[zweiteren]], [[zweitesten]]  
+
+---
+📊 **Konjugierte Indefinitzahlen** *(if applicable)*  
+(none for zwei)  
+
+---
+[[zweitens]], [[zweifach]], [[zwilling]], [[zweierlei]], [[zweiundzwanzig]], [[der Zweite]], [[zweitweise]], [[zweimalig]]
+</ideal_output>
+</example>
+
+
+<example>
+<german_word>
+einzigsten
+</german_word>
+<ideal_output>
+1️⃣ [[eins]], [aɪ̯ns] | [[ein]], [aɪ̯n]  
+
+---
+= [[einziger]], [[einer]], [[einmal]]  
+≈ [[gewisser]], [[irgendein]], [[ein paar]]  
+≠ [[null]], [[zwei]], [[kein]]  
+
+---
+one, a/an, single  
+один, некий, какой-то  
+
+---
+[[ein]]  
+
+---
+N: [[ein]], [[eins]]  
+A: [[ein]]  
+G: [[eines]]  
+D: [[einem]]  
+
+---
+📏 **Konjugierte Ordinalzahlen**  
+N: [[erste]], [[erster]], [[erstes]], [[ersten]]  
+A: [[ersten]], [[ersteren]], [[ersten]]  
+G: [[ersten]], [[ersterer]], [[ersten]]  
+D: [[erstem]], [[ersterem]], [[ersten]]  
+F: [[erste]], [[erstere]], [[ersteste]]  
+N: [[erstes]], [[ersteres]], [[erstestes]]  
+P: [[ersten]], [[ersteren]], [[erstesten]]  
+
+---
+📊 **Konjugierte Indefinitzahlen**  
+N: [[einige]], [[einer]], [[einziges]], [[einigen]]  
+A: [[einigen]], [[einiger]], [[einzigsten]]  
+G: [[einiger]], [[einigerer]], [[einzigster]]  
+D: [[einigem]], [[einigerem]], [[einzigstem]]  
+F: [[einige]], [[einige]], [[einzigste]]  
+N: [[einiges]], [[einigeres]], [[einzigstes]]  
+P: [[einigen]], [[einigeren]], [[einzigsten]]  
+
+---
+[[einmal]], [[einzig]], [[einer]], [[einige]], [[erstens]], [[einheit]], [[einzel]], [[einzigartig]], [[einmalig]]
+</ideal_output>
+</example>
+
 <example>
 <german_word>
 traurig
