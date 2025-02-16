@@ -8,9 +8,8 @@ export default async function getInfinitiveAndEmoji(plugin: MyPlugin, editor: Ed
 
     try {
         const response = await plugin.apiService.determineInfinitiveAndEmoji(word);
-        if (response) {
-            const formattedText = `${response}\n`;
-            editor.replaceSelection(formattedText);
+        if (response && view.file?.path) {
+            await plugin.fileService.appendToFile(view.file.path, response + '\n');
         }
     } catch (error) {
         new Notice(`Error: ${error.message}`);
