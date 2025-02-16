@@ -37,19 +37,19 @@ export class ApiService {
         try {
             const timestamp = new Date().toISOString();
             const logEntry = `
-## ${timestamp}
-### Prompt:
-\`\`\`
-${systemPrompt}
-\`\`\`
+                ## ${timestamp}
+                ### Prompt:
+                \`\`\`
+                ${systemPrompt}
+                \`\`\`
 
-### Response:
-\`\`\`
-${response}
-\`\`\`
-${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : ''}
----
-`;
+                ### Response:
+                \`\`\`
+                ${response}
+                \`\`\`
+                ${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : ''}
+                ---
+                `;
 
             const file = this.vault.getAbstractFileByPath(this.logFile) as TFile;
             if (file) {

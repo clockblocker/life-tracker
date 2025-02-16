@@ -1,7 +1,18 @@
 import { Editor, MarkdownView, Notice } from 'obsidian';
 import MyPlugin from '../main';
-import { getInfinitiveAndEmoji as getInfinitiveAndEmojiFn } from './functions';
+import { getWordFromFilename } from '../utils';
 
 export default async function getInfinitiveAndEmoji(plugin: MyPlugin, editor: Editor, view: MarkdownView) {
-    await getInfinitiveAndEmojiFn(plugin, editor, view);
+    const word = await getWordFromFilename(view);
+    if (!word) return;
+
+    try {
+        const response = await plugin.apiService.determineInfinitiveAndEmoji(word);
+        if (response) {
+            const formattedText = `${response}\n`;
+            editor.replaceSelection(formattedText);
+        }
+    } catch (error) {
+        new Notice(`Error: ${error.message}`);
+    }
 } 
