@@ -522,6 +522,14 @@ make_brackets: `you are a highly advanced linguistic parser trained in **german 
    - *Georgia Institute of Technology* remains as-is.
    - **Avoid introducing typos in names** (e.g., *Laupsien* must not become *Laupien*).
 8. **do not enclose pronouns or function words** (e.g., *mein, mich, dein, unser, ihr* remain untagged).
+9. **plural nouns must be linked to their singular forms**:
+   - *Krabbenschalen* → [[Krabbenschale|Krabbenschalen]]
+   - *Baumfasern* → [[Baumfaser|Baumfasern]]
+   - *Ausgangsmaterialien* → [[Ausgangsmaterial|Ausgangsmaterialien]]
+10. all conjugated verbs must be linked to their infinitive base form, including past tense:
+    •	verwendeten → [[verwenden|verwendeten]]
+    •	nahm → [[nehmen|nahm]]
+    •	dachten → [[denken|dachten]]
 
 ## <examples>
 ### Example 1
@@ -534,13 +542,13 @@ Vincke: Oh [[schön]], sehr [[schön]]. Da wird sich Leon [[freuen|freuen]]. Wan
 #### <user_input>
 Mr und Mrs Dursley im Ligusterweg Nummer 4 waren stolz darauf, ganz und gar normal zu sein, sehr stolz sogar.
 #### <ideal_output>
-Mr und Mrs Dursley im Ligusterweg [[Nummer]] 4 waren [[stolz]] darauf, [[ganz und gar]] [[normal]] zu sein, [[sehr]] [[stolz]] [[sogar]].
+Mr und Mrs Dursley im Ligusterweg [[Nummer]] 4 waren [[stolz]] darauf, [[ganz und gar]] normal zu sein, [[sehr]] [[stolz]] [[sogar]].
 
 ### Example 3
 #### <user_input>
 So hat jeder seine Sorgen... Ehe ich's vergesse: heute Abend läßt du dir von Tante Martha einen Kleiderbügel geben und hängst den Anzug ordentlich auf.
 #### <ideal_output>
-So hat jeder seine [[Sorgen]]... [[Ehe]] ich's [[vergessen|vergesse]]: [[heute]] [[Abend]] [[geben lassen|läßt]] du dir von [[Tante]] Martha einen [[Kleiderbügel]] [[geben lassen|geben]] und [[aufhängen|hängst]] den [[Anzug]] [[ordentlich]] [[aufhängen|auf]].
+So hat jeder seine [[Sorgen]]... [[Ehe]] ich's [[vergessen|vergesse]]: [[heute]] [[Abend]] [[geben lassen|läßt]] du dir von Tante Martha einen [[Kleiderbügel]] [[geben lassen|geben]] und [[aufhängen|hängst]] den [[Anzug]] [[ordentlich]] [[aufhängen|auf]].
 
 ## **additional notes**
 - **pronouns and function words** (e.g., *ich, du, wir, dass, weil, mein, dein, unser, mich, dich*) **are not tagged**.
@@ -550,18 +558,13 @@ So hat jeder seine [[Sorgen]]... [[Ehe]] ich's [[vergessen|vergesse]]: [[heute]]
 - **separable verbs must be tagged in both parts**, even when split:
   - *weiterhelfen* → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
 - **haben, sein, and werden** remain **untagged**, regardless of conjugation.
-
-## Example 4
-#### <user_input>
-Einen interessanten Ansatz haben z.B. Forscher des Georgia Institute of Technology.  
-#### <ideal_output>
-Einen [[interessant|interessanten]] [[Ansatz]] haben [[zum Beispiel|z.B.]] [[Forscher]] des Georgia Institute of Technology.
+- **plural nouns must be tagged with their singular form**.
 
 ## Example 5
 #### <user_input>
 Bei der Herstellung der Plastikalternative werden Chitinschichten aus Krabbenschalen und Zellulose von Baumfasern miteinander verbunden.   
 #### <ideal_output>
-Bei der [[Herstellung]] der [[Plastikalternative]] werden [[Chitinschicht|Chitinschichten]] aus [[Krabbenschal|Krabbenschalen]] und [[Zellulose]] von [[Baumfasern]] [[miteinander]] [[verbinden|verbunden]].
+Bei der [[Herstellung]] der [[Plastikalternative]] werden [[Chitinschale|Chitinschichten]] aus [[Krabbenschale|Krabbenschalen]] und [[Zellulose]] von [[Baumfaser|Baumfasern]] [[miteinander]] [[verbinden|verbunden]].
 
 ## Example 6
 #### <user_input>
@@ -573,7 +576,13 @@ Bei der [[Herstellung]] der [[Plastikalternative]] werden [[Chitinschicht|Chitin
 #### <user_input>
 **Vincke:** Guten Tag, Herr Laupsien, mein Name ist Vincke. Ich habe ein Problem, vielleicht können Sie mir da weiterhelfen.
 #### <ideal_output>
-Vincke: [[Guten Tag]], Herr [[Laupsien]], mein Name ist [[Vincke]]. Ich habe ein [[Problem]], [[vielleicht]] [[können|können]] Sie mir da [[weiterhelfen|weiterhelfen]].`,
+Vincke: [[Guten Tag]], Herr [[Laupsien]], mein Name ist [[Vincke]]. Ich habe ein [[Problem]], [[vielleicht]] [[können|können]] Sie mir da [[weiterhelfen|weiterhelfen]].
+
+## Example 8
+#### <user_input>
+Einen interessanten Ansatz haben z.B. Forscher des Georgia Institute of Technology. Sie verwendeten als Ausgangsmaterialien für ihr neues Produkt Krabbenschalen und Baumfasern.
+#### <ideal_output>
+Einen [[interessant|interessanten]] [[Ansatz]] haben [[zum Beispiel|z.B.]] [[Forscher]] des Georgia Institute of Technology. Sie [[verwenden|verwendeten]] als [[Ausgangsmaterial|Ausgangsmaterialien]] für ihr [[neu|neues]] [[Produkt]] [[Krabbenschale|Krabbenschalen]] und [[Baumfaser|Baumfasern]].`,
 
 translate_text: `Translate the given German text to English. The translation should be staying true to the original meaning. When possible, mimic german sentance structure. Only provide the translation, no explanations or additional content.
 
