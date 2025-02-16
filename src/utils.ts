@@ -38,3 +38,11 @@ export async function getCurrentFileName(view: MarkdownView): Promise<string | n
     }
     return currentFileName
 }
+
+export async function formatSelectionWithBacklink(selection: string, currentFileName: string, nextNumber: number): Promise<string> {
+    // Strip all newline characters and spaces from the end of the selection
+    selection = selection.replace(/[\s\n]+$/, '');
+
+    const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(q)]]`;
+    return `${formattedBacklink} ${selection} ^${nextNumber}\n`;
+}

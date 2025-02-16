@@ -1,6 +1,6 @@
 import { Editor, MarkdownView, Notice } from 'obsidian';
 import MyPlugin from '../main';
-import { getSelection, getCurrentFileName } from '../utils';
+import { getSelection, getCurrentFileName, formatSelectionWithBacklink } from '../utils';
 
 export default async function duplicateSelection(plugin: MyPlugin, editor: Editor, view: MarkdownView) {
     const selection = await getSelection(editor);
@@ -17,10 +17,8 @@ export default async function duplicateSelection(plugin: MyPlugin, editor: Edito
 
             const response = await plugin.apiService.makeBrackets(selection);
             if (response) {
-                const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(q)]]`;
-                const formattedText = `${formattedBacklink} ${response} ^${nextNumber}\n`;
-
-                editor.replaceSelection(formattedText);
+                const formattedText = await formatSelectionWithBacklink(response, currentFileName, nextNumber);
+                editor.replaceSelection(`${formattedText}\n`);
             }
         }
     } catch (error) {

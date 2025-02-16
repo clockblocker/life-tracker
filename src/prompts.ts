@@ -504,10 +504,10 @@ make_brackets: `you are a highly advanced linguistic parser trained in **german 
    - *Hoffnungen* → [[Hoffnung]]
    - *eisigen* → [[eisig]]
    - *zweiteste* → [[zwei]]
-2. **identify and tag verbs** with their infinitive forms, keeping their conjugation visible**:
-   - *hat* → [[haben|hat]]
+2. **identify and tag verbs** with their infinitive forms, keeping their conjugation visible**, except for *haben, sein,* and *werden*, which remain untagged:
+   - *hat* → hat
    - *ließ* → [[lassen|ließ]]
-   - *werden verbunden* → [[verbinden|werden]] ... [[verbinden|verbunden]]
+   - *werden verbunden* → werden ... [[verbinden|verbunden]]
 3. **handle separable verbs properly** by tagging both parts:
    - *hängst auf* → [[aufhängen|hängst]] ... [[aufhängen|auf]]
    - *weiterhelfen* → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
@@ -521,58 +521,59 @@ make_brackets: `you are a highly advanced linguistic parser trained in **german 
 7. **ensure names and proper nouns remain untouched**:
    - *Georgia Institute of Technology* remains as-is.
    - **Avoid introducing typos in names** (e.g., *Laupsien* must not become *Laupien*).
+8. **do not enclose pronouns or function words** (e.g., *mein, mich, dein, unser, ihr* remain untagged).
 
 ## <examples>
 ### Example 1
 #### <user_input>
 Vincke: Oh schön, sehr schön. Da wird sich Leon freuen. Wann können wir denn mal vorbeikommen?
 #### <ideal_output>
-Vincke: Oh [[schön]], sehr [[schön]]. Da [[freuen|wird]] sich Leon [[freuen|freuen]]. Wann [[können|können]] wir denn mal [[vorbeikommen]]?
+Vincke: Oh [[schön]], sehr [[schön]]. Da wird sich Leon [[freuen|freuen]]. Wann [[können|können]] wir denn mal [[vorbeikommen]]?
 
 ### Example 2
 #### <user_input>
 Mr und Mrs Dursley im Ligusterweg Nummer 4 waren stolz darauf, ganz und gar normal zu sein, sehr stolz sogar.
 #### <ideal_output>
-Mr und Mrs Dursley im Ligusterweg [[Nummer]] 4 [[sein|waren]] [[stolz]] [[darauf]], [[ganz und gar]] normal zu [[sein]], [[sehr]] [[stolz]] [[sogar]].
+Mr und Mrs Dursley im Ligusterweg [[Nummer]] 4 waren [[stolz]] darauf, [[ganz und gar]] [[normal]] zu sein, [[sehr]] [[stolz]] [[sogar]].
 
 ### Example 3
 #### <user_input>
 So hat jeder seine Sorgen... Ehe ich's vergesse: heute Abend läßt du dir von Tante Martha einen Kleiderbügel geben und hängst den Anzug ordentlich auf.
 #### <ideal_output>
-So [[Sorgen haben|hat]] jeder seine [[Sorgen]]... [[Ehe]] ich's [[vergessen|vergesse]]: [[heute]] [[Abend]] [[geben lassen|läßt]] du dir von Tante Martha einen [[Kleiderbügel]] [[geben lassen|geben]] und [[aufhängen|hängst]] den [[Anzug]] [[ordentlich]] [[aufhängen|auf]].
+So hat jeder seine [[Sorgen]]... [[Ehe]] ich's [[vergessen|vergesse]]: [[heute]] [[Abend]] [[geben lassen|läßt]] du dir von [[Tante]] Martha einen [[Kleiderbügel]] [[geben lassen|geben]] und [[aufhängen|hängst]] den [[Anzug]] [[ordentlich]] [[aufhängen|auf]].
 
 ## **additional notes**
-- **pronouns and function words** (e.g., *ich, du, wir, dass, weil*) are **not tagged** unless they form part of a phrase.
+- **pronouns and function words** (e.g., *ich, du, wir, dass, weil, mein, dein, unser, mich, dich*) **are not tagged**.
 - **negations** (*nicht, kein*) remain untagged.
 - **modal verbs** (*können, müssen, sollen*) should be tagged when conjugated:
   - *kann gehen* → [[können|kann]] [[gehen]]
 - **separable verbs must be tagged in both parts**, even when split:
   - *weiterhelfen* → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
-- **names must remain unchanged and correctly spelled**.
+- **haben, sein, and werden** remain **untagged**, regardless of conjugation.
 
 ## Example 4
 #### <user_input>
 Einen interessanten Ansatz haben z.B. Forscher des Georgia Institute of Technology.  
 #### <ideal_output>
-Einen [[interessant|interessanten]] [[Ansatz]] [[haben]] [[zum Beispiel|z.B.]] [[Forscher]] des Georgia Institute of Technology.
+Einen [[interessant|interessanten]] [[Ansatz]] haben [[zum Beispiel|z.B.]] [[Forscher]] des Georgia Institute of Technology.
 
 ## Example 5
 #### <user_input>
 Bei der Herstellung der Plastikalternative werden Chitinschichten aus Krabbenschalen und Zellulose von Baumfasern miteinander verbunden.   
 #### <ideal_output>
-Bei der [[Herstellung]] der [[Plastikalternative]] [[verbinden|werden]] [[Chitinschicht|Chitinschichten]] aus [[Krabbenschal|Krabbenschalen]] und [[Zellulose]] von [[Baumfasern]] [[miteinander]] [[verbinden|verbunden]].
+Bei der [[Herstellung]] der [[Plastikalternative]] werden [[Chitinschicht|Chitinschichten]] aus [[Krabbenschal|Krabbenschalen]] und [[Zellulose]] von [[Baumfasern]] [[miteinander]] [[verbinden|verbunden]].
 
 ## Example 6
 #### <user_input>
 **Laupsien:** Das ist doch schön. Tiere sind für Kinder immer gut, fördern Sozialkompetenz, Verantwortungsbewusstsein ...
 #### <ideal_output>
-[[Laupsien]]: Das ist doch [[schön]]. [[Tiere]] [[sein|sind]] für [[Kind]] [[gut]], [[fördern]] [[Sozialkompetenz]], [[Verantwortungsbewusstsein]]...
+[[Laupsien]]: Das ist doch [[schön]]. [[Tiere]] sind für [[Kind]] [[gut]], [[fördern]] [[Sozialkompetenz]], [[Verantwortungsbewusstsein]]...
 
 ## Example 7
 #### <user_input>
 **Vincke:** Guten Tag, Herr Laupsien, mein Name ist Vincke. Ich habe ein Problem, vielleicht können Sie mir da weiterhelfen.
 #### <ideal_output>
-Vincke: [[Guten Tag]], Herr [[Laupsien]], [[mein]] [[Name]] [[sein|ist]] [[Vincke]]. Ich [[haben|habe]] ein [[Problem]], [[vielleicht]] [[können|können]] Sie mir da [[weiterhelfen|weiterhelfen]].`,
+Vincke: [[Guten Tag]], Herr [[Laupsien]], mein Name ist [[Vincke]]. Ich habe ein [[Problem]], [[vielleicht]] [[können|können]] Sie mir da [[weiterhelfen|weiterhelfen]].`,
 
 translate_text: `Translate the given German text to English. The translation should be staying true to the original meaning. When possible, mimic german sentance structure. Only provide the translation, no explanations or additional content.
 
