@@ -17,7 +17,7 @@ export default async function formatSelectionWithNumber(plugin: MyPlugin, editor
 
             const formattedText = await formatSelectionWithBacklink(selection, currentFileName, nextNumber);
 
-            await navigator.clipboard.writeText(`${selection} ${formattedText} \n`);
+            await navigator.clipboard.writeText(`${formattedText} \n`);
             editor.replaceSelection(`${formattedText}\n`);
         }
     } catch (error) {
