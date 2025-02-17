@@ -5,11 +5,17 @@ export class FileService {
 
     async appendToFile(filePath: string, text: string): Promise<void> {
         try {
-            const abstractFile = await this.vault.getAbstractFileByPath(filePath);
+            let abstractFile = await this.vault.getAbstractFileByPath(filePath);
 
             if (!abstractFile || !(abstractFile instanceof TFile)) {
-                console.error(`File "${filePath}" not found.`);
-                return;
+                // If the file doesn't exist, create it
+                await this.vault.create(filePath, '');
+                abstractFile = await this.vault.getAbstractFileByPath(filePath);
+
+                if (!abstractFile || !(abstractFile instanceof TFile)) {
+                    console.error(`Failed to create file "${filePath}".`);
+                    return;
+                }
             }
 
             let fileContent = await this.vault.read(abstractFile);

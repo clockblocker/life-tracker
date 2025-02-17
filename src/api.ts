@@ -10,10 +10,14 @@ export class ApiService {
     private chatSessions: { [key: string]: any } = {};
 
     constructor(private settings: MyPluginSettings, private vault: Vault) {
+        console.log('ApiService constructor called');
+        console.log('Settings:', this.settings);
         try {
             if (this.settings.apiProvider === 'deepseek') {
                 // No initialization needed here
+                console.log('Using DeepSeek API');
             } else if (this.settings.apiProvider === 'google') {
+                console.log('Using Google API');
                 this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
             }
             this.ensureLogFile();
@@ -70,38 +74,46 @@ export class ApiService {
     private async generateContent(systemPrompt: string, userInput: string): Promise<string> {
         try {
             let response: string | null = null;
+            // Remove leading tab characters from the system prompt
+            systemPrompt = systemPrompt.replace(/^\t+/gm, '');
 
             if (this.settings.apiProvider === 'deepseek') {
                 if (!this.settings.deepseekApiKey) {
                     throw new Error('DeepSeek API key not configured.');
                 }
 
-                const url = 'https://api.deepseek.com/chat/completions';
+                const url = 'https://api.deepseek.com/v1/generation/inference';
                 const headers = {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.settings.deepseekApiKey}`
                 };
-                const body = JSON.stringify({
-                    model: this.model,
+                const deepseekData = {
+                    model: 'deepseek-chat',
                     messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: userInput }
+                        {
+                            role: 'system',
+                            content: systemPrompt
+                        },
+                        {
+                            role: 'user',
+                            content: userInput
+                        }
                     ],
-                    stream: false
-                });
+                    stream: false,
+                };
 
                 const res = await fetch(url, {
                     method: 'POST',
                     headers: headers,
-                    body: body
+                    body: JSON.stringify(deepseekData)
                 });
 
                 if (!res.ok) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
 
-                const data = await res.json();
-                response = data.choices[0].message.content;
+                const deepseekResponse = await res.json();
+                response = deepseekResponse.choices[0].message.content;
 
             } else if (this.settings.apiProvider === 'google') {
                 if (!this.settings.googleApiKey) {
