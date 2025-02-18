@@ -44,3 +44,24 @@ The plugin automatically maintains bidirectional links between related words, he
 2. Open the command palette (Cmd/Ctrl + P)
 3. Choose the appropriate template for your word type
 4. Fill in the basic information - the plugin will handle the formatting and linking
+
+## Network Use
+
+This plugin utilizes network requests to communicate with the following remote services:
+
+*   **Google Gemini API:** Used for translation, dictionary entry generation, and other language processing tasks.
+*   **DeepSeek API:** Used as an alternative API provider for translation and language processing tasks.
+
+These APIs require network access to function properly. The plugin sends text to these services for processing and receives the results back. Your API keys are stored securely within your Obsidian vault and are not shared with any third parties.
+
+## API Keys
+
+This plugin requires you to provide your own API keys for the Google Gemini API and/or the DeepSeek API. You can obtain these keys by creating accounts on the respective platforms.
+
+## Disclaimer
+
+This plugin is not affiliated with or endorsed by Google or DeepSeek. The use of the Google Gemini API and DeepSeek API is subject to their respective terms of service.
+
+## License
+
+This plugin is licensed under the MIT License. See the `LICENSE` file for the full license text.
