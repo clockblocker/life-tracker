@@ -173,7 +173,7 @@ export class ApiService {
     }
 
     async translateText(text: string): Promise<string> {
-        return this.generateContent(prompts.translate_text, text);
+        return this.generateContent(prompts.translate_de_to_eng, text);
     }
 
     async translateRuToDe(text: string): Promise<string> {

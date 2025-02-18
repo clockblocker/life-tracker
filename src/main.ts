@@ -5,7 +5,7 @@ import { ApiService } from './api';
 import { FileService } from './file';
 import fillTemplate from './commands/fillTemplate';
 import getInfinitiveAndEmoji from './commands/getInfinitiveAndEmoji';
-import duplicateSelection from './commands/duplicateSelection';
+import makeBracketsCommand from './commands/makeBrackets';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
@@ -105,7 +105,7 @@ export default class MyPlugin extends Plugin {
                 id: 'duplicate-selection',
                 name: 'Duplicate selected text and process with brackets',
                 editorCallback: async (editor: Editor, view: MarkdownView) => {
-                    await duplicateSelection(this, editor, view);
+                    await makeBracketsCommand(this, editor, view);
                 }
             });
 

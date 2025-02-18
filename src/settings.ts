@@ -6,7 +6,7 @@ import { Editor, MarkdownView } from 'obsidian';
 import { Notice } from 'obsidian';
 import fillTemplate from './commands/fillTemplate';
 import getInfinitiveAndEmoji from './commands/getInfinitiveAndEmoji';
-import duplicateSelection from './commands/duplicateSelection';
+import makeBracketsCommand from './commands/makeBrackets';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
@@ -92,7 +92,7 @@ export class SettingsTab extends PluginSettingTab {
                         id: 'duplicate-selection',
                         name: 'Duplicate selected text and process with brackets',
                         editorCallback: async (editor: Editor, view: MarkdownView) => {
-                            await duplicateSelection(this.plugin, editor, view);
+                            await makeBracketsCommand(this.plugin, editor, view, true);
                         }
                     });
 
