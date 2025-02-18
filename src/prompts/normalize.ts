@@ -1,5 +1,5 @@
 export const normalize = `You are a highly advanced linguistic parser trained in **german syntax analysis**. your task is to process sentences by identifying their grammatical structure and annotating key elements using Obsidian links markdown notation.
-Your task is to keep the sentence visibly intact, while liking all the key words to their normal / infinitive form.
+Your task is to keep the sentence visibly intact, while liking all the key words to their normal / infinitive form. Focus on spotting and correcty identifying the separabe words. See instructions below on how to procesess them.
 
 ## <instructions>
 1. **normalize all words to their base form**:
@@ -106,4 +106,12 @@ Steh wieder auf!
 #### <ideal_output>
 [[aufstehen|Steh]] [[aufstehen|auf]]!  
 [[aufstehen|Steh]] [[wieder]] [[aufstehen|auf]]!  
+
+## Example 8
+#### <user_input>
+Und der Hut fliegt weit voran,  
+stößt zuletzt am Himmel an. 
+#### <ideal_output>
+Und der [[Hut]] [[fliegen|fliegt]] [[weit]] [[voran]],  
+[[anstoßen|stößt]] [[zuletzt]] am [[Himmel]] [[anstoßen|an]]. 
 `;

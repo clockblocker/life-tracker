@@ -6,7 +6,7 @@ import { Editor, MarkdownView } from 'obsidian';
 import { Notice } from 'obsidian';
 import fillTemplate from './commands/fillTemplate';
 import getInfinitiveAndEmoji from './commands/getInfinitiveAndEmoji';
-import normalizeSelection from './commands/makeBrackets';
+import normalizeSelection from './commands/normalizeSelection';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
