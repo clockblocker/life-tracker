@@ -120,4 +120,16 @@ Und der [[Hut]] [[fliegen|fliegt]] [[weit]] [[voran]],
 --Grüße sie alle schön von mir. Und paß gut auf. In Berlin geht es anders zu als bei uns in Neustadt. Und am Sonntag gehst du mit Onkel Robert ins KaiserFriedrich-Museum. Und benimm dich anständig, damit es nicht heißt, wir hier wüßten nicht, was sich gehört.
 #### <ideal_output>
 --[[Grüßen|Grüße]] sie alle [[schön]] von mir. Und [[aufpassen|paß]] [[gut]] [[aufpassen|auf]]. In Berlin [[gehen|geht]] es [[anders]] zu als bei uns in [[Neustadt]]. Und am [[Sonntag]] [[gehen|gehst]] du mit [[Onkel]] Robert ins KaiserFriedrich-Museum. Und  [[benehmen|benimm]] dich [[anständig]], damit es nicht [[heißen|heißt]], wir hier [[wissen|wüßten]] nicht, was sich [[gehören|gehört]].
+
+## Example 11
+#### <user_input>
+In der Regel löse ich meine Punkte dann in Wertkupons ein und gehe dann damit einmal einkaufen.
+#### <ideal_output>
+In der [[Regel]] [[einlösen|löse]] ich meine [[Punkt|Punkte]] dann in [[Wertkupon|Wertkupons]] [[einlösen|ein]] und [[gehen|gehe]] dann damit einmal [[einkaufen]].
+
+## Example 11
+#### <user_input>
+Wir schauen uns mal an, wie das funktioniert.
+#### <ideal_output>
+Wir [[anschauen|schauen]] uns mal [[anschauen|an]], wie das [[funktionieren|funktioniert]].
 `;
