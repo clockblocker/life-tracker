@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, Notice, Plugin, TFile } from 'obsidian';
+import { Editor, MarkdownView, Notice, Plugin, TFile, normalizePath } from 'obsidian';
 import { SettingsTab } from './settings';
 import { DEFAULT_SETTINGS, MyPluginSettings } from './types';
 import { ApiService } from './api';
@@ -66,14 +66,14 @@ export default class MyPlugin extends Plugin {
                             filePath = item.path;
                         } else {
                             const firstLetter = item.name[0].toUpperCase();
-                            const folderPath = `Worter/${firstLetter}`;
+                            const folderPath = normalizePath(`Worter/${firstLetter}`);
                             
                             const folder = vault.getAbstractFileByPath(folderPath);
                             if (!folder) {
                                 await vault.createFolder(folderPath);
                             }
             
-                            filePath = `${folderPath}/${item.name}.md`;
+                            filePath = normalizePath(`${folderPath}/${item.name}.md`);
                         }
             
                         const fileExists = await this.fileService.doesFileContainContent(filePath, backlink);

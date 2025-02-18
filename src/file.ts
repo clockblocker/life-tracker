@@ -1,19 +1,20 @@
-import { Notice, TFile, Vault } from 'obsidian';
+import { Notice, TFile, Vault, normalizePath } from 'obsidian';
 
 export class FileService {
     constructor(private vault: Vault) {}
 
     async appendToFile(filePath: string, text: string): Promise<void> {
         try {
-            let abstractFile = await this.vault.getAbstractFileByPath(filePath);
+            const normalizedPath = normalizePath(filePath);
+            let abstractFile = await this.vault.getAbstractFileByPath(normalizedPath);
 
             if (!abstractFile || !(abstractFile instanceof TFile)) {
                 // If the file doesn't exist, create it
-                await this.vault.create(filePath, '');
-                abstractFile = await this.vault.getAbstractFileByPath(filePath);
+                await this.vault.create(normalizedPath, '');
+                abstractFile = await this.vault.getAbstractFileByPath(normalizedPath);
 
                 if (!abstractFile || !(abstractFile instanceof TFile)) {
-                    console.error(`Failed to create file "${filePath}".`);
+                    console.error(`Failed to create file "${normalizedPath}".`);
                     return;
                 }
             }
@@ -30,13 +31,19 @@ export class FileService {
     }
 
     async doesFileContainContent(path: string, content: string): Promise<boolean | null> {
-        const file = this.vault.getAbstractFileByPath(path);
-        
-        if (!file || !(file instanceof TFile)) {
+        try {
+            const normalizedPath = normalizePath(path);
+            const file = this.vault.getAbstractFileByPath(normalizedPath);
+            
+            if (!file || !(file instanceof TFile)) {
+                return null;
+            }
+
+            const fileContent = await this.vault.read(file);
+            return fileContent.includes(content);
+        } catch (error) {
+            console.error(`Failed to check file content ${path}: ${error}`);
             return null;
         }
-
-        const fileContent = await this.vault.read(file);
-        return fileContent.includes(content);
     }
 }
