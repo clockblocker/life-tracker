@@ -40,8 +40,6 @@ export default class MyPlugin extends Plugin {
                     return;
                 }
 
-                console.log('fileName', fileName)
-
                 const { metadataCache, vault } = this.app;
                 const fileCache = metadataCache.getFileCache(view.file);
                 const links = fileCache?.links ?? [];
@@ -86,7 +84,6 @@ export default class MyPlugin extends Plugin {
                         new Notice(`Error processing link ${item.name}: ${error.message}`);
                     }
                 }
-                console.log('resolvedPaths', resolvedPaths)
             }
         });
 

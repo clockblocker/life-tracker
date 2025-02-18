@@ -10,19 +10,14 @@ export class ApiService {
     private chatSessions: { [key: string]: any } = {};
 
     constructor(private settings: MyPluginSettings, private vault: Vault) {
-        console.log('ApiService constructor called');
-        console.log('Settings:', this.settings);
         try {
             if (this.settings.apiProvider === 'deepseek') {
                 // No initialization needed here
-                console.log('Using DeepSeek API');
             } else if (this.settings.apiProvider === 'google') {
-                console.log('Using Google API');
                 this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
             }
             this.ensureLogFile();
         } catch (error) {
-            console.error('Error initializing API service:', error);
             new Notice(`Error initializing API service: ${error.message}`);
         }
     }
@@ -151,7 +146,7 @@ export class ApiService {
             }
 
             const logResponse = response === null ? "" : response;
-            await this.appendToLog(systemPrompt, logResponse);
+            // await this.appendToLog(systemPrompt, logResponse);
             return logResponse;
         } catch (error: any) {
             await this.appendToLog(systemPrompt, "", error);
