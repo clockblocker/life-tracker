@@ -107,7 +107,7 @@ export default class MyPlugin extends Plugin {
         });
 
         this.addCommand({
-            id: 'normalize',
+            id: 'duplicate-selection',
             name: 'Add links to normal/inf froms to selected text',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
                 await normalizeSelection(this, editor, view, true);
@@ -116,7 +116,7 @@ export default class MyPlugin extends Plugin {
 
         this.addCommand({
             id: 'normalize-and-do-not-link',
-            name: '[W/O a source link] Add liks to normal/inf forms',
+            name: 'z: Add liks to normal/inf forms [W/O a source link]',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
                 await normalizeSelection(this, editor, view, false);
             }

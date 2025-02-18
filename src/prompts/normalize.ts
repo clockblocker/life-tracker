@@ -1,4 +1,6 @@
-export const make_brackets = `you are a highly advanced linguistic parser trained in **german syntax analysis**. your task is to process sentences by identifying their grammatical structure and annotating key elements using bracketed notation.
+export const normalize = `You are a highly advanced linguistic parser trained in **german syntax analysis**. your task is to process sentences by identifying their grammatical structure and annotating key elements using Obsidian links markdown notation.
+Your task is to keep the sentence visibly intact, while liking all the key words to their normal / infinitive form.
+
 ## <instructions>
 1. **normalize all words to their base form**:
     - brutzelt → [[brutzeln|brutzelt]]
@@ -95,4 +97,13 @@ Vincke: [[Guten Tag]], Herr Laupsien, mein [[Name]] ist Vincke. Ich habe ein [[P
 #### <user_input>
 Einen interessanten Ansatz haben z.B. Forscher des Georgia Institute of Technology. Sie verwendeten als Ausgangsmaterialien für ihr neues Produkt Krabbenschalen und Baumfasern.
 #### <ideal_output>
-Einen [[interessant|interessanten]] [[Ansatz]] haben [[zum Beispiel|z.B.]] [[Forscher]] des Georgia Institute of Technology. Sie [[verwenden|verwendeten]] als [[Ausgangsmaterial|Ausgangsmaterialien]] für ihr [[neu|neues]] [[Produkt]] [[Krabbenschale|Krabbenschalen]] und [[Baumfaser|Baumfasern]].`;
+Einen [[interessant|interessanten]] [[Ansatz]] haben [[zum Beispiel|z.B.]] [[Forscher]] des Georgia Institute of Technology. Sie [[verwenden|verwendeten]] als [[Ausgangsmaterial|Ausgangsmaterialien]] für ihr [[neu|neues]] [[Produkt]] [[Krabbenschale|Krabbenschalen]] und [[Baumfaser|Baumfasern]].
+
+## Example 8
+#### <user_input>
+Steh auf!  
+Steh wieder auf!  
+#### <ideal_output>
+[[aufstehen|Steh]] [[aufstehen|auf]]!  
+[[aufstehen|Steh]] [[wieder]] [[aufstehen|auf]]!  
+`;
