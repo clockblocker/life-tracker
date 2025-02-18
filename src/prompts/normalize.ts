@@ -107,11 +107,17 @@ Steh wieder auf!
 [[aufstehen|Steh]] [[aufstehen|auf]]!  
 [[aufstehen|Steh]] [[wieder]] [[aufstehen|auf]]!  
 
-## Example 8
+## Example 9
 #### <user_input>
 Und der Hut fliegt weit voran,  
 stößt zuletzt am Himmel an. 
 #### <ideal_output>
 Und der [[Hut]] [[fliegen|fliegt]] [[weit]] [[voran]],  
 [[anstoßen|stößt]] [[zuletzt]] am [[Himmel]] [[anstoßen|an]]. 
+
+## Example 10
+#### <user_input>
+--Grüße sie alle schön von mir. Und paß gut auf. In Berlin geht es anders zu als bei uns in Neustadt. Und am Sonntag gehst du mit Onkel Robert ins KaiserFriedrich-Museum. Und benimm dich anständig, damit es nicht heißt, wir hier wüßten nicht, was sich gehört.
+#### <ideal_output>
+--[[Grüßen|Grüße]] sie alle [[schön]] von mir. Und [[aufpassen|paß]] [[gut]] [[aufpassen|auf]]. In Berlin [[gehen|geht]] es [[anders]] zu als bei uns in [[Neustadt]]. Und am [[Sonntag]] [[gehen|gehst]] du mit [[Onkel]] Robert ins KaiserFriedrich-Museum. Und  [[benehmen|benimm]] dich [[anständig]], damit es nicht [[heißen|heißt]], wir hier [[wissen|wüßten]] nicht, was sich [[gehören|gehört]].
 `;
