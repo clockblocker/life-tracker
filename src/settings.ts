@@ -6,7 +6,7 @@ import { Editor, MarkdownView } from 'obsidian';
 import { Notice } from 'obsidian';
 import fillTemplate from './commands/fillTemplate';
 import getInfinitiveAndEmoji from './commands/getInfinitiveAndEmoji';
-import makeBracketsCommand from './commands/makeBrackets';
+import normalizeSelection from './commands/makeBrackets';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
@@ -68,79 +68,7 @@ export class SettingsTab extends PluginSettingTab {
             .addButton(button => button
                 .setButtonText('Reload')
                 .onClick(async () => {
-                    await this.plugin.loadSettings();
-                    this.plugin.apiService = new ApiService(this.plugin.settings, this.app.vault);
-
-                    // Re-register commands
-                    this.plugin.addCommand({
-                        id: 'fill-template',
-                        name: 'Fill the template for the word in the title of the file',
-                        editorCallback: async (editor: Editor, view: MarkdownView) => {
-                            await fillTemplate(this.plugin, editor, view);
-                        }
-                    });
-
-                    this.plugin.addCommand({
-                        id: 'get-infinitive-and-emoji',
-                        name: 'Get infinitive form and emoji for current word',
-                        editorCallback: async (editor: Editor, view: MarkdownView) => {
-                            await getInfinitiveAndEmoji(this.plugin, editor, view);
-                        }
-                    });
-
-                    this.plugin.addCommand({
-                        id: 'duplicate-selection',
-                        name: 'Duplicate selected text and process with brackets',
-                        editorCallback: async (editor: Editor, view: MarkdownView) => {
-                            await makeBracketsCommand(this.plugin, editor, view, true);
-                        }
-                    });
-
-                    this.plugin.addCommand({
-                        id: 'translate-selection',
-                        name: 'Translate selected text and show below',
-                        editorCallback: async (editor: Editor) => {
-                            await translateSelection(this.plugin, editor);
-                        }
-                    });
-
-                    this.plugin.addCommand({
-                        id: 'format-selection-with-number',
-                        name: 'Format selection with next number and source link',
-                        editorCallback: async (editor: Editor, view: MarkdownView) => {
-                            await formatSelectionWithNumber(this.plugin, editor, view);
-                        }
-                    });
-
-                    this.plugin.addCommand({
-                        id: 'translate-ru-to-de',
-                        name: 'Translate Russian text to German',
-                        editorCallback: async (editor: Editor) => {
-                            const selection = editor.getSelection();
-                            if (!selection) {
-                                new Notice('No text selected');
-                                return;
-                            }
-
-                            try {
-                                const response = await this.plugin.apiService.translateRuToDe(selection);
-                                if (response) {
-                                    editor.replaceSelection(selection + '\n' + response + '\n');
-                                }
-                            } catch (error) {
-                                new Notice(`Error: ${error.message}`);
-                            }
-                        }
-                    });
-
-                    this.plugin.addCommand({
-                        id: 'check-ru-de-translation',
-                        name: 'Check Russian-German translation',
-                        editorCallback: async (editor: Editor) => {
-                            await checkRuDeTranslation(this.plugin, editor);
-                        }
-                    });
-
+                    await this.plugin.reloadPlugin();
                     containerEl.empty();
                     this.display();
                 }));
