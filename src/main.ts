@@ -89,7 +89,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'fill-template',
-            name: 'Fill the template for the word in the title of the file',
+            name: 'Generate an dictionary entrie for the word in the title of the file',
             editorCallback: async (editor: Editor, view: MarkdownView) => {
                 await fillTemplate(this, editor, view);
             }

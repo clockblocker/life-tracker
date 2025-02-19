@@ -38,12 +38,27 @@ The plugin automatically maintains bidirectional links between related words, he
 - Connections between synonyms and antonyms
 - References between related grammatical forms
 
+## Setup
+1. The plugin will be creating a LOT of files (every konjugation of every word will live in it's own file). So it is hightly recommendend to make a special folder ("Worter") for all the new files to go to by default. 
+![The example of the default folder](img/worter.png)
+All of the automatically created files go to Worter/{the_fiest_letter_of_the_word}/{word} bt default
+
+2. Setup the hotkes for plugin's commands. The essential ones are:
+- Get infinitive form and emoji for current word (Inf command)
+- Generate an dictionary entrie for the word in the title of the file (Generate command)
+- Add backlinks to the current file in all referenced files (Populate command)
+
 ## Usage
 
-1. Create a new note in your vault
-2. Open the command palette (Cmd/Ctrl + P)
-3. Choose the appropriate template for your word type
-4. Fill in the basic information - the plugin will handle the formatting and linking
+1. Go to any German text
+2. Select any German word and enclose it in [[]]
+3. Go to the [[selected_word]]
+4. Invoke the Inf command
+5. Go to the generated infinitive / normal form of the word
+6. Invoke the Generate command
+7. Invoke the Populate command
+8. Add the context from your text to the emplty block at the start of the dictionary entrie 
+
 
 ## Network Use
 
