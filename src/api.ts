@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, GenerationConfig, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
-import { MyPluginSettings } from "./types";
-import { TFile, Vault, Notice } from 'obsidian';
+import { TextEaterSettings } from "./types";
+import { TFile, Vault, Notice, TAbstractFile } from 'obsidian';
 import { prompts } from './prompts';
 
 export class ApiService {
@@ -9,7 +9,7 @@ export class ApiService {
     private logFile = "api-logs.md";
     private chatSessions: { [key: string]: any } = {};
 
-    constructor(private settings: MyPluginSettings, private vault: Vault) {
+    constructor(private settings: TextEaterSettings, private vault: Vault) {
         try {
             if (this.settings.apiProvider === 'deepseek') {
                 // No initialization needed here
@@ -50,14 +50,14 @@ export class ApiService {
                 ---
                 `;
 
-            const file = this.vault.getAbstractFileByPath(this.logFile) as TFile;
-            if (file) {
-                const currentContent = await this.vault.read(file);
-                await this.vault.modify(file, currentContent + logEntry);
+            const abstractFile = this.vault.getAbstractFileByPath(this.logFile);
+            if (abstractFile instanceof TFile) {
+                const currentContent = await this.vault.read(abstractFile);
+                await this.vault.modify(abstractFile, currentContent + logEntry);
             } else {
                 await this.ensureLogFile();
-                const newFile = this.vault.getAbstractFileByPath(this.logFile) as TFile;
-                if (newFile) {
+                const newFile = this.vault.getAbstractFileByPath(this.logFile);
+                if (newFile instanceof TFile) {
                     await this.vault.modify(newFile, logEntry);
                 }
             }

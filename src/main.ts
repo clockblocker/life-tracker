@@ -1,6 +1,6 @@
 import { Editor, MarkdownView, Notice, Plugin, TFile, normalizePath } from 'obsidian';
 import { SettingsTab } from './settings';
-import { DEFAULT_SETTINGS, MyPluginSettings } from './types';
+import { DEFAULT_SETTINGS, TextEaterSettings } from './types';
 import { ApiService } from './api';
 import { FileService } from './file';
 import fillTemplate from './commands/fillTemplate';
@@ -10,8 +10,8 @@ import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
 
-export default class MyPlugin extends Plugin {
-    settings: MyPluginSettings;
+export default class TextEaterPlugin extends Plugin {
+    settings: TextEaterSettings;
     apiService: ApiService;
     fileService: FileService;
 

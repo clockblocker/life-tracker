@@ -1,6 +1,5 @@
 import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { MyPluginSettings } from './types';
-import MyPlugin from './main';
+import TextEaterPlugin from './main';
 import { ApiService } from './api';
 import { Editor, MarkdownView } from 'obsidian';
 import { Notice } from 'obsidian';
@@ -12,9 +11,9 @@ import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
 
 export class SettingsTab extends PluginSettingTab {
-    plugin: MyPlugin;
+    plugin: TextEaterPlugin;
 
-    constructor(app: App, plugin: MyPlugin) {
+    constructor(app: App, plugin: TextEaterPlugin) {
         super(app, plugin);
         this.plugin = plugin;
     }
