@@ -491,4 +491,30 @@ D: dem [[Rechercheergbnis]], den [[Rechercheergbnissen]]
 </ideal_output>
 </example>
 </examples>
+
+<example>
+<german_word>
+her
+</german_word>
+<ideal_output>
+⬆️ [[her]], [heːɐ̯]
+
+---
+
+---
+= [[hierher]], [[dorthin]]
+≈ [[hin]], [[dort]], [[hier]]
+≠ [[hinweg]], [[weg]]
+
+---
+here, hither
+сюда
+
+---
+[[her]]
+
+---
+[[herkommen]], [[heraus]], [[herum]], [[herüber]], [[herunter]], [[herausfinden]], [[herstellen]], [[hergeben]]
+</ideal_output>
+</example>
 `;
