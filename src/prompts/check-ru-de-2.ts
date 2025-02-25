@@ -232,10 +232,27 @@ Ich kann nichts für Sie ==tun==</agent_output>
 
     <exapmple>
       <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
-Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Angelegenheit zu beantworten
-</user_input>
+Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Angelegenheit zu beantworten</user_input>
       <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere ==Fragen== zu beantworten.</agent_output>
     </exapmple>
+
+    <exapmple>
+      <user_input>1. Помогите мне прыгнуть! Hilf mir zu springen!
+2. Помогите нам открыть дверь. Helfen Sie uns die Tür zu offnen </user_input>
+      <agent_output>Hilf mir zu springen! ✅
+Helfen Sie uns==,== die Tür zu ==öffnen==.</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>14. Meine Schwester hofft, am Weihnachtsfest sehr gut auszusehen.
+15. Die Großmutter hat wieder vergessen, die Tabletten einzunehmen.</user_input>
+      <agent_output>14. Meine Schwester hofft, am Weihnachtsfest sehr gut auszusehen. ✅
+15. Die Großmutter hat wieder vergessen, die Tabletten einzunehmen. ✅</agent_output>
+    </exapmple>
+
+14. Meine Schwester hofft, am Weihnachtsfest sehr gut auszusehen.
+15. Die Großmutter hat wieder vergessen, die Tabletten einzunehmen.
+
       
     <exapmple>
       <user_input>Dis noichkien lesen will konnte</user_input>
