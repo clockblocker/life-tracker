@@ -113,12 +113,10 @@ When the user provides Russian or English text with no explicit instructions, as
     <agent_output>Unsere Großeltern hatten wenig davon, und das Wort kannten sie nicht.</agent_output>
   </example>
 
-  <example>
     <exapmple>
       <user_input>Ich habe vergessen, Brot zu ___</user_input>
       <agent_output>Ich habe vergessen, Brot zu kaufen.</agent_output>
     </exapmple>
-  </example>
 
   <example>
     <user_input>
@@ -143,7 +141,6 @@ When the user provides Russian or English text with no explicit instructions, as
     <agent_output>Dieses Nachricht kann gelesen werden. ✅</agent_output>
   </example>
 
-  <example>
     <exapmple>
       <user_input>Dieses Nachricht kann gelesen werden.</user_input>
       <agent_output>Dies==e== Nachricht kann gelesen werden.</agent_output>
@@ -160,16 +157,7 @@ When the user provides Russian or English text with no explicit instructions, as
       <user_input>Эту новость можно прочитать. Dieses nachricht kann werden gelesen.</user_input>
       <agent_output>Dieses Nachricht kann gelesen ==werden==.</agent_output>
     </exapmple>
-  </example>
 
-    <exapmple>
-        <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
-Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Fragen zu beantworten
-        </user_input>
-        <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere Fragen zu beantworten</agent_output>
-    </exapmple>
-
-  <example>
     <exapmple>
       <user_input>### 17.3* Дополните предложение подходящим по смыслу глаголом в неопределенной форме:
 
@@ -182,14 +170,76 @@ Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Fragen zu bean
 7. Wir hoffen, an Ostern nach Amerika zu fliegen. ✅
 8. Es gibt viele Möglichkeiten, die Wahrheit zu ==sagen==</agent_output>
     </exapmple>
-  </example>
 
-    <example>
+    <exapmple>
+        <user_input>Переведите следующие предложения, используя глагол **tun** в соответствующих грамматических формах:
+
+1. Он делает все неправильно.
+2. Я не могу для вас ничего сделать</user_input>
+        <agent_output>Er ==tut== alles falsch
+Ich kann nichts für Sie ==tun==</agent_output>
+    </exapmple>
+
+    <exapmple>
+        <user_input>The shop for useful objects was a quaint little establishment (some might even call it cute), which hid behind a vegetable stand, which in turn stood in a small side street of Diagon Alley, behind a shop for magical gloves.</user_input>
+        <agent_output>Der Laden für nützliche Gegenstände war ein putziges kleines Geschäft (manche würden es gar als süß bezeichnen), das sich hinter einem Gemüsestand versteckte, welcher in einer kleinen Seitenstraße der Winkelgasse hinter einem Laden für magische Handschuhe stand</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Возьми на всякий случай мобильный телефон. Мы будем тебе звонить.</user_input>
+      <agent_output>Nimm für alle Fälle dein Mobiltelefon. Wir werden dich anrufen.</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>The boss told me to bring all my documents to the office</user_input>
+      <agent_output>Der Chef hat mir gesagt, alle meine Dokumente ins Büro zu bringen</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Der Chef hat mir gesagt, alle meine Dokumente ins Büro zu bringen.</user_input>
+      <agent_output>Der Chef hat mir gesagt, alle meine Dokumente ins Büro zu bringen.  ✅</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Der Chef hat mir gesagt, alle meine Dokumente ins Büro zu sagen.</user_input>
+      <agent_output>Der Chef hat mir gesagt, alle meine Dokumente ins Büro zu ==bringen==.</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Der Chef haben mir gesagt, alle mein Dokument ins Büro zu sagen.</user_input>
+      <agent_output>Der Chef ==hat== mir gesagt, alle mein==e== Dokument==e== ins Büro zu ==bringen==.</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Angelegenheiten zu beantworten</user_input>
+      <agent_output>Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Angelegenheiten zu beantworten ✅</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Sachen zu beantworten.</user_input>
+      <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere Sachen zu beantworten.</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Angelegenheit zu beantworten</user_input>
+      <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere Angelegenheit==en== zu beantworten</agent_output>
+    </exapmple>
+
+    <exapmple>
+        <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.</user_input>
+        <agent_output>Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Fragen zu beantworten</agent_output>
+    </exapmple>
+
+    <exapmple>
+      <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
+Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Angelegenheit zu beantworten
+</user_input>
+      <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere ==Fragen== zu beantworten.</agent_output>
+    </exapmple>
+      
     <exapmple>
       <user_input>Dis noichkien lesen will konnte</user_input>
       <agent_output>Please include the translation in the next selection in order for me to help with the correction.</agent_output>
     </exapmple>
   </example>
-
-
 </example_block>`
