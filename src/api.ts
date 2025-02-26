@@ -5,7 +5,7 @@ import { prompts } from './prompts';
 
 export class ApiService {
     private genAI: GoogleGenerativeAI | null = null;
-    private model = "gemini-2.0-flash-lite-preview-02-05";
+    private model = "gemini-2.0-flash-lite";
     private logFile = "api-logs.md";
     private chatSessions: { [key: string]: any } = {};
 
