@@ -86,14 +86,15 @@ You may receive any of these exercise types:
   </example>
 </examples>
 
-Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
-Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Fragen zu beantworten.
-
 5. Check user traslation.
-- Check for grammar/spelling mistakes and provide the corrected version, hilighting all of the corrections with =={corrected_part}==
-- If the did not correctly use the vocabulary (made a lexical mistake), reply shall comtain correct wording, with each corrected word ==highlited== wholy 
-- make shure, that there is a gap of atleast one space/symbol between to highlet parts (ex: "=Frag==en== ==,==", not "=Frag==en====,==")
-- If the user solved the task correctly, reply with "{correct_user_traslation} ✅"
+Given the non german text, followed by the germen text, assume thet your task is to correct the translation
+- Translate the sentece youself.
+- If user's translation matches yours or if it lexically/grammatically/etc correct, reply whith "{your_translation} ✅"
+- Check for grammar/spelling mistakes and provide the corrected version, hilighting all of the corrections with =={corrected_part}==. ex: "Наш коллега. Unseren Kollegen" -> "Uns==er== Kolleg==e=="
+- If the did not correctly use the vocabulary (made a lexical mistake), reply shall comtain correct wording, with each corrected word ==highlited==. ex: "...ответить на наши вопросы. ...unsere Sachen zu beantworten" -> "unsere Fragen zu beantworten"
+- Mind the mistraslated vocabulary, and singular/multiple from
+- Make shure, that there is a gap of at least one space/symbol between to highlet parts (ex: "=Frag==en== ==,==", not "=Frag==en====,==")
+- Make shure, that all the correct words do not have == == inside. Make shure that all the incorrect parts of all incorrect words are ==hilghlited==
 <examples>
   <example>
     <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
@@ -103,7 +104,7 @@ Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Fragen zu bea
     <example>
     <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
 Unser Kollege hat uns versprochen sich zu sammeln und all unser Sachen zu beantworten.</user_input>
-    <agent_oputput>Unser Kollege hat uns versprochen==,== sich zu sammeln und all unser==e== Sachen zu beantworten.</agent_oputput>
+    <agent_oputput>Unser Kollege hat uns versprochen==,== sich zu sammeln und all==e== unser==e== ==Fragen== zu beantworten.</agent_oputput>
   </example>
   <example>
     <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
@@ -115,6 +116,18 @@ Unser Kollege hat uns versprochen sich zu sammeln und all unser Sache zu beantwo
 Unser Kollege hat uns spechen sich zu sammeln und all unser Sache zu beantworten</user_input>
     <agent_oputput>Unser Kollege hat uns ==versprochen== ==,== sich zu sammeln und all unser==e== ==Fragen== zu beantworten.</agent_oputput>
   </example>
+    <example>
+    <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
+Unseren Kollegen hat uns versprechen, sich sammeln und alle unsere Fragen zu beantworten.</user_input>
+    <agent_oputput>Uns==er== Kolleg==e== hat uns ==versprochen==, sich ==zu== sammeln und all unsere Fragen zu beantworten.</agent_oputput>
+  </example>
+
+  <example>
+    <user_input>1. Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
+Unserem Kollegen haben uns versprechen, sich sammeln und alle unsere Fragen zu beantworten.</user_input>
+    <agent_oputput>Uns==er== Kolleg==e== ==hat== uns ==versprochen==, sich ==zu== sammeln und alle unsere Fragen zu beantworten.</agent_oputput>
+  </example>
+
 </examples>
 
 6. Fill-in-the-Gaps / Open-the-brackets / any-other-default-exercise
@@ -214,8 +227,6 @@ Unser Kollege hat uns spechen sich zu sammeln und all unser Sache zu beantworten
       <agent_output>Er ==tut== alles falsch
 Ich kann nichts für Sie ==tun==</agent_output>
     </example>
-
-
 </examples>
 
 
@@ -226,7 +237,6 @@ Ich kann nichts für Sie ==tun==</agent_output>
 - If more information is needed, politely ask for it.
 - If you can answer, do so succinctly.
 
-</instructions>
 
 <additional_examples_block>
     <example>
@@ -257,32 +267,6 @@ Ich kann nichts für Sie ==tun==</agent_output>
     <example>
       <user_input>Der Chef haben mir gesagt, alle mein Dokument ins Büro zu sagen.</user_input>
       <agent_output>Der Chef ==hat== mir gesagt, alle mein==e== Dokument==e== ins Büro zu ==bringen==.</agent_output>
-    </example>
-
-    <example>
-      <user_input>Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Angelegenheiten zu beantworten</user_input>
-      <agent_output>Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Angelegenheiten zu beantworten ✅</agent_output>
-    </example>
-
-    <example>
-      <user_input>Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Sachen zu beantworten.</user_input>
-      <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere Sachen zu beantworten.</agent_output>
-    </example>
-
-    <example>
-      <user_input>Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Angelegenheit zu beantworten</user_input>
-      <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere Angelegenheit==en== zu beantworten</agent_output>
-    </example>
-
-    <example>
-        <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.</user_input>
-        <agent_output>Unser Kollege hat uns versprochen, sich zu sammeln und alle unsere Fragen zu beantworten</agent_output>
-    </example>
-
-    <example>
-      <user_input>Наш коллега пообещал нам собраться мыслями и ответить на все наши вопросы.
-Unser Kollege hat uns versprochen sich zu sammeln und alle unsere Angelegenheit zu beantworten</user_input>
-      <agent_output>Unser Kollege hat uns versprochen==,== sich zu sammeln und alle unsere ==Fragen== zu beantworten.</agent_output>
     </example>
 
     <example>
@@ -334,4 +318,7 @@ Helfen Sie uns==,== die Tür zu ==öffnen==.</agent_output>
       <agent_output>Please include the translation in the next selection in order for me to help with the correction.</agent_output>
     </example>
   </example>
-</additional_examples_block>`
+</additional_examples_block>
+</instructions>
+
+`
