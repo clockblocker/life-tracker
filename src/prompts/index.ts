@@ -4,8 +4,7 @@ import { generate_dictionary_entry } from "prompts/generate-dictinary-entrie";
 import { normalize } from "prompts/normalize";
 import { translate_de_to_eng } from "prompts/translate-de-to-eng";
 import { translate_ru_to_de } from "prompts/translate-ru-to-de";
-import { check_ru_de_translation_2 } from "./check-ru-de-2";
-
+import { generate_valence_block } from "./valence";
 
 export const prompts = {
    generate_dictionary_entry,
@@ -14,4 +13,5 @@ export const prompts = {
    translate_de_to_eng,
    translate_ru_to_de,
    check_ru_de_translation,
+   generate_valence_block,
 };

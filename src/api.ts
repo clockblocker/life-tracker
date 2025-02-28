@@ -156,7 +156,11 @@ export class ApiService {
     }
 
     async fetchTemplate(word: string): Promise<string> {
-        return this.generateContent(prompts.generate_dictionary_entry, word);
+        const [dictionaryEntry, valenceBlock] = await Promise.all([
+            this.generateContent(prompts.generate_dictionary_entry, word),
+            this.generateContent(prompts.generate_valence_block, word)
+        ]);
+        return `${dictionaryEntry}\n\n---\n${valenceBlock}`;
     }
 
     async determineInfinitiveAndEmoji(word: string): Promise<string> {

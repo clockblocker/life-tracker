@@ -1,7 +1,5 @@
 export const generate_dictionary_entry = `You are an expert linguist specializing in the German language. Your task is to create a detailed dictionary entry for a given German word. Here's the word you need to analyze:
-<german_word>
-{{german_word}}
-</german_word>
+<german_word>{{german_word}}</german_word>
 
 Before creating the entry, analyze the word and plan your approach. Break down the word inside <word_breakdown> tags:
 
@@ -41,14 +39,11 @@ Now, create the dictionary entry using the appropriate template based on your an
 5. For other parts of speech:
 - Create a similar template, adapting the information as appropriate for the specific part of speech
 
-Present only your final entry. Do not present the user with word_breakdown. Do not write to the user your thought process.
+Present only your final entry. Do not present the user with word_breakdown. Do not write to the user your thought process. Do not include tags in the output
 <examples>
 <example>
-<german_word>
-verfeinden
-</german_word>
-<ideal_output>
-😤 [[verfeinden]], [fɛɐ̯ˈfaɪ̯ndn̩] | [[verfeindete]], haben [[verfeindet]]
+<german_word>verfeinden</german_word>
+<agent_output>😤 [[verfeinden]], [fɛɐ̯ˈfaɪ̯ndn̩] | [[verfeindete]], haben [[verfeindet]]
 
 ---
 
@@ -66,29 +61,28 @@ to make enemies, to set at odds
 [[ver]]|[[fein]]|[den]]
 
 ---
-ich: [[verfeinde]], [[verfeindete]], –, [[verfeinde]], [[verfeindete]]
-du: [[verfeindest]], [[verfeindetest]], [[verfeinde]] | [[verfeind]] | [[verfeinde]], [[verfeindest]], [[verfeindetest]]
-er/sie/es: [[verfeindet]], [[verfeindete]], –, [[verfeinde]], [[verfeindete]]
-wir: [[verfeinden]], [[verfeindeten]], [[verfeinden wir|verfeinden]], [[verfeinden]], [[verfeindeten]]
-ihr: [[verfeindet]], [[verfeindetet]], [[verfeindet]], [[verfeindet]], [[verfeindetet]] 
 
-PI: [[verfeindend]], PII: [[verfeindet]], Zu+inf: [[zuverfeinden]]
+Person, Präsens, Präteritum, Imperativ, Konjunktiv I,  Konjunktiv II 
+ich, [[verfeind]] / [[verfeinde]], [[verfeindete]], [[verfeinde]], [[verfeindete]], -
+du, [[verfeindest]], [[verfeindetest]], [[verfeindest]], [[verfeindetest]], [[verfeind]] / [[verfeinde]]
+er, [[verfeindet]], [[verfeindete]], [[verfeinde]], [[verfeindete]], -
+wir, [[verfeinden]], [[verfeindeten]], [[verfeinden]], [[verfeindeten]], [[verfeinden]]
+ihr, [[verfeindet]], [[verfeindetet]], [[verfeindet]], [[verfeindetet]], [[verfeindet]]
+sie, [[verfeinden]], [[verfeindeten]], [[verfeinden]], [[verfeindeten]], [[verfeinden]]
+
+*Zu + Inf*: zu [[verfeinden]], P1: [[verfeindend]], P2: [[verfeindet]]
+
 
 ---
 [[verfeinden]] - [[ver]] = [[feinden]] / to make enemies, to set at odds
 
 ---
-[[Verfehndung]], [[Verfeindung]], [[Feind]], [[feindlich]], [[Feindschaft]]
-
-</ideal_output>
+[[Verfehndung]], [[Verfeindung]], [[Feind]], [[feindlich]], [[Feindschaft]]</agent_output>
 </example>
 
 <example>
-<german_word>
-tanztest
-</german_word>
-<ideal_output>
-💃 [[tanzen]], [ˈtanʦn̩] | [[tanzte]], haben [[getanzt]]
+<german_word>tanztest</german_word>
+<agent_output>💃 [[tanzen]], [ˈtanʦn̩] | [[tanzte]], haben [[getanzt]]
 
 ---
 
@@ -105,27 +99,25 @@ to dance
 [[tanz]]|[[en]]
 
 ---
-ich: [[tanze]], [[tanzte]], –, [[tanze]], [[tanzte]]
-du: [[tanzt]], [[tanzt]], [[tanze]] | [[tanz]], [[tanzt]], [[tanztest]]
-er/sie/es: [[tanzt]], [[tanzte]], –, [[tanze]], [[tanzte]]
-wir: [[tanzen]], [[tanzten]], [[tanzen wir|tanzen]], [[tanzen]], [[tanzten]]
-ihr: [[tanzt]], [[tanztet]], [[tanzt]], [[tanzt]], [[tanztet]]
+Person, Präsens, Präteritum, Imperativ, Konjunktiv I,  Konjunktiv II 
+ich, [[tanz]] / [[tanze]], [[tanzte]], [[tanze]], [[tanzte]], -
+du, [[tanzt]], [[tanztest]], [[tanzest]], [[tanztest]], [[tanz /]] [[tanze]]
+er, [[tanzt]], [[tanzte]], [[tanze]], [[tanzte]], -
+wir, [[tanzen]], [[tanzten]], [[tanzen]], [[tanzten]], [[tanzen]]
+ihr, [[tanzt]], [[tanztet]], [[tanzet]], [[tanztet]], [[tanzt]]
+sie, [[tanzen]], [[tanzten]], [[tanzen]], [[tanzten]], [[tanzen]]
 
-PI: [[tanzend]], PII: [[getanzt]], Zu+inf: [[zu tanzen]]
+*Zu + Inf*: zu [[tanzen]], *P1*: [[tanzend]], *P2*: [[getanzt]]
 
 ---
 
 ---
-[[Tanz]], [[Tänzer]], [[Tänzerin]], [[Tanzfläche]], [[tanzerisch]], [[Tanzkurs]]
-</ideal_output>
+[[Tanz]], [[Tänzer]], [[Tänzerin]], [[Tanzfläche]], [[tanzerisch]], [[Tanzkurs]]</agent_output>
 </example>
 
 <example>
-<german_word>
-Hoffnung
-</german_word>
-<ideal_output>
-🔴 🕊️ die [[Hoffnung]], [ˈhɔfnʊŋ]
+<german_word>Hoffnung</german_word>
+<agent_output>🕊️ 🔴 die [[Hoffnung]], [ˈhɔfnʊŋ]
 die [[Hoffnungen]]
 
 ---
@@ -150,16 +142,12 @@ G: der [[Hoffnung]], der [[Hoffnungen]]
 D: der [[Hoffnung]], den [[Hoffnungen]]  
 
 ---
-[[hoffen]], [[hoffentlich]], [[hoffnungsvoll]], [[hoffnungslos]]
-</ideal_output>
+[[hoffen]], [[hoffentlich]], [[hoffnungsvoll]], [[hoffnungslos]]</agent_output>
 </example>
 
 <example>
-<german_word>
-Busch
-</german_word>
-<ideal_output>
-🔵 🌳 der [[Busch]]
+<german_word>Busch</german_word>
+<agent_output>🌳 🔵 der [[Busch]]
 die [[B\\xFCsche]]
 
 ---
@@ -184,16 +172,12 @@ G: des [[Busches]], der [[Büsche]]
 D: dem [[Busch]], den [[Büschen]] 
 
 ---
-buschig, buschieren
-</ideal_output>
+buschig, buschieren</agent_output>
 </example>
 
 <example>
-<german_word>
-klein
-</german_word>
-<ideal_output>
-🐭 [[klein]], [\\u02C8kla\\u026A\\u032Fn] ≠ [[gro\\xDF]]
+<german_word>klein</german_word>
+<agent_output>🐭 [[klein]], [\\u02C8kla\\u026A\\u032Fn] ≠ [[gro\\xDF]]
 
 ---
 
@@ -220,15 +204,11 @@ N: [[kleines]], [[kleineres]], [[kleinstes]]
 P: [[kleinen]], [[kleineren]], [[kleinsten]]  
 
 ---
-[[Kleinheit]], [[kleinlich]], [[kleinmachen]]
-</ideal_output>
+[[Kleinheit]], [[kleinlich]], [[kleinmachen]]</agent_output>
 </example>
 <example>
-<german_word>
-anzurufen
-</german_word>
-<ideal_output>
-📞 [[anrufen]], [ˈanʦuˌʁuːfən] | [[rief an]], haben [[angerufen]]
+<german_word>anzurufen</german_word>
+<agent_output>📞 [[anrufen]], [ˈanʦuˌʁuːfən] | [[rief an]], haben [[angerufen]]
 
 ---
 
@@ -246,27 +226,23 @@ to call, to phone
 [[an]]|[[ru]]|[[fen]]
 
 ---
-ich: [[rufe an]], [[rief an]], –, [[rufe an]], [[riefe an]]
-du: [[rufst an]], [[riefst an]], [[rufe an]] | [[ruf an]], [[rufest an]], [[riefest an]]
-er/sie/es: [[ruft an]], [[rief an]], –, [[rufe an]], [[riefe an]]
-wir: [[rufen an]], [[riefen an]], [[rufen wir an|rufen an]], [[rufen an]], [[riefen an]]
-ihr: [[ruft an]], [[rieft an]], [[ruft an]], [[rufet an]], [[riefet an]]
-
-PI: [[anrufend]], PII: [[angerufen]], Zu+inf: [[anzurufen]]
+ich, [[ruf an]] / [[rufe an]], [[rief an]], [[rufe an]], [[riefe an]], -
+du, [[rufst an]], [[riefst an]], [[rufest an]], [[riefest an]], [[ruf an]] / [[rufe an]]
+er, [[ruft an]], [[rief an]], [[rufe an]], [[riefe an]], -
+wir, [[rufen an]], [[riefen an]], [[rufen an]], [[riefen an]], [[rufen an]]
+ihr, [[ruft an]], [[rieft an]], [[rufet an]], [[riefet an]], [[ruft an]]
+sie, [[rufen an]], [[riefen an]], [[rufen an]], [[riefen an]], [[rufen an]]
+*Zu + Inf*: [[anzurufen]], P1: [[anrufend]], P2: [[angerufen]]
 
 ---
 [[anrufen]] - [[an]] = [[rufen]] / to call, to phone
 
 ---
-[[Anruf]], [[Anrufer]], [[Anruferin]], [[anrufbar]], [[Anrufbeantworter]]
-</ideal_output>
+[[Anruf]], [[Anrufer]], [[Anruferin]], [[anrufbar]], [[Anrufbeantworter]]</agent_output>
 </example>
 <example>
-<german_word>
-ständigen
-</german_word>
-<ideal_output>
-🕰️ [[ständig]], [ˈʃtɛndɪç] ≠ [[selten]]
+<german_word>ständigen</german_word>
+<agent_output>🕰️ [[ständig]], [ˈʃtɛndɪç] ≠ [[selten]]
 
 ---
 
@@ -293,16 +269,12 @@ N: [[ständiges]], [[ständigeres]], [[ständigstes]]
 P: [[ständigen]], [[ständigeren]], [[ständigsten]]  
 
 ---
-[[stehen]], [[Ständigkeit]], [[zuständig]], [[anständig]], [[beständig]], [[aufständig]]
-</ideal_output>
+[[stehen]], [[Ständigkeit]], [[zuständig]], [[anständig]], [[beständig]], [[aufständig]]</agent_output>
 </example>
 
 <example>
-<german_word>
-zweiteres
-</german_word>
-<ideal_output>
-2️⃣ [[zwei]], [t͡svaɪ̯]  
+<german_word>zweiteres</german_word>
+<agent_output>2️⃣ [[zwei]], [t͡svaɪ̯]  
 
 ---
 
@@ -339,17 +311,13 @@ P: [[zweiten]], [[zweiteren]], [[zweitesten]]
 (none for zwei)  
 
 ---
-[[zweitens]], [[zweifach]], [[zwilling]], [[zweierlei]], [[zweiundzwanzig]], [[der Zweite]], [[zweitweise]], [[zweimalig]]
-</ideal_output>
+[[zweitens]], [[zweifach]], [[zwilling]], [[zweierlei]], [[zweiundzwanzig]], [[der Zweite]], [[zweitweise]], [[zweimalig]]</agent_output>
 </example>
 
 
 <example>
-<german_word>
-einzigsten
-</german_word>
-<ideal_output>
-1️⃣ [[eins]], [aɪ̯ns] | [[ein]], [aɪ̯n]  
+<german_word>einzigsten</german_word>
+<agent_output>1️⃣ [[eins]], [aɪ̯ns] | [[ein]], [aɪ̯n]  
 
 ---
 = [[einziger]], [[einer]], [[einmal]]  
@@ -390,16 +358,12 @@ N: [[einiges]], [[einigeres]], [[einzigstes]]
 P: [[einigen]], [[einigeren]], [[einzigsten]]  
 
 ---
-[[einmal]], [[einzig]], [[einer]], [[einige]], [[erstens]], [[einheit]], [[einzel]], [[einzigartig]], [[einmalig]]
-</ideal_output>
+[[einmal]], [[einzig]], [[einer]], [[einige]], [[erstens]], [[einheit]], [[einzel]], [[einzigartig]], [[einmalig]]</agent_output>
 </example>
 
 <example>
-<german_word>
-traurig
-</german_word>
-<ideal_output>
-😢 [[traurig]], [ˈtʁaʊ̯ʁɪç]
+<german_word>traurig</german_word>
+<agent_output>😢 [[traurig]], [ˈtʁaʊ̯ʁɪç]
 nicht [[fröhlich]]
 
 ---
@@ -427,15 +391,11 @@ N: [[trauriges]], [[traurigeres]], [[traurigstes]]
 P: [[traurigen]], [[traurigeren]], [[traurigsten]]  
 
 ---
-[[Trauer]], [[trauern]], [[Traurigkeit]], [[betrauern]], [[trauernd]]
-</ideal_output>
+[[Trauer]], [[trauern]], [[Traurigkeit]], [[betrauern]], [[trauernd]]</agent_output>
 </example>
 <example>
-<german_word>
-obwohl
-</german_word>
-<ideal_output>
-🔗 [[obwohl]], [ɔpˈvoːl]
+<german_word>obwohl</german_word>
+<agent_output>🔗 [[obwohl]], [ɔpˈvoːl]
 
 ---
 
@@ -453,15 +413,11 @@ although, even though, despite
 [[ob]]|[[wohl]]
 
 ---
-[[trotz]], [[obschon]], [[obzwar]], [[wiewohl]], [[obgleich]]
-</ideal_output>
+[[trotz]], [[obschon]], [[obzwar]], [[wiewohl]], [[obgleich]]</agent_output>
 </example>
 <example>
-<german_word>
-Rechercheergebnisse
-</german_word>
-<ideal_output>
-🟢 📄 das [[Rechercheergbenis]], [reˈʃɛrʃəʔɛɐ̯ɡeːpnɪs]
+<german_word>Rechercheergebnisse</german_word>
+<agent_output>📄 🟢 das [[Rechercheergbenis]], [reˈʃɛrʃəʔɛɐ̯ɡeːpnɪs]
 die [[Rechercheergbnisse]]
 
 ---
@@ -487,17 +443,13 @@ G: des [[Rechercheergbnis­ses]], der [[Rechercheergbnisse]]
 D: dem [[Rechercheergbnis]], den [[Rechercheergbnissen]]  
 
 ---
-[[recherchieren]], [[Recherche]], [[ergebnisorientiert]], [[Forschung]]
-</ideal_output>
+[[recherchieren]], [[Recherche]], [[ergebnisorientiert]], [[Forschung]]</agent_output>
 </example>
 </examples>
 
 <example>
-<german_word>
-her
-</german_word>
-<ideal_output>
-⬆️ [[her]], [heːɐ̯]
+<german_word>her</german_word>
+<agent_output>⬆️ [[her]], [heːɐ̯]
 
 ---
 
@@ -514,7 +466,6 @@ here, hither
 [[her]]
 
 ---
-[[herkommen]], [[heraus]], [[herum]], [[herüber]], [[herunter]], [[herausfinden]], [[herstellen]], [[hergeben]]
-</ideal_output>
+[[herkommen]], [[heraus]], [[herum]], [[herüber]], [[herunter]], [[herausfinden]], [[herstellen]], [[hergeben]]</agent_output>
 </example>
 `;
