@@ -160,7 +160,7 @@ export class ApiService {
             this.generateContent(prompts.generate_dictionary_entry, word),
             this.generateContent(prompts.generate_valence_block, word)
         ]);
-        return `${dictionaryEntry}\n\n---\n${valenceBlock}`;
+        return `${dictionaryEntry.replace('<agent_output>', '').replace('</agent_output>', '')}\n\n---\n${valenceBlock}`;
     }
 
     async determineInfinitiveAndEmoji(word: string): Promise<string> {

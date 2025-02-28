@@ -35,12 +35,12 @@ const vorstellen_valenz = "###### [[stellen]] jN jM [[vor]]\n" +
 "– Meinen Freund.\n\n" +
 "– Wem [[stellen]] wir euch [[vor]]?\n" +  
 "– Meinem Chef.\n\n" +  
-"– Warum hat er mich ihr [[vorgestellt]]?\n" +
+"– Warum [[hat]] er mich ihr [[vorgestellt]]?\n" +
 "– Um euch miteinander bekannt zu machen.\n\n" +  
 "---\n" +
 "###### [[stellen]] *[[sich]]* jN [[vor]]\n" +
 "– Wen [[stellst]] du *[[sich|dir]]* [[vor]]?\n" +  
-"– Mir einen berühmten Schauspieler.\n\n" +  
+"– Einen berühmten Schauspieler.\n\n" +  
 "– Was [[stellen]] wir *[[sich|uns]]* [[vor]]?\n" +  
 "– Unsere Reise nach Japan.\n\n" +  
 "– Warum [[hat]] er *[[sich|sich]]* das nicht [[vorgestellt]]?\n" +  
@@ -50,10 +50,10 @@ const vorstellen_valenz = "###### [[stellen]] jN jM [[vor]]\n" +
 const erfahren_valenz = "###### [[erfahren]] (`von` jM / `durch` jN) **von** jN\n" +  
 "– **Wovon** [[erfährst]] du?\n" +  
 "– **Von** einer neuen Regelung.\n\n" +  
-"– `Von` wem haben wir das [[erfahren]]?\n" +  
+"– `Von` wem [[haben]] wir das [[erfahren]]?\n" +  
 "– `Von` unserem Lehrer.\n\n" +  
-"– Wie hat sie **davon** [[erfahren]]?\n" +  
-"– Sie `durch` einen Freund **davon** erfahren\n\n" +
+"– Wie [[hat]] sie **davon** [[erfahren]]?\n" +  
+"– Sie [[hat]] **davon** `durch` einen Freund  [[erfahren]]\n\n" +
 "---\n" +
 "###### [[erfahren]] `über` jN\n" +  
 "– `Worüber` [[erfährst]] du in dem Kurs?\n" +  
