@@ -19,7 +19,7 @@ export default class TextEaterPlugin extends Plugin {
 
     async onload() {
         try {
-            await this.reloadPlugin();
+            await this.loadPlugin();
             this.addSettingTab(new SettingsTab(this.app, this));
         } catch (error) {
             console.error('Error during plugin initialization:', error);
@@ -27,7 +27,7 @@ export default class TextEaterPlugin extends Plugin {
         }
     }
 
-    async reloadPlugin() {
+    async loadPlugin() {
         await this.loadSettings();
         this.apiService = new ApiService(this.settings, this.app.vault);
         this.fileService = new FileService(this.app.vault);
@@ -39,11 +39,13 @@ export default class TextEaterPlugin extends Plugin {
                 const fileName = view.file?.name;
                 const backlink = view.file?.basename;
 
+                console.log("view.file, fileName, backlink", view.file, fileName, backlink);
+
                 if (view.file && fileName && backlink) {
                     if (!checking) {
-                        addBacklinksToCurrentFile(view.file, backlink)
+                        addBacklinksToCurrentFile(view.file, backlink, this.app.vault, this.app.metadataCache);
                     }
-                    return true
+                    return true;
                 }
                 
                 return false;

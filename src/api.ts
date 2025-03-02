@@ -26,10 +26,17 @@ export class ApiService {
         try {
             const existingFile = this.vault.getAbstractFileByPath(this.logFile);
             if (!existingFile) {
-                await this.vault.create(this.logFile, "# API Logs\n\n");
+                try {
+                    await this.vault.create(this.logFile, "# API Logs\n\n");
+                } catch (createError) {
+                    // If the error is because the file already exists, that's fine
+                    if (!(createError.message && createError.message.includes("already exists"))) {
+                        console.error('Error creating log file:', createError);
+                    }
+                }
             }
         } catch (error) {
-            console.error('Error creating log file:', error);
+            console.error('Error checking for log file:', error);
         }
     }
 
