@@ -1,4 +1,4 @@
-# Custom Dictionary Builder (Obsidian Plugin)
+# German Text Eater (Obsidian Plugin)
 
 Open a file with German text.
 For every unknown word, generate a structured vocabulary entry with context from the text.
