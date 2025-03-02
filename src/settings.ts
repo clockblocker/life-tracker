@@ -23,7 +23,9 @@ export class SettingsTab extends PluginSettingTab {
 
         containerEl.empty();
 
-        containerEl.createEl('h2', { text: 'Settings for my awesome plugin.' });
+        new Setting(containerEl)
+            .setName('API Configuration')
+            .setHeading();
 
         new Setting(containerEl)
             .setName('Google API Key')
@@ -60,6 +62,10 @@ export class SettingsTab extends PluginSettingTab {
                         await this.plugin.saveSettings();
                     });
             });
+
+        new Setting(containerEl)
+            .setName('Plugin Actions')
+            .setHeading();
 
         new Setting(containerEl)
             .setName('Reload Plugin')

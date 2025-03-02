@@ -9,6 +9,7 @@ import normalizeSelection from './commands/normalizeSelection';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
+import translateRuToDe from './commands/translateRuToDe';
 import addBacklinksToCurrentFile from 'commands/addBacklinksToCurrentFile';
 
 export default class TextEaterPlugin extends Plugin {
@@ -144,15 +145,7 @@ export default class TextEaterPlugin extends Plugin {
                 const selection = editor.getSelection();
                 if (selection) {
                     if (!checking) {
-                        try {
-                            this.apiService.translateRuToDe(selection).then(response => {
-                                if (response) {
-                                    editor.replaceSelection(selection + '\n' + response + '\n');
-                                }
-                            });
-                        } catch (error) {
-                            new Notice(`Error: ${error.message}`);
-                        }
+                        translateRuToDe(this, editor, selection);
                     }
                     return true;
                 }
