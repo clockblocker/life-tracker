@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, GenerationConfig, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { TextEaterSettings } from "./types";
-import { TFile, Vault, Notice, TAbstractFile } from 'obsidian';
+import { TFile, Vault, Notice, TAbstractFile, requestUrl } from 'obsidian';
 import { prompts } from './prompts';
 
 export class ApiService {
@@ -82,10 +82,6 @@ export class ApiService {
                 }
 
                 const url = 'https://api.deepseek.com/v1/generation/inference';
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.settings.deepseekApiKey}`
-                };
                 const deepseekData = {
                     model: 'deepseek-chat',
                     messages: [
@@ -101,17 +97,21 @@ export class ApiService {
                     stream: false,
                 };
 
-                const res = await fetch(url, {
+                const res = await requestUrl({
+                    url: url,
                     method: 'POST',
-                    headers: headers,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.settings.deepseekApiKey}`
+                    },
                     body: JSON.stringify(deepseekData)
                 });
 
-                if (!res.ok) {
+                if (res.status !== 200) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
 
-                const deepseekResponse = await res.json();
+                const deepseekResponse = res.json;
                 response = deepseekResponse.choices[0].message.content;
 
             } else if (this.settings.apiProvider === 'google') {
