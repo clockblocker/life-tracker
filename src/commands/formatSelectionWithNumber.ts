@@ -6,7 +6,7 @@ export default async function formatSelectionWithNumber(plugin: TextEaterPlugin,
     const currentFileName = file.basename;
     
     try {
-        const fileContent = await plugin.app.vault.read(file);
+        const fileContent = editor.getValue();
         const maxNumber = plugin.findHighestNumber(fileContent);
         const nextNumber = maxNumber + 1;
 
