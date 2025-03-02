@@ -24,7 +24,8 @@ export class ApiService {
 
     private async ensureLogFile() {
         try {
-            if (!(await this.vault.adapter.exists(this.logFile))) {
+            const existingFile = this.vault.getAbstractFileByPath(this.logFile);
+            if (!existingFile) {
                 await this.vault.create(this.logFile, "# API Logs\n\n");
             }
         } catch (error) {
@@ -52,13 +53,16 @@ export class ApiService {
 
             const abstractFile = this.vault.getAbstractFileByPath(this.logFile);
             if (abstractFile instanceof TFile) {
-                const currentContent = await this.vault.read(abstractFile);
-                await this.vault.modify(abstractFile, currentContent + logEntry);
+                await this.vault.process(abstractFile, (currentContent) => {
+                    return currentContent + logEntry;
+                });
             } else {
                 await this.ensureLogFile();
                 const newFile = this.vault.getAbstractFileByPath(this.logFile);
                 if (newFile instanceof TFile) {
-                    await this.vault.modify(newFile, logEntry);
+                    await this.vault.process(newFile, (currentContent) => {
+                        return currentContent + logEntry;
+                    });
                 }
             }
         } catch (error) {
