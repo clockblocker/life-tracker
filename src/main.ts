@@ -9,6 +9,7 @@ import normalizeSelection from './commands/normalizeSelection';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import checkRuDeTranslation from './commands/checkRuDeTranslation';
+import addBacklinksToCurrentFile from 'commands/addBacklinksToCurrentFile';
 
 export default class TextEaterPlugin extends Plugin {
     settings: TextEaterSettings;
@@ -33,57 +34,19 @@ export default class TextEaterPlugin extends Plugin {
         this.addCommand({
             id: 'backlink-all-to-current-file',
             name: 'Add backlinks to the current file in all referenced files',
-            editorCallback: async (editor: Editor, view: MarkdownView) => {
+            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 const fileName = view.file?.name;
-                if (!view.file || !fileName) {
-                    new Notice('Current file is missing a title');
-                    return;
-                }
+                const backlink = view.file?.basename;
 
-                const { metadataCache, vault } = this.app;
-                const fileCache = metadataCache.getFileCache(view.file);
-                const links = fileCache?.links ?? [];
-                
-                const resolvedPaths: {name: string, path: string | null}[] = [];
-        
-                for (const link of links) {
-                  const rawLink = link.link; 
-                  const file = metadataCache.getFirstLinkpathDest(rawLink, view.file.path);
-                  
-                  if (file instanceof TFile) {
-                    resolvedPaths.push({name: rawLink, path: file.path});
-                  } else {
-                    resolvedPaths.push({name: rawLink, path: null});
-                  }
-                }
-
-                for (const item of resolvedPaths) {
-                    try {
-                        let filePath: string;
-                        const backlink = `[[${fileName.split(".")[0]}]]`;
-            
-                        if (item.path) {
-                            filePath = item.path;
-                        } else {
-                            const firstLetter = item.name[0].toUpperCase();
-                            const folderPath = normalizePath(`Worter/${firstLetter}`);
-                            
-                            const folder = vault.getAbstractFileByPath(folderPath);
-                            if (!folder) {
-                                await vault.createFolder(folderPath);
-                            }
-            
-                            filePath = normalizePath(`${folderPath}/${item.name}.md`);
-                        }
-            
-                        const fileExists = await this.fileService.doesFileContainContent(filePath, backlink);
-                        if (!fileExists) {
-                            await this.fileService.appendToFile(filePath, `, ${backlink}`);
-                        }
-                    } catch (error) {
-                        new Notice(`Error processing link ${item.name}: ${error.message}`);
+                if (view.file && fileName && backlink) {
+                    if (!checking) {
+                        addBacklinksToCurrentFile(view.file, backlink)
                     }
+                    return true
                 }
+                
+                new Notice('Current file is missing a title');
+                return false;
             }
         });
 
