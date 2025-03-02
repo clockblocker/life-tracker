@@ -1,11 +1,7 @@
 import { Editor, Notice } from 'obsidian';
-import MyPlugin from '../main';
-import { getSelection } from '../utils';
+import TextEaterPlugin from '../main';
 
-export default async function checkRuDeTranslation(plugin: MyPlugin, editor: Editor) {
-    const selection = await getSelection(editor);
-    if (!selection) return;
-
+export default async function checkRuDeTranslation(plugin: TextEaterPlugin, editor: Editor, selection: string) {
     try {
         const response = await plugin.apiService.checkRuDeTranslation(selection);
         if (response) {

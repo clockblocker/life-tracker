@@ -1,15 +1,13 @@
-import { Editor, MarkdownView, Notice } from 'obsidian';
-import MyPlugin from '../main';
-import { getWordFromFilename } from '../utils';
+import { Editor, MarkdownView, Notice, TFile } from 'obsidian';
+import TextEaterPlugin from '../main';
 
-export default async function fillTemplate(plugin: MyPlugin, editor: Editor, view: MarkdownView) {
-    const word = await getWordFromFilename(view);
-    if (!word) return;
+export default async function fillTemplate(plugin: TextEaterPlugin, editor: Editor, file: TFile) {
+    const word = file.basename;
 
     try {
         const response = await plugin.apiService.fetchTemplate(word);
-        if (response && view?.file?.path) {
-            await plugin.fileService.appendToFile(view.file.path, response);
+        if (response) {
+            await plugin.fileService.appendToFile(file.path, response);
         }
     } catch (error) {
         new Notice(`Error: ${error.message}`);

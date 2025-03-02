@@ -1,19 +1,15 @@
-import { Editor, MarkdownView, Notice } from 'obsidian';
-import MyPlugin from '../main';
-import { getWordFromFilename } from '../utils';
+import { Editor, MarkdownView, Notice, TFile } from 'obsidian';
+import TextEaterPlugin from '../main';
 
-export default async function getInfinitiveAndEmoji(plugin: MyPlugin, editor: Editor, view: MarkdownView) {
-    const word = await getWordFromFilename(view);
-    if (!word) return;
+export default async function getInfinitiveAndEmoji(plugin: TextEaterPlugin, editor: Editor, file: TFile) {
+    const word = file.basename;
 
     try {
         let response = await plugin.apiService.determineInfinitiveAndEmoji(word);
         if (response) {
             response = response.replace(/^\n+/, '');
             response = response.trim();
-            if (view.file?.path) {
-                await plugin.fileService.appendToFile(view.file.path, response + '\n');
-            }
+            await plugin.fileService.appendToFile(file.path, response + '\n');
         }
     } catch (error) {
         new Notice(`Error: ${error.message}`);

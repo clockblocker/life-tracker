@@ -45,85 +45,133 @@ export default class TextEaterPlugin extends Plugin {
                     return true
                 }
                 
-                new Notice('Current file is missing a title');
                 return false;
             }
         });
 
         this.addCommand({
             id: 'fill-template',
-            name: 'Generate an dictionary entrie for the word in the title of the file',
-            editorCallback: async (editor: Editor, view: MarkdownView) => {
-                await fillTemplate(this, editor, view);
+            name: 'Generate a dictionary entry for the word in the title of the file',
+            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
+                if (view.file) {
+                    if (!checking) {
+                        fillTemplate(this, editor, view.file);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
 
         this.addCommand({
             id: 'get-infinitive-and-emoji',
             name: 'Get infinitive form and emoji for current word',
-            editorCallback: async (editor: Editor, view: MarkdownView) => {
-                await getInfinitiveAndEmoji(this, editor, view);
+            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
+                if (view.file) {
+                    if (!checking) {
+                        getInfinitiveAndEmoji(this, editor, view.file);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
 
         this.addCommand({
             id: 'duplicate-selection',
-            name: 'Add links to normal/inf froms to selected text',
-            editorCallback: async (editor: Editor, view: MarkdownView) => {
-                await normalizeSelection(this, editor, view, true);
+            name: 'Add links to normal/inf forms to selected text',
+            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
+                const selection = editor.getSelection();
+                if (selection && view.file) {
+                    if (!checking) {
+                        normalizeSelection(this, editor, view.file, selection, true);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
 
         this.addCommand({
             id: 'normalize-and-do-not-link',
-            name: 'z: Add liks to normal/inf forms [W/O a source link]',
-            editorCallback: async (editor: Editor, view: MarkdownView) => {
-                await normalizeSelection(this, editor, view, false);
+            name: 'z: Add links to normal/inf forms [W/O a source link]',
+            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
+                const selection = editor.getSelection();
+                if (selection && view.file) {
+                    if (!checking) {
+                        normalizeSelection(this, editor, view.file, selection, false);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
 
         this.addCommand({
             id: 'translate-selection',
             name: 'Translate selected text and show below',
-            editorCallback: async (editor: Editor) => {
-                await translateSelection(this, editor);
+            editorCheckCallback: (checking: boolean, editor: Editor) => {
+                const selection = editor.getSelection();
+                if (selection) {
+                    if (!checking) {
+                        translateSelection(this, editor, selection);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
 
         this.addCommand({
             id: 'format-selection-with-number',
             name: 'Format selection with next number and source link',
-            editorCallback: async (editor: Editor, view: MarkdownView) => {
-                await formatSelectionWithNumber(this, editor, view);
+            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
+                const selection = editor.getSelection();
+                if (selection && view.file) {
+                    if (!checking) {
+                        formatSelectionWithNumber(this, editor, view.file, selection);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
 
         this.addCommand({
             id: 'translate-ru-to-de',
             name: 'Translate Russian text to German',
-            editorCallback: async (editor: Editor) => {
+            editorCheckCallback: (checking: boolean, editor: Editor) => {
                 const selection = editor.getSelection();
-                if (!selection) {
-                    new Notice('No text selected');
-                    return;
-                }
-
-                try {
-                    const response = await this.apiService.translateRuToDe(selection);
-                    if (response) {
-                        editor.replaceSelection(selection + '\n' + response + '\n');
+                if (selection) {
+                    if (!checking) {
+                        try {
+                            this.apiService.translateRuToDe(selection).then(response => {
+                                if (response) {
+                                    editor.replaceSelection(selection + '\n' + response + '\n');
+                                }
+                            });
+                        } catch (error) {
+                            new Notice(`Error: ${error.message}`);
+                        }
                     }
-                } catch (error) {
-                    new Notice(`Error: ${error.message}`);
+                    return true;
                 }
+                return false;
             }
         });
 
         this.addCommand({
             id: 'check-ru-de-translation',
             name: 'Check Russian-German translation',
-            editorCallback: async (editor: Editor) => {
-                await checkRuDeTranslation(this, editor);
+            editorCheckCallback: (checking: boolean, editor: Editor) => {
+                const selection = editor.getSelection();
+                if (selection) {
+                    if (!checking) {
+                        checkRuDeTranslation(this, editor, selection);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
     }

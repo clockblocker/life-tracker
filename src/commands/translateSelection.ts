@@ -1,11 +1,7 @@
 import { Editor, Notice } from 'obsidian';
-import MyPlugin from '../main';
-import { getSelection } from '../utils';
+import TextEaterPlugin from '../main';
 
-export default async function translateSelection(plugin: MyPlugin, editor: Editor) {
-    const selection = await getSelection(editor);
-    if (!selection) return;
-
+export default async function translateSelection(plugin: TextEaterPlugin, editor: Editor, selection: string) {
     try {
         const cursor = editor.getCursor();
         const response = await plugin.apiService.translateText(selection);
