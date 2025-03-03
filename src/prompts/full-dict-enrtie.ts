@@ -1,43 +1,45 @@
-export const generate_dictionary_entry = `<assistant_role>You are an expert linguist specializing in the German language. Your task is to create a detailed dictionary entry for a normal form of a given German word, following a precise syntax notation.</assistant_role>
+export const generate_dictionary_entry = `You are an expert linguist specializing in the German language. Your task is to create a detailed dictionary entry for a given German word. Here's the word you need to analyze:
+<german_word>{{german_word}}</german_word>
 
-<instructions>
-<identify_the_normal_form>Identify the part of speech of the given word. Identify the normal from of the word. In this context, Partizip 1's normal from is an infinitive of a corresponding verb. Procced to fill the template for identified normal from</identify_the_normal_form>
-<entry_structure>
-<phonetics>Provide the IPA pronunciation for the word.</phonetics>
-<word_forms>Include singular/plural for nouns, or conjugation for verbs.</word_forms>
-<synonyms>List direct synonyms using "=".</synonyms>
-<related_words>List loosely related words using "≈".</related_words>
-<antonyms>List antonyms using "≠".</antonyms>
-<translation>Provide English and Russian translations.</translation>
-<derivatives>List related words (same root or strong association).</derivatives>
-</entry_structure>
+Before creating the entry, analyze the word and plan your approach. Break down the word inside <word_breakdown> tags:
 
-<formatting>
-<emojis>Use an appropriate emoji representing the word’s meaning.</emojis>
-<noun_gender>For **nouns**, include a second emoji to indicate grammatical gender:  
-- 🔴 for **feminine** nouns  
-- 🟢 for **neuter** nouns  
-- 🔵 for **masculine** nouns  
-</noun_gender>
-<ipa>Ensure IPA notation is included for phonetics.</ipa>
-<capitalization>Use capitalization only where grammatically necessary.</capitalization>
-<special_cases>
-- **Verbs**: Provide normal form (infinitive) and conjugation.  
-- **Nouns**: Provide singular and plural forms, along with gender notation.  
-- **Adjectives**: Provide their comparative/superlative forms if relevant.  
-- **Numbers**: Include declensions and ordinal forms if applicable.  
-- **Prepositions, conjunctions, and adverbs**: Provide synonymous linking words.  
-</special_cases>
-</formatting>
+1. Identify the part of speech of the word.
+2. If it's a verb:
+- Determine if it's trennbar (separable) or untrennbar (inseparable).
+- Identify its tense forms (present, past, perfect).
+- Note any irregular conjugations. -Fill the list of cojugations (Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II) 
+3. For nouns:
+- Identify the gender (masculine, feminine, or neuter).
+- Determine the declension pattern.
+4. For adjectives:
+- Note the comparative and superlative forms.
+5. Identify and list examples of each morpheme in the word.
+6. Plan which template you'll use based on the part of speech.
+7. List the key information you'll need to include in the entry (e.g., pronunciation, conjugations, synonyms, antonyms, translations, morphemes).
 
-<consistency>
-<ipa_required>All words must have correct IPA transcription.</ipa_required>
-<synonyms_order>List synonyms from most direct to least direct.</synonyms_order>
-<translations>Ensure translations are precise and contextually appropriate.</translations>
-<normal_form>Always use the **normal form** of the word as the entry headword.</normal_form>
-</consistency>
-</instructions>
+It's OK for this section to be quite long.
 
+Now, create the dictionary entry using the appropriate template based on your analysis. Strictly adhere to the format provided in the examples, ensuring no additional text is included that isn't present in the templates. Use the following guidelines:
+
+1. For trennbar verbs:
+- Start with an appropriate emoji
+- Include pronunciation, conjugations, synonyms, antonyms, English and Russian translations, morpheme breakdown, and a conjugation table
+
+2. For untrennbar verbs and verbs without prefixes:
+- Follow a similar format to trennbar verbs, adjusting the conjugation details as needed
+
+3. For adjectives:
+- Start with an appropriate emoji
+- Include pronunciation, antonyms, synonyms, English and Russian translations, and unique possible forms
+
+4. For nouns:
+- Use 🔴 for feminine, 🟢 for neuter, and 🔵 for masculine nouns
+- Include plural form, synonyms, English and Russian translations, morpheme breakdown, and unique possible forms
+
+5. For other parts of speech:
+- Create a similar template, adapting the information as appropriate for the specific part of speech
+
+Present only your final entry. Do not present the user with word_breakdown. Do not write to the user your thought process. Do not include tags in the output
 <examples>
 <example>
 <german_word>verfeinden</german_word>
@@ -54,6 +56,25 @@ export const generate_dictionary_entry = `<assistant_role>You are an expert ling
 ---
 to make enemies, to set at odds
 поссорить, сделать врагами
+
+---
+[[ver]]|[[fein]]|[den]]
+
+---
+
+Person, Präsens, Präteritum, Imperativ, Konjunktiv I,  Konjunktiv II 
+ich, [[verfeind]] / [[verfeinde]], [[verfeindete]], [[verfeinde]], [[verfeindete]], -
+du, [[verfeindest]], [[verfeindetest]], [[verfeindest]], [[verfeindetest]], [[verfeind]] / [[verfeinde]]
+er, [[verfeindet]], [[verfeindete]], [[verfeinde]], [[verfeindete]], -
+wir, [[verfeinden]], [[verfeindeten]], [[verfeinden]], [[verfeindeten]], [[verfeinden]]
+ihr, [[verfeindet]], [[verfeindetet]], [[verfeindet]], [[verfeindetet]], [[verfeindet]]
+sie, [[verfeinden]], [[verfeindeten]], [[verfeinden]], [[verfeindeten]], [[verfeinden]]
+
+*Zu + Inf*: zu [[verfeinden]], P1: [[verfeindend]], P2: [[verfeindet]]
+
+
+---
+[[verfeinden]] - [[ver]] = [[feinden]] / to make enemies, to set at odds
 
 ---
 [[Verfehndung]], [[Verfeindung]], [[Feind]], [[feindlich]], [[Feindschaft]]</agent_output>
@@ -73,6 +94,22 @@ to make enemies, to set at odds
 ---
 to dance
 танцевать
+
+---
+[[tanz]]|[[en]]
+
+---
+Person, Präsens, Präteritum, Imperativ, Konjunktiv I,  Konjunktiv II 
+ich, [[tanz]] / [[tanze]], [[tanzte]], [[tanze]], [[tanzte]], -
+du, [[tanzt]], [[tanztest]], [[tanzest]], [[tanztest]], [[tanz /]] [[tanze]]
+er, [[tanzt]], [[tanzte]], [[tanze]], [[tanzte]], -
+wir, [[tanzen]], [[tanzten]], [[tanzen]], [[tanzten]], [[tanzen]]
+ihr, [[tanzt]], [[tanztet]], [[tanzet]], [[tanztet]], [[tanzt]]
+sie, [[tanzen]], [[tanzten]], [[tanzen]], [[tanzten]], [[tanzen]]
+
+*Zu + Inf*: zu [[tanzen]], *P1*: [[tanzend]], *P2*: [[getanzt]]
+
+---
 
 ---
 [[Tanz]], [[Tänzer]], [[Tänzerin]], [[Tanzfläche]], [[tanzerisch]], [[Tanzkurs]]</agent_output>
@@ -96,6 +133,15 @@ hope
 надежда
 
 ---
+[[Hoff]]|[[nung]]
+
+---
+N: die [[Hoffnung]], die [[Hoffnungen]]  
+A: die [[Hoffnung]], die [[Hoffnungen]]  
+G: der [[Hoffnung]], der [[Hoffnungen]]  
+D: der [[Hoffnung]], den [[Hoffnungen]]  
+
+---
 [[hoffen]], [[hoffentlich]], [[hoffnungsvoll]], [[hoffnungslos]]</agent_output>
 </example>
 
@@ -115,6 +161,15 @@ die [[B\\xFCsche]]
 ---
 bush, shrub
 куст
+
+---
+[[Busch]]
+
+---
+N: der [[Busch]], die [[Büsche]]  
+A: den [[Busch]], die [[Büsche]]  
+G: des [[Busches]], der [[Büsche]]  
+D: dem [[Busch]], den [[Büschen]] 
 
 ---
 buschig, buschieren</agent_output>
@@ -137,6 +192,18 @@ small, little
 маленький
 
 ---
+[[klein]]
+
+---
+N: [[klein]], [[kleiner]], [[kleinster]]  
+A: [[kleinen]], [[kleineren]], [[kleinsten]]  
+G: [[kleiner]], [[kleinerer]], [[kleinster]]  
+D: [[kleinem]], [[kleinerem]], [[kleinstem]]  
+F: [[kleine]], [[kleinere]], [[kleinste]]  
+N: [[kleines]], [[kleineres]], [[kleinstes]]  
+P: [[kleinen]], [[kleineren]], [[kleinsten]]  
+
+---
 [[Kleinheit]], [[kleinlich]], [[kleinmachen]]</agent_output>
 </example>
 <example>
@@ -156,6 +223,21 @@ to call, to phone
 звонить 
 
 ---
+[[an]]|[[ru]]|[[fen]]
+
+---
+ich, [[ruf an]] / [[rufe an]], [[rief an]], [[rufe an]], [[riefe an]], -
+du, [[rufst an]], [[riefst an]], [[rufest an]], [[riefest an]], [[ruf an]] / [[rufe an]]
+er, [[ruft an]], [[rief an]], [[rufe an]], [[riefe an]], -
+wir, [[rufen an]], [[riefen an]], [[rufen an]], [[riefen an]], [[rufen an]]
+ihr, [[ruft an]], [[rieft an]], [[rufet an]], [[riefet an]], [[ruft an]]
+sie, [[rufen an]], [[riefen an]], [[rufen an]], [[riefen an]], [[rufen an]]
+*Zu + Inf*: [[anzurufen]], P1: [[anrufend]], P2: [[angerufen]]
+
+---
+[[anrufen]] - [[an]] = [[rufen]] / to call, to phone
+
+---
 [[Anruf]], [[Anrufer]], [[Anruferin]], [[anrufbar]], [[Anrufbeantworter]]</agent_output>
 </example>
 <example>
@@ -173,6 +255,18 @@ to call, to phone
 ---
 constantly, continuously, persistently, perpetually
 постоянный, непрерывный, беспрестанный
+
+---
+[[stän]]|[[dig]]
+
+---
+N: [[ständig]], [[ständiger]], [[ständigster]]  
+A: [[ständigen]], [[ständigeren]], [[ständigsten]]  
+G: [[ständigen]], [[ständigeren]], [[ständigsten]]  
+D: [[ständigem]], [[ständigeren]], [[ständigstem]]  
+F: [[ständige]], [[ständigere]], [[ständigste]]  
+N: [[ständiges]], [[ständigeres]], [[ständigstes]]  
+P: [[ständigen]], [[ständigeren]], [[ständigsten]]  
 
 ---
 [[stehen]], [[Ständigkeit]], [[zuständig]], [[anständig]], [[beständig]], [[aufständig]]</agent_output>
@@ -285,6 +379,18 @@ sad, sorrowful
 грустный, печальный
 
 ---
+[[trau]]|[[rig]]
+
+---
+N: [[traurig]], [[trauriger]], [[traurigster]]  
+A: [[traurigen]], [[traurigeren]], [[traurigsten]]  
+G: [[trauriger]], [[traurigerer]], [[traurigster]]  
+D: [[traurigem]], [[traurigerem]], [[traurigstem]]  
+F: [[traurige]], [[traurigere]], [[traurigste]]  
+N: [[trauriges]], [[traurigeres]], [[traurigstes]]  
+P: [[traurigen]], [[traurigeren]], [[traurigsten]]  
+
+---
 [[Trauer]], [[trauern]], [[Traurigkeit]], [[betrauern]], [[trauernd]]</agent_output>
 </example>
 <example>
@@ -327,6 +433,16 @@ research result, findings
 результаты исследования
 
 ---
+[[Recher­che]]+[[ergeb­nis]]
+[[Re]]|[[cher]]|[[che]]|[[er]]|[[geb]]|[[nis]]
+
+---
+N: das [[Rechercheergbenis]], die [[Rechercheergbnisse]]  
+A: das [[Rechercheergbenis]], die [[Rechercheergbnisse]]  
+G: des [[Rechercheergbnis­ses]], der [[Rechercheergbnisse]]  
+D: dem [[Rechercheergbnis]], den [[Rechercheergbnissen]]  
+
+---
 [[recherchieren]], [[Recherche]], [[ergebnisorientiert]], [[Forschung]]</agent_output>
 </example>
 </examples>
@@ -352,5 +468,4 @@ here, hither
 ---
 [[herkommen]], [[heraus]], [[herum]], [[herüber]], [[herunter]], [[herausfinden]], [[herstellen]], [[hergeben]]</agent_output>
 </example>
-</examples>
 `;

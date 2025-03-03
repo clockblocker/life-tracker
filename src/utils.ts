@@ -1,5 +1,7 @@
 import { Editor, MarkdownView, TFile, Vault, normalizePath } from 'obsidian';
 
+export const longDash =  "—";
+
 export const extractBacklinks = (content: string): string[] => {
     const links = content.split('[[')
         .map(part => part

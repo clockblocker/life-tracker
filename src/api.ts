@@ -77,7 +77,7 @@ export class ApiService {
         }
     }
 
-    private async generateContent(systemPrompt: string, userInput: string): Promise<string> {
+    async generateContent(systemPrompt: string, userInput: string): Promise<string> {
         try {
             let response: string | null = null;
             // Remove leading tab characters from the system prompt
@@ -165,7 +165,7 @@ export class ApiService {
             throw new Error(error.message);
         }
     }
-
+    
     async fetchTemplate(word: string): Promise<string> {
         const [dictionaryEntry, valenceBlock] = await Promise.all([
             this.generateContent(prompts.generate_dictionary_entry, word),
