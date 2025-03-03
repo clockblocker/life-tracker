@@ -17,11 +17,12 @@ export default async function fillTemplate(plugin: TextEaterPlugin, editor: Edit
         const adjForms = extractAdjectiveForms(froms);
 
         const baseBlock = `${dictionaryEntry.replace('<agent_output>', '').replace('</agent_output>', '')}`;
-        const morphemsBlock = morphems === longDash ? "" : `${morphems}`;
-        const valenceBlock = valence === longDash ? "" : `${valence}`;
-        const fromsBlock = froms === longDash ? "" : `${froms}`;
-        const adjFormsBlock = adjForms === longDash ? "" : `${adjForms}`;
+        const morphemsBlock = morphems.replace('\n', "") === longDash ? "" : `${morphems}`;
+        const valenceBlock = valence.replace('\n', "") === longDash ? "" : `${valence}`;
+        const fromsBlock = froms.replace('\n', "") === longDash ? "" : `${froms}`;
+        const adjFormsBlock = adjForms.replace('\n', "") === longDash ? "" : `${adjForms}`;
 
+        console.log('[baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock]', [baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock])
         const blocks = [baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock];
         const entrie = blocks.filter(Boolean).join('\n---\n')
 
