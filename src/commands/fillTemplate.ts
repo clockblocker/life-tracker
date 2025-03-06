@@ -38,8 +38,6 @@ export default async function fillTemplate(plugin: TextEaterPlugin, editor: Edit
             // callBack && await callBack();
         } else {
             await plugin.fileService.appendToFile(file.path, `[[${normalForm}]]`);
-            await navigator.clipboard.writeText(entrie);
-            new Notice(`${word} is a form of the ${normalForm}. Copied the dictinary entrie for ${normalForm} to clipbord.`);
         }
     } catch (error) {
         new Notice(`Error: ${error.message}`);
