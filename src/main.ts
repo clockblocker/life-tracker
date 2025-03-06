@@ -33,7 +33,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'backlink-all-to-current-file',
-            name: 'Add backlinks to the current file in all referenced files',
+            name: '[P] All referenced files with a backlink to the current file',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 const fileName = view.file?.name;
                 const backlink = view.file?.basename;
@@ -53,7 +53,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'fill-template',
-            name: 'Generate a dictionary entry for the word in the title of the file',
+            name: '[G] Generate a dictionary entry for the word in the title of the file',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 const fileName = view.file?.name;
                 const backlink = view.file?.basename;
@@ -70,7 +70,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'fill-template-2',
-            name: 'Z: Generate and auto-populate dictionary entry',
+            name: '[WIP]: Generate and auto-populate dictionary entry',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 const fileName = view.file?.name;
                 const backlink = view.file?.basename;
@@ -88,7 +88,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'get-infinitive-and-emoji',
-            name: '[Redundant] Get infinitive form and emoji for current word',
+            name: '[I] [Redundant] Get infinitive/normal form and emoji for current word',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 if (view.file) {
                     if (!checking) {
@@ -102,7 +102,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'duplicate-selection',
-            name: 'Add links to normal/inf forms to selected text',
+            name: '[WIP] Add links to normal/inf forms to selected text',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 const selection = editor.getSelection();
                 if (selection && view.file) {
@@ -117,7 +117,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'translate-selection',
-            name: 'Translate selected text',
+            name: '[D] Translate selecteD text',
             editorCheckCallback: (checking: boolean, editor: Editor) => {
                 const selection = editor.getSelection();
                 if (selection) {
@@ -132,7 +132,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'format-selection-with-number',
-            name: 'Split selection into linked blocks',
+            name: '[S] Split selection into linked blocks',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 const selection = editor.getSelection();
                 if (selection && view.file) {
@@ -147,7 +147,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'check-ru-de-translation',
-            name: 'Keymaker',
+            name: '[K] Keymaker',
             editorCheckCallback: (checking: boolean, editor: Editor) => {
                 const selection = editor.getSelection();
                 if (selection) {

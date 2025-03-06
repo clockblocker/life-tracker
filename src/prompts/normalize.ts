@@ -3,40 +3,40 @@ Your task is to keep the sentence visibly intact, while liking all the key words
 
 ## <instructions>
 1. **normalize all words to their base form**:
-    - brutzelt → [[brutzeln|brutzelt]]
-    - gesorgt → [[sorgen|gesorgt]]
-    - sorgen → [[sorgen]]
-    - Katze → [[Katze]]
-    - Hoffnungen → [[Hoffnung|Hoffnungen]]
-    - eisigen → [[eisig|eisigen]]
-    - einzigsten → [[eins|einzigsten]]
-    - zweiteste → [[zwei|zweiteste]]
+- brutzelt → [[brutzeln|brutzelt]]
+- gesorgt → [[sorgen|gesorgt]]
+- sorgen → [[sorgen]]
+- Katze → [[Katze]]
+- Hoffnungen → [[Hoffnung|Hoffnungen]]
+- eisigen → [[eisig|eisigen]]
+- einzigsten → [[eins|einzigsten]]
+- zweiteste → [[zwei|zweiteste]]
 2. **identify and tag verbs** with their infinitive forms, keeping their conjugation visible**, except for *haben, sein,* and *werden*, which remain untagged:
-    - hat → hat
-    - ließ → [[lassen|ließ]]
-    - werden verbunden → werden ... [[verbinden|verbunden]]
+- hat → hat
+- ließ → [[lassen|ließ]]
+- werden verbunden → werden ... [[verbinden|verbunden]]
 3. **handle separable verbs properly** by tagging both parts:
-    - hängst auf → [[aufhängen|hängst]] ... [[aufhängen|auf]]
-    - weiterhelfen → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
-    - vorbeikommen → [[vorbeikommen]]
+- hängst auf → [[aufhängen|hängst]] ... [[aufhängen|auf]]
+- weiterhelfen → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
+- vorbeikommen → [[vorbeikommen]]
 4. **convert numerals and ordinal numbers properly**:
-    - zweiteste → [[zwei]]
-    - drittes → [[drei]]
+- zweiteste → [[zwei]]
+- drittes → [[drei]]
 5. **convert abbreviations to their expanded form where applicable**:
-    - z.B. → [[zum Beispiel|z.B.]]
+- z.B. → [[zum Beispiel|z.B.]]
 6. **preserve sentence structure** without removing punctuation or altering meaning.
 7. **ensure names and proper nouns remain untouched**:
-    - Georgia Institute of Technology* remains as-is.
-    - *Avoid introducing typos in names** (e.g., *Laupsien* must not become *Laupien*).
+- Georgia Institute of Technology* remains as-is.
+- *Avoid introducing typos in names** (e.g., *Laupsien* must not become *Laupien*).
 8. **do not enclose pronouns or function words** (e.g., *mein, mich, dein, unser, ihr* remain untagged).
 9. **plural nouns must be linked to their singular forms**:
-    - Krabbenschalen → [[Krabbenschale|Krabbenschalen]]
-    - Baumfasern → [[Baumfaser|Baumfasern]]
-    - Ausgangsmaterialien → [[Ausgangsmaterial|Ausgangsmaterialien]]
+- Krabbenschalen → [[Krabbenschale|Krabbenschalen]]
+- Baumfasern → [[Baumfaser|Baumfasern]]
+- Ausgangsmaterialien → [[Ausgangsmaterial|Ausgangsmaterialien]]
 10. all conjugated verbs must be linked to their infinitive base form, including past tense:
-    •	verwendeten → [[verwenden|verwendeten]]
-    •	nahm → [[nehmen|nahm]]
-    •	dachten → [[denken|dachten]]
+•	verwendeten → [[verwenden|verwendeten]]
+•	nahm → [[nehmen|nahm]]
+•	dachten → [[denken|dachten]]
 
 ## <examples>
 ### Example 1
@@ -61,9 +61,9 @@ So hat jeder seine [[Sorgen]]... [[Ehe]] ich's [[vergessen|vergesse]]: [[heute]]
 - *pronouns and function words** (e.g., *ich, du, wir, dass, weil, mein, dein, unser, mich, dich*) **are not tagged**.
 - *negations** (*nicht, kein*) remain untagged.
 - *modal verbs** (*können, müssen, sollen*) should be tagged when conjugated:
-    - kann gehen → [[können|kann]] [[gehen]]
+- kann gehen → [[können|kann]] [[gehen]]
 - *separable verbs must be tagged in both parts**, even when split:
-    - weiterhelfen → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
+- weiterhelfen → [[weiterhelfen|weiter]] ... [[weiterhelfen|helfen]]
 - *haben, sein, and werden** remain **untagged**, regardless of conjugation.
 - *plural nouns must be tagged with their singular form**.
 
