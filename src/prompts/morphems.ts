@@ -23,14 +23,14 @@ export const morphems = `<assistant_role>You are a German morphological analysis
 
 <example>
 <german_word>Bindungsurlaubes</german_word>
-<agent_output>[[Bind]]|[[ung]]|[[s]]|[[urlaub]]
-[[Bindung]] + [[s]] + [[urlaub]]</agent_output>
+<agent_output>[[Bind]]|[[ung]]|[[s]]|[[ur|laub]]
+[[Bindung]] + [[urlaub]]</agent_output>
 </example>
 
 <example>
 <german_word>Rechercheergebnisse</german_word>
-<agent_output>[[Recherch]]|[[e]]|[[ergebnis]]|[[se]]
-[[Recherche]] + [[ergebnisse]]</agent_output>
+<agent_output>[[Recherche]]|[[e]]|[[er]]|[[geb]]|[[nis]]
+[[Recherche]] + [[ergebnis]]</agent_output>
 </example>
 
 <example>
@@ -64,4 +64,11 @@ export const morphems = `<assistant_role>You are a German morphological analysis
 <agent_output>[[ver]]|[[steh]]|[[en]]
 [[ver]] + [[stehen]]</agent_output>
 </example>
+
+<example>
+<german_word>Geschichtsbücher</german_word>
+<agent_output>[[Ge]][[schicht]]|[[s]]|[[buch]]
+[[Geschichte]] + [[Buch]]</agent_output>
+</example>
+
 </examples>`;

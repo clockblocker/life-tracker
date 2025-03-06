@@ -3,7 +3,12 @@ import TextEaterPlugin from '../main';
 import { prompts } from 'prompts';
 import { longDash } from 'utils';
 
-export default async function fillTemplate(plugin: TextEaterPlugin, editor: Editor, file: TFile) {
+function extractFirstBracketedWord(text: string) {
+    const match = text.match(/\[\[([^\]]+)\]\]/);
+    return match ? match[1] : null;
+}
+
+export default async function fillTemplate(plugin: TextEaterPlugin, editor: Editor, file: TFile, callBack?: () => void) {
     const word = file.basename;
 
     try {
@@ -22,11 +27,20 @@ export default async function fillTemplate(plugin: TextEaterPlugin, editor: Edit
         const fromsBlock = froms.replace('\n', "") === longDash ? "" : `${froms}`;
         const adjFormsBlock = adjForms.replace('\n', "") === longDash ? "" : `${adjForms}`;
 
-        console.log('[baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock]', [baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock])
         const blocks = [baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock];
         const entrie = blocks.filter(Boolean).join('\n---\n')
 
-        await plugin.fileService.appendToFile(file.path, entrie);
+        
+        const normalForm = extractFirstBracketedWord(baseBlock);
+
+        if (normalForm?.toLocaleLowerCase() === word.toLocaleLowerCase()) {
+            await plugin.fileService.appendToFile(file.path, entrie);
+            // callBack && await callBack();
+        } else {
+            await plugin.fileService.appendToFile(file.path, `[[${normalForm}]]`);
+            await navigator.clipboard.writeText(entrie);
+            new Notice(`${word} is a form of the ${normalForm}. Copied the dictinary entrie for ${normalForm} to clipbord.`);
+        }
     } catch (error) {
         new Notice(`Error: ${error.message}`);
     }

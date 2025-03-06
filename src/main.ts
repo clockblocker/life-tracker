@@ -56,9 +56,30 @@ export default class TextEaterPlugin extends Plugin {
             id: 'fill-template',
             name: 'Generate a dictionary entry for the word in the title of the file',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
-                if (view.file) {
+                const fileName = view.file?.name;
+                const backlink = view.file?.basename;
+
+                if (view.file && fileName && backlink) {
                     if (!checking) {
-                        fillTemplate(this, editor, view.file);
+                        fillTemplate(this, editor, view.file)
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        this.addCommand({
+            id: 'fill-template-2',
+            name: 'Z: Generate and auto-populate dictionary entry',
+            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
+                const fileName = view.file?.name;
+                const backlink = view.file?.basename;
+
+                if (view.file && fileName && backlink) {
+                    if (!checking) {
+                        const cb = () => addBacklinksToCurrentFile(view.file!, backlink, this.app.vault, this.app.metadataCache)
+                        fillTemplate(this, editor, view.file, cb)
                     }
                     return true;
                 }
