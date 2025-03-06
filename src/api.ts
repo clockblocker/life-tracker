@@ -186,11 +186,7 @@ export class ApiService {
         return this.generateContent(prompts.translate_de_to_eng, text);
     }
 
-    async translateRuToDe(text: string): Promise<string> {
-        return this.generateContent(prompts.translate_ru_to_de, text);
-    }
-
-    async checkRuDeTranslation(text: string): Promise<string> {
+    async consultKeymaker(text: string): Promise<string> {
         return this.generateContent(prompts.check_ru_de_translation, text);
     }
 }

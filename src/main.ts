@@ -8,8 +8,7 @@ import getInfinitiveAndEmoji from './commands/getInfinitiveAndEmoji';
 import normalizeSelection from './commands/normalizeSelection';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
-import checkRuDeTranslation from './commands/checkRuDeTranslation';
-import translateRuToDe from './commands/translateRuToDe';
+import insertReplyFromKeymaker from './commands/checkRuDeTranslation';
 import addBacklinksToCurrentFile from 'commands/addBacklinksToCurrentFile';
 
 export default class TextEaterPlugin extends Plugin {
@@ -89,7 +88,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'get-infinitive-and-emoji',
-            name: 'Get infinitive form and emoji for current word',
+            name: '[Redundant] Get infinitive form and emoji for current word',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 if (view.file) {
                     if (!checking) {
@@ -118,7 +117,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'translate-selection',
-            name: 'Translate selected text and show below',
+            name: 'Translate selected text',
             editorCheckCallback: (checking: boolean, editor: Editor) => {
                 const selection = editor.getSelection();
                 if (selection) {
@@ -133,7 +132,7 @@ export default class TextEaterPlugin extends Plugin {
 
         this.addCommand({
             id: 'format-selection-with-number',
-            name: 'Format selection with next number and source link',
+            name: 'Split selection into linked blocks',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 const selection = editor.getSelection();
                 if (selection && view.file) {
@@ -147,28 +146,13 @@ export default class TextEaterPlugin extends Plugin {
         });
 
         this.addCommand({
-            id: 'translate-ru-to-de',
-            name: 'Translate Russian text to German',
-            editorCheckCallback: (checking: boolean, editor: Editor) => {
-                const selection = editor.getSelection();
-                if (selection) {
-                    if (!checking) {
-                        translateRuToDe(this, editor, selection);
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        this.addCommand({
             id: 'check-ru-de-translation',
-            name: 'Check Russian-German translation',
+            name: 'Keymaker',
             editorCheckCallback: (checking: boolean, editor: Editor) => {
                 const selection = editor.getSelection();
                 if (selection) {
                     if (!checking) {
-                        checkRuDeTranslation(this, editor, selection);
+                        insertReplyFromKeymaker(this, editor, selection);
                     }
                     return true;
                 }
