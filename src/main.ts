@@ -87,22 +87,7 @@ export default class TextEaterPlugin extends Plugin {
                 const selection = editor.getSelection();
                 if (selection && view.file) {
                     if (!checking) {
-                        normalizeSelection(this, editor, view.file, selection, true);
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        this.addCommand({
-            id: 'normalize-and-do-not-link',
-            name: 'z: Add links to normal/inf forms [W/O a source link]',
-            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
-                const selection = editor.getSelection();
-                if (selection && view.file) {
-                    if (!checking) {
-                        normalizeSelection(this, editor, view.file, selection, false);
+                        normalizeSelection(this, editor, view.file, selection);
                     }
                     return true;
                 }

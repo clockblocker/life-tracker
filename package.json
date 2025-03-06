@@ -25,6 +25,8 @@
 	},
 	"dependencies": {
 		"@google/generative-ai": "^0.21.0",
-		"openai": "^4.85.1"
+		"@types/sbd": "^1.0.5",
+		"openai": "^4.85.1",
+		"sbd": "^1.0.19"
 	}
 }

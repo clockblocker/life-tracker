@@ -178,8 +178,8 @@ export class ApiService {
         return this.generateContent(prompts.determine_infinitive_and_pick_emoji, word);
     }
 
-    async makeBrackets(text: string): Promise<string> {
-        return this.generateContent(prompts.make_brackets, text);
+    async normalize(text: string): Promise<string> {
+        return this.generateContent(prompts.normalize, text);
     }
 
     async translateText(text: string): Promise<string> {

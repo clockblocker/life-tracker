@@ -13,11 +13,11 @@ export const extractBacklinks = (content: string): string[] => {
     return links;
 };
 
-export async function formatSelectionWithBacklink(selection: string, currentFileName: string, nextNumber: number): Promise<string> {
+export function formatSelectionWithBacklink(selection: string, currentFileName: string, nextNumber: number): string {
     // Strip all newline characters and spaces from the end of the selection
     selection = selection.replace(/[\s\n]+$/, '');
 
-    const formattedBacklink = `[[${currentFileName}#^${nextNumber}|(q)]]`;
+    const formattedBacklink = `[[${currentFileName}#^${nextNumber}|^]]`;
     return `${formattedBacklink} ${selection} ^${nextNumber}\n`;
 }
 

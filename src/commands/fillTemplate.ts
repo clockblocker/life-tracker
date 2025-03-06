@@ -17,7 +17,7 @@ export default async function fillTemplate(plugin: TextEaterPlugin, editor: Edit
         const adjForms = extractAdjectiveForms(froms);
 
         const baseBlock = `${dictionaryEntry.replace('<agent_output>', '').replace('</agent_output>', '')}`;
-        const morphemsBlock = morphems.replace('\n', "") === longDash ? "" : `${morphems}`;
+        const morphemsBlock = morphems.replace('\n', "") === longDash ? "" : `${morphems}\n`;
         const valenceBlock = valence.replace('\n', "") === longDash ? "" : `${valence}`;
         const fromsBlock = froms.replace('\n', "") === longDash ? "" : `${froms}`;
         const adjFormsBlock = adjForms.replace('\n', "") === longDash ? "" : `${adjForms}`;

@@ -13,7 +13,7 @@ export const prompts = {
    generate_forms,
    morphems,
    determine_infinitive_and_pick_emoji, 
-   make_brackets: normalize,
+   normalize,
    translate_de_to_eng,
    translate_ru_to_de,
    check_ru_de_translation,

@@ -3,11 +3,12 @@ Examples (input -> output):
 "brutzelt" -> "🍳 [[brutzeln]]",
 "gesorgt" -> "🤔 [[sorgen]]",
 "Hoffnungen" -> "🔴 die [[Hoffnung]] 🕊️",
-"eisigen", -> "🥶 [[eisig]]",
-"zweiteste", -> "2️⃣ [[zwei]]",
-"Auftragslage", -> "📈 [[Auftragslage]]",
-"her", -> "➡️ [[her]]",
-"saßen", -> "🪑 [[sitzen]]". 
+"eisigen" -> "🥶 [[eisig]]",
+"zweiteste" -> "2️⃣ [[zwei]]",
+"Auftragslage" -> "📈 [[Auftragslage]]",
+"her" -> "➡️ [[her]]",
+"saßen" -> "🪑 [[sitzen]]". 
+"unbändiges" -> "💪 [[unbändig]] | 🟢 das [[Unbändige]] 💪"
 The output should be compact, without extra spaces or newlines.
 
 If a word can be a form of multiple parts of speach, list all options, separated with |. Examples (input -> output):
