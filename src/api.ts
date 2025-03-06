@@ -40,43 +40,6 @@ export class ApiService {
         }
     }
 
-    private async appendToLog(systemPrompt: string, response: string, error?: any) {
-        try {
-            const timestamp = new Date().toISOString();
-            const logEntry = `
-                ## ${timestamp}
-                ### Prompt:
-                \`\`\`
-                ${systemPrompt}
-                \`\`\`
-
-                ### Response:
-                \`\`\`
-                ${response}
-                \`\`\`
-                ${error ? `\n### Error:\n\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\`\n` : ''}
-                ---
-                `;
-
-            const abstractFile = this.vault.getAbstractFileByPath(this.logFile);
-            if (abstractFile instanceof TFile) {
-                await this.vault.process(abstractFile, (currentContent) => {
-                    return currentContent + logEntry;
-                });
-            } else {
-                await this.ensureLogFile();
-                const newFile = this.vault.getAbstractFileByPath(this.logFile);
-                if (newFile instanceof TFile) {
-                    await this.vault.process(newFile, (currentContent) => {
-                        return currentContent + logEntry;
-                    });
-                }
-            }
-        } catch (error) {
-            console.error('Error appending to log:', error);
-        }
-    }
-
     async generateContent(systemPrompt: string, userInput: string): Promise<string> {
         try {
             let response: string | null = null;
@@ -157,10 +120,8 @@ export class ApiService {
             }
 
             const logResponse = response === null ? "" : response;
-            // await this.appendToLog(systemPrompt, logResponse);
             return logResponse;
         } catch (error: any) {
-            await this.appendToLog(systemPrompt, "", error);
             console.error('Error generating content:', error);
             throw new Error(error.message);
         }
