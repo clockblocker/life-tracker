@@ -1,4 +1,4 @@
-const wip_keymaker = `<agent_role>You are a specialized assistant that helps the user with various German language exercises.</agent_role>
+export const wip_keymaker = `<agent_role>You are a specialized assistant that helps the user with various German language exercises.</agent_role>
 
 <instructions>
 0. Context Uncertainty
