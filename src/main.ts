@@ -43,7 +43,7 @@ export default class TextEaterPlugin extends Plugin {
 
                 if (view.file && fileName && backlink) {
                     if (!checking) {
-                        addBacklinksToCurrentFile(view.file, backlink, this.app.vault, this.app.metadataCache);
+                        addBacklinksToCurrentFile(view.file, backlink, this.app.vault, this.app.metadataCache, editor);
                     }
                     return true;
                 }
@@ -56,30 +56,9 @@ export default class TextEaterPlugin extends Plugin {
             id: 'fill-template',
             name: '[G] Generate a dictionary entry for the word in the title of the file',
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
-                const fileName = view.file?.name;
-                const backlink = view.file?.basename;
-
-                if (view.file && fileName && backlink) {
+                if (view.file) {
                     if (!checking) {
                         fillTemplate(this, editor, view.file)
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        this.addCommand({
-            id: 'fill-template-2',
-            name: '[WIP]: Generate and auto-populate dictionary entry',
-            editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
-                const fileName = view.file?.name;
-                const backlink = view.file?.basename;
-
-                if (view.file && fileName && backlink) {
-                    if (!checking) {
-                        const cb = () => addBacklinksToCurrentFile(view.file!, backlink, this.app.vault, this.app.metadataCache)
-                        fillTemplate(this, editor, view.file, cb)
                     }
                     return true;
                 }
@@ -161,20 +140,38 @@ export default class TextEaterPlugin extends Plugin {
             }
         });
 
-        this.addCommand({
-            id: 'c1-richter',
-            name: '[WIP] C1 Richter',
-            editorCheckCallback: (checking: boolean, editor: Editor) => {
-                const selection = editor.getSelection();
-                if (selection) {
-                    if (!checking) {
-                        insertReplyFromC1Richter(this, editor, selection);
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
+        // this.addCommand({
+        //     id: 'fill-template-2',
+        //     name: '[WIP]: Generate and auto-populate dictionary entry',
+        //     editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
+        //         const fileName = view.file?.name;
+        //         const backlink = view.file?.basename;
+
+        //         if (view.file && fileName && backlink) {
+        //             if (!checking) {
+        //                 const cb = () => addBacklinksToCurrentFile(view.file!, backlink, this.app.vault, this.app.metadataCache)
+        //                 fillTemplate(this, editor, view.file, cb)
+        //             }
+        //             return true;
+        //         }
+        //         return false;
+        //     }
+        // });
+
+        // this.addCommand({
+        //     id: 'c1-richter',
+        //     name: '[WIP] C1 Richter',
+        //     editorCheckCallback: (checking: boolean, editor: Editor) => {
+        //         const selection = editor.getSelection();
+        //         if (selection) {
+        //             if (!checking) {
+        //                 insertReplyFromC1Richter(this, editor, selection);
+        //             }
+        //             return true;
+        //         }
+        //         return false;
+        //     }
+        // });
     }
 
     async loadSettings() {

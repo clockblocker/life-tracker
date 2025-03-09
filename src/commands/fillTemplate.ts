@@ -35,7 +35,6 @@ export default async function fillTemplate(plugin: TextEaterPlugin, editor: Edit
 
         if (normalForm?.toLocaleLowerCase() === word.toLocaleLowerCase()) {
             await plugin.fileService.appendToFile(file.path, entrie);
-            // callBack && await callBack();
         } else {
             await plugin.fileService.appendToFile(file.path, `[[${normalForm}]]`);
         }

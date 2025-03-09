@@ -6,7 +6,6 @@ import { prompts } from './prompts';
 export class ApiService {
     private genAI: GoogleGenerativeAI | null = null;
     private model = "gemini-2.0-flash-lite";
-    private logFile = "api-logs.md";
     private chatSessions: { [key: string]: any } = {};
 
     constructor(private settings: TextEaterSettings, private vault: Vault) {
@@ -16,27 +15,8 @@ export class ApiService {
             } else if (this.settings.apiProvider === 'google') {
                 this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
             }
-            this.ensureLogFile();
         } catch (error) {
             new Notice(`Error initializing API service: ${error.message}`);
-        }
-    }
-
-    private async ensureLogFile() {
-        try {
-            const existingFile = this.vault.getAbstractFileByPath(this.logFile);
-            if (!existingFile) {
-                try {
-                    await this.vault.create(this.logFile, "# API Logs\n\n");
-                } catch (createError) {
-                    // If the error is because the file already exists, that's fine
-                    if (!(createError.message && createError.message.includes("already exists"))) {
-                        console.error('Error creating log file:', createError);
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error checking for log file:', error);
         }
     }
 

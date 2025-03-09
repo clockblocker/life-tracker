@@ -1,7 +1,7 @@
-import { TFile, normalizePath, Notice, Vault, MetadataCache } from "obsidian";
+import { TFile, normalizePath, Notice, Vault, MetadataCache, Editor } from "obsidian";
 import { appendToFile, doesFileContainContent } from '../utils';
 
-export default async function addBacklinksToCurrentFile(file: TFile, backlink: string, vault: Vault, metadataCache: MetadataCache) {
+export default async function addBacklinksToCurrentFile(file: TFile, backlink: string, vault: Vault, metadataCache: MetadataCache, editor: Editor) {
     try {
         const fileCache = metadataCache.getFileCache(file);
         const links = fileCache?.links ?? [];
@@ -21,8 +21,6 @@ export default async function addBacklinksToCurrentFile(file: TFile, backlink: s
             }
         }
 
-        console.log("resolvedPaths", resolvedPaths);
-
         for (const item of resolvedPaths) {
             try {
                 let filePath: string;
@@ -34,7 +32,7 @@ export default async function addBacklinksToCurrentFile(file: TFile, backlink: s
                     const firstLetter = item.name[0].toUpperCase();
                     const folderPath = normalizePath(`Worter/${firstLetter}`);
                     
-                    const folder = vault.getAbstractFileByPath(folderPath);
+                    const folder = vault.getFolderByPath(folderPath);
                     if (!folder) {
                         await vault.createFolder(folderPath);
                     }
@@ -42,17 +40,15 @@ export default async function addBacklinksToCurrentFile(file: TFile, backlink: s
                     filePath = normalizePath(`${folderPath}/${item.name}.md`);
                 }
         
-                console.log("filePath", filePath);
-
-                // Use utility functions directly with vault
-                const fileExists = await doesFileContainContent(vault, filePath, backlinkText);
-                if (!fileExists) {
+                const backlinkTextInFile = await doesFileContainContent(vault, filePath, backlinkText);
+                if (!backlinkTextInFile) {
                     await appendToFile(vault, filePath, `, ${backlinkText}`);
                 }
             } catch (error) {
                 new Notice(`Error processing link ${item.name}: ${error.message}`);
             }
         }
+        editor.refresh();
     } catch (error) {
         new Notice(`Error processing backlinks: ${error.message}`);
     }
