@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, Notice, Plugin, TFile, normalizePath } from 'obsidian';
+import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
 import { SettingsTab } from './settings';
 import { DEFAULT_SETTINGS, TextEaterSettings } from './types';
 import { ApiService } from './api';
@@ -8,8 +8,9 @@ import getInfinitiveAndEmoji from './commands/getInfinitiveAndEmoji';
 import normalizeSelection from './commands/normalizeSelection';
 import translateSelection from './commands/translateSelection';
 import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
-import insertReplyFromKeymaker from './commands/checkRuDeTranslation';
-import addBacklinksToCurrentFile from 'commands/addBacklinksToCurrentFile';
+import addBacklinksToCurrentFile from './commands/addBacklinksToCurrentFile';
+import insertReplyFromKeymaker from './commands/insertReplyFromC1Richter';
+import insertReplyFromC1Richter from './commands/insertReplyFromC1Richter';
 
 export default class TextEaterPlugin extends Plugin {
     settings: TextEaterSettings;
@@ -153,6 +154,21 @@ export default class TextEaterPlugin extends Plugin {
                 if (selection) {
                     if (!checking) {
                         insertReplyFromKeymaker(this, editor, selection);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        this.addCommand({
+            id: 'c1-richter',
+            name: '[WIP] C1 Richter',
+            editorCheckCallback: (checking: boolean, editor: Editor) => {
+                const selection = editor.getSelection();
+                if (selection) {
+                    if (!checking) {
+                        insertReplyFromC1Richter(this, editor, selection);
                     }
                     return true;
                 }

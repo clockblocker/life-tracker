@@ -71,4 +71,17 @@ export const morphems = `<assistant_role>You are a German morphological analysis
 [[Geschichte]] + [[Buch]]</agent_output>
 </example>
 
+<example>
+<german_word>Schweinehund</german_word>
+<agent_output>[[Schwein]]|[[e]]|[[hund]]
+[[Schwein]] + [[Hund]]</agent_output>
+</example>
+
+<example>
+<german_word>standhalten</german_word>
+<agent_output>[[stand]]|[[halt]]|[[en]]
+[[stand]]+[[halten]]
+</example>
+
+
 </examples>`;

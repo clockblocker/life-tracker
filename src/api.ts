@@ -148,6 +148,10 @@ export class ApiService {
     }
 
     async consultKeymaker(text: string): Promise<string> {
-        return this.generateContent(prompts.check_ru_de_translation, text);
+        return this.generateContent(prompts.keymaker, text);
+    }
+
+    async consultC1Richter(text: string): Promise<string> {
+        return this.generateContent(prompts.c1Richter, text);
     }
 }
