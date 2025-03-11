@@ -8,6 +8,29 @@ function extractFirstBracketedWord(text: string) {
     return match ? match[1] : null;
 }
 
+function getIPAIndexes(str: string) {
+    const regex = /(?<!\[)\[(?!\[)(.*?)(?<!\])\](?!\])/g;
+    let matches = [];
+    let match;
+    
+    while ((match = regex.exec(str)) !== null) {
+        matches.push([match.index, regex.lastIndex - 1]);
+    }
+    
+    return matches.length ? matches[0] : null;
+}
+
+function incertYouglishLinkInIpa(baseBlock: string) {
+    const ipaI = getIPAIndexes(baseBlock);
+    const word = extractFirstBracketedWord(baseBlock);
+
+    if (!ipaI || !word) {
+        return baseBlock;
+    }
+    
+    return baseBlock.slice(0, ipaI[1] + 1) + `(https://youglish.com/pronounce/${word}/german)` + baseBlock.slice(ipaI[1] + 1);
+}
+
 export default async function fillTemplate(plugin: TextEaterPlugin, editor: Editor, file: TFile, callBack?: () => void) {
     const word = file.basename;
 
@@ -27,9 +50,8 @@ export default async function fillTemplate(plugin: TextEaterPlugin, editor: Edit
         const fromsBlock = froms.replace('\n', "") === longDash ? "" : `${froms}`;
         const adjFormsBlock = adjForms.replace('\n', "") === longDash ? "" : `${adjForms}`;
 
-        const blocks = [baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock];
+        const blocks = [incertYouglishLinkInIpa(baseBlock), morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock];
         const entrie = blocks.filter(Boolean).join('\n---\n')
-
         
         const normalForm = extractFirstBracketedWord(baseBlock);
 
