@@ -24,7 +24,15 @@ export default async function formatSelectionWithNumber(plugin: TextEaterPlugin,
         if (splitSentences.length <= 2) {
             formattedText = formatSelectionWithBacklink(selection, currentFileName, nextNumber)
         } else {
-            formattedText = splitSentences.map((s, i) => formatSelectionWithBacklink(s, currentFileName, nextNumber + i)).join('\n')
+            const formattedParts: string[] = [];
+            for (let i = 0; i < splitSentences.length; i++) {
+                let sentence = splitSentences[i];
+                const matches = sentence.match(/(?:[^\n]+|\n+)/g);
+                if (matches) {
+                    formattedParts.push(matches.map(s => s.trim() ? formatSelectionWithBacklink(s.trim(), currentFileName, nextNumber + i): s).join(''));
+                } 
+            }
+            formattedText = formattedParts.join("\n")
         }
 
         await navigator.clipboard.writeText(`${formattedText}`);

@@ -17,7 +17,7 @@ export function formatSelectionWithBacklink(selection: string, currentFileName: 
     // Strip all newline characters and spaces from the end of the selection
     selection = selection.replace(/[\s\n]+$/, '');
 
-    const formattedBacklink = `[[${currentFileName}#^${nextNumber}|^]]`;
+    const formattedBacklink = `*[[${currentFileName}#^${nextNumber}|^]]*`;
     return `${formattedBacklink} ${selection} ^${nextNumber}\n`;
 }
 

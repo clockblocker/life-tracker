@@ -7,11 +7,16 @@ Examples (input -> output):
 "zweiteste" -> "2️⃣ [[zwei]]",
 "Auftragslage" -> "📈 [[Auftragslage]]",
 "her" -> "➡️ [[her]]",
-"saßen" -> "🪑 [[sitzen]]". 
-"unbändiges" -> "💪 [[unbändig]] | 🟢 das [[Unbändige]] 💪"
+"saßen" -> "🪑 [[sitzen]]",
 The output should be compact, without extra spaces or newlines.
 
 If a word can be a form of multiple parts of speach, list all options, separated with |. Examples (input -> output):
 "vergangene", -> "🕰️ [[vergehen]]", 
 "Nieser", -> "🤧 [[niesen]] | 🔵 der [[Nieser]] 🤧",
-"klares", -> "😌 [[klären]] | 😌 [[klar]] | 🟢 das [[Klare]] 😌.`;
+"klares", -> "😌 [[klären]] | 😌 [[klar]] | 🟢 das [[Klare]] 😌",
+"Nieser", -> "🤧 [[niesen]] | 🔵 der [[Nieser]] 🤧",
+"Heimwerken" -> "[[heimwerken]] | [[Heimwerk]]",
+"deutschen" -> "🔵 der [[Deutsche]] 🇩🇪 | 🇩🇪 [[deutsch]]",
+"unbändiges" -> "💪 [[unbändig]] | 🟢 das [[Unbändige]] 💪",
+"gehobener" -> "🎩 gehoben",
+`;

@@ -157,4 +157,26 @@ D: dem [[Rechercheergbnis]], den [[Rechercheergbnissen]]</agent_output>
 <german_word>her</german_word>
 <agent_output>${longDash}</agent_output>
 </example>
+
+<example>
+<german_word>verstopft</german_word>
+<agent_output>Person, Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II
+ich, [[verstopf]] / [[verstopfe]], [[verstopfte]], [[verstopfe]], [[verstopfte]], -
+du, [[verstopfst]], [[verstopftest]], [[verstopfst]], [[verstopftest]], [[verstopf]] / [[verstopfe]]
+er, [[verstopft]], [[verstopfte]], [[verstopfe]], [[verstopfte]], -
+wir, [[verstopfen]], [[verstopften]], [[verstopfen]], [[verstopften]], [[verstopfen]]
+ihr, [[verstopft]], [[verstopftet]], [[verstopfet]], [[verstopftet]], [[verstopft]]
+sie, [[verstopfen]], [[verstopften]], [[verstopfen]], [[verstopften]], [[verstopfen]]
+
+*Zu + Inf*: zu [[verstopfen]], *P2*: [[verstopft]]
+Adjektive: [[verstopfend]], [[verstopfender]], [[verstopfendst]]</agent_output>
+</example>
+
+<example>
+<german_word>gehoben</german_word>
+<agent_output>Adjektive: [[gehoben]], [[gehobener]], [[gehobenest]]</agent_output>
+</example>
+
+"gehobener" -> "🎩 gehoben",
+
 `;
