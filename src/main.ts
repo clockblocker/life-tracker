@@ -140,6 +140,21 @@ export default class TextEaterPlugin extends Plugin {
             }
         });
 
+        this.addCommand({
+            id: 'check-schriben',
+            name: '[E] schribEn chEck',
+            editorCheckCallback: (checking: boolean, editor: Editor) => {
+                const selection = editor.getSelection();
+                if (selection) {
+                    if (!checking) {
+                        insertReplyFromC1Richter(this, editor, selection, true);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
         // this.addCommand({
         //     id: 'fill-template-2',
         //     name: '[WIP]: Generate and auto-populate dictionary entry',

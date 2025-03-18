@@ -7,6 +7,8 @@ import { generate_valence_block } from "./valence";
 import { generate_forms } from "./generate-forms";
 import { morphems } from "./morphems";
 import { C1_RICHTER_PROMPT } from "./c1Richter";
+import { C1_RICHTER_PROMPT_V2 } from "./wip/c1RichterCorrectedDECorrectionFirst";
+import { C1_RICHTER_PROMPT_V1 } from "./wip/c1RichterCorrectedDE";
 
 export const prompts = {
    generate_dictionary_entry,
@@ -16,6 +18,7 @@ export const prompts = {
    normalize,
    translate_de_to_eng,
    keymaker,
-   c1Richter: C1_RICHTER_PROMPT,
+   c1Richter: C1_RICHTER_PROMPT_V1,
+   c1Richter2: C1_RICHTER_PROMPT_V2,
    generate_valence_block,
 };
