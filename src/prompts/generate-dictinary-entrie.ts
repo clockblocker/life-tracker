@@ -102,7 +102,7 @@ hope
 <example>
 <german_word>Busch</german_word>
 <agent_output>🌳 🔵 der [[Busch]]
-die [[B\\xFCsche]]
+die [[Büsche]]
 
 ---
 
@@ -310,9 +310,9 @@ although, even though, despite
 [[trotz]], [[obschon]], [[obzwar]], [[wiewohl]], [[obgleich]]</agent_output>
 </example>
 <example>
-<german_word>Rechercheergebnisse</german_word>
-<agent_output>📄 🟢 das [[Rechercheergbenis]], [reˈʃɛrʃəʔɛɐ̯ɡeːpnɪs]
-die [[Rechercheergbnisse]]
+<german_word>Rechercheergbnisse</german_word>
+<agent_output>📄 🟢 das [[Rechercheergebenis]], [reˈʃɛrʃəʔɛɐ̯ɡeːpnɪs]
+die [[Rechercheergebnisse]]
 
 ---
 

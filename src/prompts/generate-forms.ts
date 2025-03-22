@@ -145,11 +145,11 @@ P: [[einigen]], [[einigeren]], [[einzigsten]]</agent_output>
 <agent_output>${longDash}</agent_output>
 </example>
 <example>
-<german_word>Rechercheergebnisse</german_word>
-<agent_output>N: das [[Rechercheergbenis]], die [[Rechercheergbnisse]]  
-A: das [[Rechercheergbenis]], die [[Rechercheergbnisse]]  
-G: des [[Rechercheergbnis­ses]], der [[Rechercheergbnisse]]  
-D: dem [[Rechercheergbnis]], den [[Rechercheergbnissen]]</agent_output>
+<german_word>Rechercheergbnisse</german_word>
+<agent_output>N: das [[Rechercheergebenis]], die [[Rechercheergebnisse]]  
+A: das [[Rechercheergbenis]], die [[Rechercheergebnisse]]  
+G: des [[Rechercheergebnis­ses]], der [[Rechercheergebnisse]]  
+D: dem [[Rechercheergebnis]], den [[Rechercheergebnissen]]</agent_output>
 </example>
 </examples>
 

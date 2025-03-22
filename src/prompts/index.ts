@@ -5,15 +5,15 @@ import { normalize } from "prompts/normalize";
 import { translate_de_to_eng } from "prompts/translate-de-to-eng";
 import { generate_valence_block } from "./valence";
 import { generate_forms } from "./generate-forms";
-import { morphems } from "./morphems";
 import { C1_RICHTER_PROMPT } from "./c1Richter";
 import { C1_RICHTER_PROMPT_V2 } from "./wip/c1RichterCorrectedDECorrectionFirst";
 import { C1_RICHTER_PROMPT_V1 } from "./wip/c1RichterCorrectedDE";
+import { morphems2 } from "./wip/morphems2";
 
 export const prompts = {
    generate_dictionary_entry,
    generate_forms,
-   morphems,
+   morphems: morphems2,
    determine_infinitive_and_pick_emoji, 
    normalize,
    translate_de_to_eng,
