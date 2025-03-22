@@ -7,7 +7,7 @@ export const generate_forms = `<assistant_role>You are an advanced linguistic as
 - Determine if it's trennbar (separable) or untrennbar (inseparable).
 - Identify its tense forms (present, past, perfect).
 - Note any irregular conjugations. 
-- Fill the list of cojugations (Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II) 
+- Fill the list of cojugations (Präsens, Präteritum, Imperativ, KI, KII) 
 
 3. For nouns:
 - Identify the gender (masculine, feminine, or neuter).
@@ -21,29 +21,29 @@ Present only your final entry. Do not write to the user your thought process. Do
 <examples>
 <example>
 <german_word>verfeinden</german_word>
-<agent_output>Person, Präsens, Präteritum, Imperativ, Konjunktiv I,  Konjunktiv II 
-ich, [[verfeind]] / [[verfeinde]], [[verfeindete]], [[verfeinde]], [[verfeindete]], -
+<agent_output>Person, Präsens, Präteritum, Imperativ, KI,  KII 
+ich, [[verfeind]] / [[verfeinde]], [[verfeindete]], [[verfeinde]], [[verfeindete]], ${longDash}
 du, [[verfeindest]], [[verfeindetest]], [[verfeindest]], [[verfeindetest]], [[verfeind]] / [[verfeinde]]
-er, [[verfeindet]], [[verfeindete]], [[verfeinde]], [[verfeindete]], -
+er, [[verfeindet]], [[verfeindete]], [[verfeinde]], [[verfeindete]], ${longDash}
 wir, [[verfeinden]], [[verfeindeten]], [[verfeinden]], [[verfeindeten]], [[verfeinden]]
 ihr, [[verfeindet]], [[verfeindetet]], [[verfeindet]], [[verfeindetet]], [[verfeindet]]
 sie, [[verfeinden]], [[verfeindeten]], [[verfeinden]], [[verfeindeten]], [[verfeinden]]
 
-*Zu + Inf*: zu [[verfeinden]], *P2*: [[verfeindet]]
+*Zu + Inf*: zu [[verfeinden]], *PII*: [[verfeindet]]
 Adjektive: [[verfeindend]], [[verfeindender]], [[verfeindendst]]</agent_output>
 </example>
 
 <example>
 <german_word>tanztest</german_word>
-<agent_output>Person, Präsens, Präteritum, Imperativ, Konjunktiv I,  Konjunktiv II 
-ich, [[tanz]] / [[tanze]], [[tanzte]], [[tanze]], [[tanzte]], -
+<agent_output>Person, Präsens, Präteritum, Imperativ, KI,  KII 
+ich, [[tanz]] / [[tanze]], [[tanzte]], [[tanze]], [[tanzte]], ${longDash}
 du, [[tanzt]], [[tanztest]], [[tanzest]], [[tanztest]], [[tanz]] / [[tanze]]
-er, [[tanzt]], [[tanzte]], [[tanze]], [[tanzte]], -
+er, [[tanzt]], [[tanzte]], [[tanze]], [[tanzte]], ${longDash}
 wir, [[tanzen]], [[tanzten]], [[tanzen]], [[tanzten]], [[tanzen]]
 ihr, [[tanzt]], [[tanztet]], [[tanzet]], [[tanztet]], [[tanzt]]
 sie, [[tanzen]], [[tanzten]], [[tanzen]], [[tanzten]], [[tanzen]]
 
-*Zu + Inf*: zu [[tanzen]], *P2*: [[getanzt]
+*Zu + Inf*: zu [[tanzen]], *PII*: [[getanzt]]
 Adjektive: [[tanzend]], [[tanzender]], [[tanzendst]]]</agent_output>
 </example>
 
@@ -70,14 +70,14 @@ D: dem [[Busch]], den [[Büschen]]</agent_output>
 
 <example>
 <german_word>anzurufen</german_word>
-<agent_output>ich, [[ruf an]] / [[rufe an]], [[rief an]], [[rufe an]], [[riefe an]], -
+<agent_output>ich, [[ruf an]] / [[rufe an]], [[rief an]], [[rufe an]], [[riefe an]], ${longDash}
 du, [[rufst an]], [[riefst an]], [[rufest an]], [[riefest an]], [[ruf an]] / [[rufe an]]
-er, [[ruft an]], [[rief an]], [[rufe an]], [[riefe an]], -
+er, [[ruft an]], [[rief an]], [[rufe an]], [[riefe an]], ${longDash}
 wir, [[rufen an]], [[riefen an]], [[rufen an]], [[riefen an]], [[rufen an]]
 ihr, [[ruft an]], [[rieft an]], [[rufet an]], [[riefet an]], [[ruft an]]
 sie, [[rufen an]], [[riefen an]], [[rufen an]], [[riefen an]], [[rufen an]]
 
-*Zu + Inf*: [[anzurufen]], *P2*: [[angerufen]]
+*Zu + Inf*: [[anzurufen]], *PII*: [[angerufen]]
 Adjektive: [[anrufend]], [[anrufender]], [[anrufendst]]</agent_output>
 </example>
 <example>
@@ -151,7 +151,6 @@ A: das [[Rechercheergbenis]], die [[Rechercheergebnisse]]
 G: des [[Rechercheergebnis­ses]], der [[Rechercheergebnisse]]  
 D: dem [[Rechercheergebnis]], den [[Rechercheergebnissen]]</agent_output>
 </example>
-</examples>
 
 <example>
 <german_word>her</german_word>
@@ -160,21 +159,65 @@ D: dem [[Rechercheergebnis]], den [[Rechercheergebnissen]]</agent_output>
 
 <example>
 <german_word>verstopft</german_word>
-<agent_output>Person, Präsens, Präteritum, Imperativ, Konjunktiv I, Konjunktiv II
-ich, [[verstopf]] / [[verstopfe]], [[verstopfte]], [[verstopfe]], [[verstopfte]], -
+<agent_output>Person, Präsens, Präteritum, Imperativ, KI, KII
+ich, [[verstopf]] / [[verstopfe]], [[verstopfte]], [[verstopfe]], [[verstopfte]], ${longDash}
 du, [[verstopfst]], [[verstopftest]], [[verstopfst]], [[verstopftest]], [[verstopf]] / [[verstopfe]]
-er, [[verstopft]], [[verstopfte]], [[verstopfe]], [[verstopfte]], -
+er, [[verstopft]], [[verstopfte]], [[verstopfe]], [[verstopfte]], ${longDash}
 wir, [[verstopfen]], [[verstopften]], [[verstopfen]], [[verstopften]], [[verstopfen]]
 ihr, [[verstopft]], [[verstopftet]], [[verstopfet]], [[verstopftet]], [[verstopft]]
 sie, [[verstopfen]], [[verstopften]], [[verstopfen]], [[verstopften]], [[verstopfen]]
 
-*Zu + Inf*: zu [[verstopfen]], *P2*: [[verstopft]]
+*Zu + Inf*: zu [[verstopfen]], *PII*: [[verstopft]]
 Adjektive: [[verstopfend]], [[verstopfender]], [[verstopfendst]]</agent_output>
 </example>
 
 <example>
-<german_word>gehoben</german_word>
+<german_word>gehobener</german_word>
 <agent_output>Adjektive: [[gehoben]], [[gehobener]], [[gehobenest]]</agent_output>
-</example>`;
+</example>
 
-// "gehobener" -> "🎩 gehoben",
+<example>
+<german_word>Bank</german_word>
+<agent_output>
+N: die [[Bank]], die [[Banken]] | die [[Bank]], die [[Bänke]]  
+A: die [[Bank]], die [[Banken]] | die [[Bank]], die [[Bänke]]  
+G: der [[Bank]], der [[Banken]] | der [[Bank]], der [[Bänke]]  
+D: der [[Bank]], den [[Banken]] | der [[Bank]], den [[Bänken]]
+</agent_output>
+</example>
+<example>
+<german_word>See</german_word>
+<agent_output>
+N: der [[See]], die [[Seen]] | die [[See]], ${longDash}  
+A: den [[See]], die [[Seen]] | die [[See]], ${longDash}  
+G: des [[Sees]], der [[Seen]] | der [[See]], ${longDash}  
+D: dem [[See]], den [[Seen]] | der [[See]], ${longDash}
+</agent_output>
+</example>
+
+<example>
+<german_word>backen</german_word>
+<agent_output>
+ich, [[backe]], [[backte]], [[backe]], [[backte]], ${longDash}  
+du, [[backst]], [[backtest]], [[backe]], [[backtest]], [[backe]]  
+er, [[backt]], [[backte]], [[backe]], [[backte]], ${longDash}  
+wir, [[backen]], [[backten]], [[backen]], [[backten]], [[backen]]  
+ihr, [[backt]], [[backtet]], [[backt]], [[backtet]], [[backt]]  
+sie, [[backen]], [[backten]], [[backen]], [[backten]], [[backen]]
+
+*Zu + Inf*: zu [[backen]], *Partizip II*: [[gebackt]]
+
+---
+ich, [[backe]], [[buk]], [[backe]], [[buk]], ${longDash}  
+du, [[backst]], [[bukst]], [[backe]], [[bukst]], [[backe]]  
+er, [[backt]], [[buk]], [[backe]], [[buk]], ${longDash}  
+wir, [[backen]], [[buken]], [[backen]], [[buken]], [[backen]]  
+ihr, [[backt]], [[buket]], [[backt]], [[buket]], [[backt]]  
+sie, [[backen]], [[buken]], [[backen]], [[buken]], [[backen]]
+
+*Zu + Inf*: zu [[backen]], *Partizip II*: [[gebacken]]
+Adjektive: [[gebacken]], [[gebackener]], [[gebackenst]]
+</agent_output>
+</example>
+</examples>
+`;

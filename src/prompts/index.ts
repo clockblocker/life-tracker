@@ -9,9 +9,10 @@ import { C1_RICHTER_PROMPT } from "./c1Richter";
 import { C1_RICHTER_PROMPT_V2 } from "./wip/c1RichterCorrectedDECorrectionFirst";
 import { C1_RICHTER_PROMPT_V1 } from "./wip/c1RichterCorrectedDE";
 import { morphems2 } from "./wip/morphems2";
+import { baseDict2 } from "./wip/baseDict2";
 
 export const prompts = {
-   generate_dictionary_entry,
+   generate_dictionary_entry: baseDict2,
    generate_forms,
    morphems: morphems2,
    determine_infinitive_and_pick_emoji, 

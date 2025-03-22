@@ -43,7 +43,7 @@ export const morphems2 = `<assistant_role>You are a German morphological analysi
 <example>
 <german_word>Bindungsurlaubes</german_word>
 <agent_output>[[Bind]]|[[ung]]|${s}s${s}|[[urlaub]]
-[[Bindung]] + ${s}s${s} + [[urlaub]]</agent_output>
+[[Bindung]] + ${s}s${s} + [[Urlaub]]</agent_output>
 </example>
 
 <example>
