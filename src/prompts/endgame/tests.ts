@@ -1,7 +1,7 @@
 type Freq = "häufig" | "manchmal" | "selten" | "kaum";
 
-const tests = [
-    ["sitzen", [
+const tests = {
+    "sitzen" : [
         [{
             type: "Verb",
             grundform: "sitzen",
@@ -18,10 +18,46 @@ const tests = [
             grundform: "Sitzen",
             gender: ["Neutrum"],
             declension: "Schwach",
-            form: "Grundform"
+            form: "Grundform",
+            derivedFrom: {
+                type: "Verb",
+                grundform: "sitzen"
+            }
         }, "selten"]
-      ]]
-];
+    ],
+"gesorgt": [
+[
+{
+type: "Verb",
+grundform: "sorgen",
+verbType: ["Transitiv"],
+regularity: ["Regelmäßig"],
+conjugation: ["Schwach"],
+konjugationsvariante: null,
+zuInf: null,
+separability: "Untrennbar",
+mood: "Indikativ",
+voice: "Aktiv",
+governingPreposition: ["für"],
+form: "Flektiert",
+derivedFrom: null
+},
+"häufig"
+],
+[{
+type: "ParticipialAdjective",
+grundform: "gesorgt",
+degree: ["Positiv"],
+partizipvariante: "P1",
+form: "Flektiert",
+derivedFrom: {
+type: "Verb",
+grundform: "sorgen"
+}
+}, "manchmal"
+]
+]
+};
 
 
 

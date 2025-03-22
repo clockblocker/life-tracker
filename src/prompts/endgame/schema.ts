@@ -4,6 +4,15 @@ const FormSchema = z.enum(["Grundform", "Flektiert"]);
 const GenderSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
 const CaseSchema = z.enum(["Nominativ", "Akkusativ", "Dativ", "Genitiv"]);
 const DegreeSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
+const FrequencySchema = z.enum(["Immer", "Häufig", "Manchmal", "Selten", "Kaum", "Nie"]);
+
+const CommonFeildsSchema = z.object({
+    frequency: FrequencySchema,
+    spelling: z.string(),
+    grundform: z.string(),
+    form: FormSchema,
+});
+
 const PartOfSpeechTypeSchema = z.enum([
   "Nomen",
   "Pronomen",
@@ -21,35 +30,40 @@ const PartOfSpeechTypeSchema = z.enum([
   "ParticipialAdjective",
 ]);
 
+const DerivedFromSchema = z.object({
+  type: PartOfSpeechTypeSchema,
+  grundform: z.string(),
+});
+
 const DeclensionSchema = z.enum(["Stark", "Schwach"]);
+
 const NomenSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Nomen),
-  grundform: z.string(),
   gender: z.array(GenderSchema),
   declension: DeclensionSchema,
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const PronomenTypeSchema = z.enum([
-  "Possessiv",
-  "Reflexiv",
-  "Personal",
-  "Generalisierendes",
-  "Demonstrativ",
-  "W-Pronomen",
-  "Indefinit",
-  "Quantifikativ",
+    "Possessiv",
+    "Reflexiv",
+    "Personal",
+    "Generalisierendes",
+    "Demonstrativ",
+    "W-Pronomen",
+    "Indefinit",
+    "Quantifikativ",
 ]);
 
 const NumberTagSchema = z.enum(["Singular", "Plural"]);
 const PronomenSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Pronomen),
-  grundform: z.string(),
   pronomenType: PronomenTypeSchema,
   case: z.optional(z.array(CaseSchema)),
   number: z.optional(z.array(NumberTagSchema)),
   gender: z.optional(z.array(GenderSchema)),
-  form: FormSchema,
+  ...CommonFeildsSchema.shape,
 });
 
 const VerbTypeSchema = z.enum(["Transitiv", "Intransitiv", "Reflexiv", "Modal"]);
@@ -60,37 +74,15 @@ const MoodSchema = z.enum(["Indikativ", "Konjunktiv", "Imperativ"]);
 const VoiceSchema = z.enum(["Aktiv", "Passiv"]);
 const KonjugationsVarianteSchema = z.enum(["K1", "K2"]);
 const GoverningPrepositionSchema = z.enum([
-  "an",
-  "auf",
-  "bei",
-  "bis",
-  "durch",
-  "für",
-  "gegen",
-  "in",
-  "mit",
-  "nach",
-  "ohne",
-  "um",
-  "unter",
-  "von",
-  "vor",
-  "während",
-  "wegen",
-  "trotz",
-  "innerhalb",
-  "außerhalb",
-  "entlang",
-  "mithilfe",
-  "seit",
-  "über",
+  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
+  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
+  "außerhalb", "entlang", "mithilfe", "seit", "über",
 ]);
 
-export const zuInfTag = "Zu Infinivive" as const;
+const zuInfTag = "Zu Infinivive" as const;
 
 const VerbSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Verb),
-  grundform: z.string(),
   verbType: z.array(VerbTypeSchema),
   regularity: z.array(RegularitySchema),
   conjugation: z.array(ConjugationSchema),
@@ -100,91 +92,92 @@ const VerbSchema = z.object({
   mood: MoodSchema,
   voice: VoiceSchema,
   governingPreposition: z.optional(z.array(GoverningPrepositionSchema)),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const DerivedAdjectiveSchema = z.enum(["Verbaladjektiv", "NominalAdjektiv"]);
 const AdjektivSchema = z.object({
-    type: z.literal(PartOfSpeechTypeSchema.Enum.Adjektiv),
-    grundform: z.string(),
-    degree: z.array(DegreeSchema),
-    derived: z.optional(DerivedAdjectiveSchema),
-    form: FormSchema,
+  type: z.literal(PartOfSpeechTypeSchema.Enum.Adjektiv),
+  degree: z.array(DegreeSchema),
+  derived: z.optional(DerivedAdjectiveSchema),
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
   
 const PartizipVarianteSchema = z.enum(["P1", "P2"]);
-
 const ParticipialAdjectiveSchema = AdjektivSchema.omit({ type: true }).extend({
-    type: z.literal(PartOfSpeechTypeSchema.Enum.ParticipialAdjective),
-    partizipvariante: PartizipVarianteSchema,
+  type: z.literal(PartOfSpeechTypeSchema.Enum.ParticipialAdjective),
+  partizipvariante: PartizipVarianteSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
 });
 
 const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
 const AdverbSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Adverb),
-  grundform: z.string(),
   category: z.array(AdverbCategorySchema),
   degree: z.optional(z.array(DegreeSchema)),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const ArtikelTypeSchema = z.enum(["Bestimmt", "Unbestimmt"]);
 const ArtikelSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Artikel),
-  grundform: z.string(),
   artikelType: ArtikelTypeSchema,
   gender: GenderSchema,
   case: CaseSchema,
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const PartikelTypeSchema = z.enum(["Intensität", "Fokus", "Negation", "Abtönung", "Konnektiv"]);
 const PartikelSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Partikel),
-  grundform: z.string(),
   partikelType: z.array(PartikelTypeSchema),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const KonjunktionTypeSchema = z.enum(["Koordinierend", "Subordinierend"]);
 const KonjunktionSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Konjunktion),
-  grundform: z.string(),
   konjunktionType: KonjunktionTypeSchema,
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const PräpositionSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Präposition),
-  grundform: z.string(),
   governingCase: z.optional(z.array(CaseSchema)),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const InterjektionSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Interjektion),
-  grundform: z.string(),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const NumeraleTypeSchema = z.enum(["Grundzahl", "Ordnungszahl", "Bruchzahl", "Multiplikativ", "Kollektiv"]);
 const NumeraleSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Numerale),
-  grundform: z.string(),
   numeraleType: z.array(NumeraleTypeSchema),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const PraefixSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Praefix),
-  grundform: z.string(),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const OnomatopoeiaSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Onomatopoeia),
-  grundform: z.string(),
-  form: FormSchema,
+  derivedFrom: z.optional(DerivedFromSchema),
+  ...CommonFeildsSchema.shape,
 });
 
 const PartOfSpeechSchema = z.discriminatedUnion("type", [
@@ -201,6 +194,7 @@ const PartOfSpeechSchema = z.discriminatedUnion("type", [
   NumeraleSchema,
   PraefixSchema,
   OnomatopoeiaSchema,
+  ParticipialAdjectiveSchema,
 ]);
 
 export {
@@ -209,6 +203,7 @@ export {
   CaseSchema,
   DegreeSchema,
   PartOfSpeechTypeSchema,
+  DerivedFromSchema,
   DeclensionSchema,
   NomenSchema,
   PronomenTypeSchema,
@@ -221,9 +216,12 @@ export {
   MoodSchema,
   VoiceSchema,
   GoverningPrepositionSchema,
+  KonjugationsVarianteSchema,
   VerbSchema,
   DerivedAdjectiveSchema,
   AdjektivSchema,
+  PartizipVarianteSchema,
+  ParticipialAdjectiveSchema,
   AdverbCategorySchema,
   AdverbSchema,
   ArtikelTypeSchema,
@@ -239,5 +237,5 @@ export {
   PraefixSchema,
   OnomatopoeiaSchema,
   PartOfSpeechSchema,
-  ParticipialAdjectiveSchema,
+  zuInfTag,
 };
