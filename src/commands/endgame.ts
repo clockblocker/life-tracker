@@ -2,6 +2,7 @@ import { Editor, MarkdownView, Notice, TFile } from 'obsidian';
 import TextEaterPlugin from '../main';
 import { prompts } from 'prompts';
 import { longDash } from 'utils';
+import { grundformsPrompt } from 'prompts/endgame/prompts/grundforms/grundformsPrompt';
 
 function extractFirstBracketedWord(text: string) {
     const match = text.match(/\[\[([^\]]+)\]\]/);
@@ -49,38 +50,16 @@ async function incertClipbordContentsInContextsBlock(baseBlock: string): Promise
     }
 }
 
-export default async function fillTemplate(plugin: TextEaterPlugin, editor: Editor, file: TFile, callBack?: () => void) {
+export default async function endgame(plugin: TextEaterPlugin, editor: Editor, file: TFile, callBack?: () => void) {
     const word = file.basename;
-
+    const sysprompt = grundformsPrompt.instructions + grundformsPrompt.examples;
     try {
-        const [dictionaryEntry, froms, morphems, valence] = await Promise.all([
-            plugin.apiService.generateContent(prompts.generate_dictionary_entry, word),
-            plugin.apiService.generateContent(prompts.generate_forms, word),
-            plugin.apiService.generateContent(prompts.morphems, word),
-            plugin.apiService.generateContent(prompts.generate_valence_block, word)
+        const [dictionaryEntry] = await Promise.all([
+            plugin.apiService.generateContent(sysprompt, word, grundformsPrompt.schema),
         ]);
-        
-        const adjForms = extractAdjectiveForms(froms);
 
-        const trimmedBaseEntrie = `${dictionaryEntry.replace('<agent_output>', '').replace('</agent_output>', '')}`
+        await plugin.fileService.appendToFile(file.path, dictionaryEntry);
 
-        const baseBlock = await incertClipbordContentsInContextsBlock(incertYouglishLinkInIpa(trimmedBaseEntrie));
-        const morphemsBlock = morphems.replace('\n', "") === longDash ? "" : `${morphems}\n`;
-        const valenceBlock = valence.replace('\n', "") === longDash ? "" : `${valence}`;
-        const fromsBlock = froms.replace('\n', "") === longDash ? "" : `${froms}`;
-        const adjFormsBlock = adjForms.replace('\n', "") === longDash ? "" : `${adjForms}`;
-
-        const blocks = [baseBlock, morphemsBlock, valenceBlock, fromsBlock, adjFormsBlock];
-        const entrie = blocks.filter(Boolean).join('\n---\n')
-        
-        const normalForm = extractFirstBracketedWord(baseBlock);
-
-        if (normalForm?.toLocaleLowerCase() === word.toLocaleLowerCase()) {
-            await plugin.fileService.appendToFile(file.path, entrie);
-        } else {
-            await plugin.fileService.appendToFile(file.path, `[[${normalForm}]]`);
-            await navigator.clipboard.writeText(entrie);
-        }
     } catch (error) {
         new Notice(`Error: ${error.message}`);
     }

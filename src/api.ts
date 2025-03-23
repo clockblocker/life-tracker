@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, GenerationConfig, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import { GoogleGenerativeAI, GenerationConfig, HarmCategory, HarmBlockThreshold, ResponseSchema } from "@google/generative-ai";
 import { TextEaterSettings } from "./types";
 import { TFile, Vault, Notice, TAbstractFile, requestUrl } from 'obsidian';
 import { prompts } from './prompts';
@@ -18,7 +18,7 @@ export class ApiService {
         }
     }
 
-    async generateContent(systemPrompt: string, userInput: string, structured?: boolean): Promise<string> {
+    async generateContent(systemPrompt: string, userInput: string, responseSchema?: ResponseSchema): Promise<string> {
         try {
             let response: string | null = null;
             // Remove leading tab characters from the system prompt
@@ -35,7 +35,7 @@ export class ApiService {
                 this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
             }
 
-            const generationConfig: GenerationConfig = !structured ? {
+            const generationConfig: GenerationConfig = !responseSchema ? {
                 temperature: 0,
                 topP: 0.95,
                 topK: 64,
@@ -46,6 +46,7 @@ export class ApiService {
                 topK: 64,
                 maxOutputTokens: 1024, 
                 responseMimeType: `application/json`,
+                responseSchema,
             };
 
             const chatKey = systemPrompt;

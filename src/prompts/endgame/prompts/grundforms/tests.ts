@@ -1487,5 +1487,5 @@ const tests = {
 };
 
 const a = ({...tests})
-  
-const b = `<examples>` + Object.entries(a).map(([k, v]) => `<example><word>${k.trim()}</word><JSON>${(v)}</JSON></example>`.replaceAll("\n      ", "").replaceAll(",  ", ",").replaceAll("\n    ", "").replaceAll("{  ", "{").replaceAll('>,<', '><').replaceAll(", ", ",")) + `</examples>`;
+    
+export const b = `<examples>` + Object.entries(a).map(([k, v]) => `<example><note>${k.trim()}</note><grundforms>${(v)}</JSON></grundforms>`.replaceAll("\n      ", "").replaceAll(",  ", ",").replaceAll("\n    ", "").replaceAll("{  ", "{").replaceAll('>,<', '><').replaceAll(", ", ",").replaceAll(": ", ":").replaceAll("  \n  ","").replaceAll("\n]","]")) + `</examples>`;
