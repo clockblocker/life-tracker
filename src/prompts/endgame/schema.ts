@@ -32,7 +32,7 @@ const DeclensionSchema = z.enum(["Stark", "Schwach"]);
 
 const NomenSchema = z.object({
   type: z.literal(PartOfSpeechTypeSchema.Enum.Nomen),
-  gender: z.array(GenderSchema),
+  gender: GenderSchema,
   declension: DeclensionSchema,
   isProperNoun: z.optional(z.boolean()),
   ...CommonFeildsSchema.shape,
