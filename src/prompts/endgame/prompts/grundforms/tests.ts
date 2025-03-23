@@ -1434,7 +1434,7 @@ const molken = {
     },
     {
       wortart: "Nomen",
-      rechtschreibung: "Molke",
+      rechtschreibung: "Molken",
       grundform: "Molke",
       emojiBeschreibungs: ["🥛"],
       genus: "Feminin",

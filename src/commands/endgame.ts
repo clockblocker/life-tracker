@@ -1,56 +1,58 @@
 import { Editor, Notice, TFile } from 'obsidian';
 import TextEaterPlugin from '../main';
-import { longDash } from 'utils';
 import { makeGrundformsPrompt } from 'prompts/endgame/prompts/grundforms/grundformsPrompt';
-import { grundformsOutputSchema } from 'prompts/endgame/schemas/zodSchemas';
+import { grundformsOutputSchema } from 'prompts/endgame/zod/schemas';
+import { Grundform, Wortart, Nomen, Genus } from 'prompts/endgame/zod/types';
 
-function extractFirstBracketedWord(text: string) {
-    const match = text.match(/\[\[([^\]]+)\]\]/);
-    return match ? match[1] : null;
-}
+// if g agj = g adv => only agj, collapse emojies, filter the same emojies  
+// if 2 verbs => leave only one, collapse emojies, filter the same emojies  
+// make them link to /path/of/a/part/of/speach if the document [[g]] does not exist
 
-function getIPAIndexes(str: string) {
-    const regex = /(?<!\[)\[(?!\[)(.*?)(?<!\])\](?!\])/g;
-    let matches = [];
-    let match;
-    
-    while ((match = regex.exec(str)) !== null) {
-        matches.push([match.index, regex.lastIndex - 1]);
+// <span class="custom-red">die</span>
+
+const formatEmoji = (g: Grundform) => `${g.emojiBeschreibungs.join(" | ")}`;
+const formatNomGenus = (g: Nomen) => {
+    switch (g.genus) {
+        case Genus.Feminin:
+            return `<span class="custom-color-for-die">[[Grammatik/Artikel/List/die|die]]</span>`;
+        case Genus.Neutrum:
+            return `<span class="custom-color-for-das">[[Grammatik/Artikel/List/das|das]]</span>`;
+        case Genus.Maskulin:
+            return `<span class="custom-color-for-der">[[Grammatik/Artikel/List/der|der]]</span>`;
     }
-    
-    return matches.length ? matches[0] : null;
-}
+};
 
-function incertYouglishLinkInIpa(baseBlock: string) {
-    const ipaI = getIPAIndexes(baseBlock);
-    const word = extractFirstBracketedWord(baseBlock);
-
-    if (!ipaI || !word) {
-        return baseBlock;
-    }
-    
-    return baseBlock.slice(0, ipaI[1] + 1) + `(https://youglish.com/pronounce/${word}/german)` + baseBlock.slice(ipaI[1] + 1);
-}
-
-async function incertClipbordContentsInContextsBlock(baseBlock: string): Promise<string> {
-    try {
-        const clipboardContent = await navigator.clipboard.readText();
-        const [first, ...rest] = baseBlock.split('---');
-
-        
-        if (rest.length >= 1) {
-            // Insert clipboard content between the first two dividers
-            return first + '---\n' + clipboardContent.trim() + rest.map(a => a.trim()).join("\n\n---\n") + "\n";
-        }
-        
-        return baseBlock;
-    } catch (error) {
-        console.error('Failed to read clipboard:', error);
-        return baseBlock;
+const makeLink = (g: Grundform) => {
+    switch (g.wortart) {
+        case Wortart.Unbekannt:
+            return g.comment;   
+        case Wortart.Nomen:
+            return `${formatEmoji(g)} ${formatNomGenus(g)} [[${g.grundform}]] *${g.wortart}*`
+        case Wortart.PartizipialesAdjektiv:
+            return `${formatEmoji(g)} [[${g.grundform}]] *${Wortart.Verb}*`;
+        case Wortart.Praefix:
+            return `${formatEmoji(g)} [[Grammatik/Praefix/List/${g.grundform} (Praefix)|${g.grundform}]] *${Wortart.Verb}*`;
+        case Wortart.Praeposition:
+            return `${formatEmoji(g)} [[Grammatik/Praeposition/List/${g.grundform} (Praeposition)|${g.grundform}]] *${Wortart.Praeposition}*`;
+        case Wortart.Pronomen:
+            return `${formatEmoji(g)} [[Grammatik/Pronomen/List/${g.grundform} (Pronomen)|${g.grundform}]] *${Wortart.Pronomen}*`;
+        case Wortart.Konjunktion:
+            return `${formatEmoji(g)} [[Grammatik/Konjunktion/List/${g.grundform} (Konjunktion)|${g.grundform}]] *${Wortart.Konjunktion}*`;
+        case Wortart.Partikel:
+            return `${formatEmoji(g)} [[Grammatik/Partikel/List/${g.grundform} (Partikel)|${g.grundform}]] *${Wortart.Partikel}*`;
+        case Wortart.Artikel:
+            return `${formatEmoji(g)} [[Grammatik/Artikel/List/${g.grundform} (Artikel)|${g.grundform}]] *${Wortart.Artikel}*`;
+        default:
+            return `${formatEmoji(g)} [[${g.grundform}]] *${g.wortart}*`
     }
 }
 
-export default async function endgame(plugin: TextEaterPlugin, editor: Editor, file: TFile, callBack?: () => void) {
+async function endgameInfCase(plugin: TextEaterPlugin, file: TFile, grundforms: Grundform[]) {
+    const links = grundforms.map((g) => makeLink(g)).join("\n")
+    await plugin.fileService.appendToFile(file.path, links);
+}
+
+export default async function endgame(plugin: TextEaterPlugin, editor: Editor, file: TFile) {
     const word = file.basename;
     try {
         const grundformsPrompt = makeGrundformsPrompt();
@@ -65,43 +67,13 @@ export default async function endgame(plugin: TextEaterPlugin, editor: Editor, f
         }
 
         const grundforms = parsed.data.map(({rechtschreibung, grundform, ...rest}) => ({rechtschreibung, grundform, ...rest, isGrundform: word === rechtschreibung && rechtschreibung === grundform})).sort(({isGrundform}) => isGrundform ? 1 : 0);
+        if (!grundforms.some(({isGrundform}) => isGrundform)) {
+            await endgameInfCase(plugin, file, parsed.data)
+        }
+        
         console.log('grundforms', grundforms);
-        await plugin.fileService.appendToFile(file.path, grundforms.toString());
-
     } catch (error) {
         new Notice(`Error: ${error.message}`);
     }
 } 
 
-function extractBaseForms(text: string): string[] | null {
-    const match = text.match(/Adjektive:\s*\[\[(.*?)\]\],\s*\[\[(.*?)\]\],\s*\[\[(.*?)\]\]/);
-    if (!match) {
-        return null;
-    }
-    
-    let [_, base, comparative, superlative] = match;
-    
-    return [base, comparative, superlative];
-    
-}
-
-
-function extractAdjectiveForms(text: string): string {
-    const baseForms = extractBaseForms(text);
-
-    if (!baseForms) {
-        return longDash;
-    }
- 
-    const endings = ["er", "es", "e", "en", "em"];
-    
-    const result: string[] = [];
-    
-    for (const suf of baseForms) {
-        for (const end of endings) {
-            result.push(`[[${suf + end}]]`);
-        }
-    }
-    
-    return result.join(', ');
-}
