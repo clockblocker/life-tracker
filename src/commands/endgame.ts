@@ -1,9 +1,8 @@
-import { Editor, MarkdownView, Notice, TFile } from 'obsidian';
+import { Editor, Notice, TFile } from 'obsidian';
 import TextEaterPlugin from '../main';
-import { prompts } from 'prompts';
 import { longDash } from 'utils';
-import { grundformsPrompt } from 'prompts/endgame/prompts/grundforms/grundformsPrompt';
-import { ResponseSchema } from '@google/generative-ai';
+import { makeGrundformsPrompt } from 'prompts/endgame/prompts/grundforms/grundformsPrompt';
+import { grundformsOutputSchema } from 'prompts/endgame/schemas/zodSchemas';
 
 function extractFirstBracketedWord(text: string) {
     const match = text.match(/\[\[([^\]]+)\]\]/);
@@ -54,8 +53,20 @@ async function incertClipbordContentsInContextsBlock(baseBlock: string): Promise
 export default async function endgame(plugin: TextEaterPlugin, editor: Editor, file: TFile, callBack?: () => void) {
     const word = file.basename;
     try {
-        const dictionaryEntry = await plugin.apiService.generateContent(grundformsPrompt, word);
-        await plugin.fileService.appendToFile(file.path, dictionaryEntry);
+        const grundformsPrompt = makeGrundformsPrompt();
+        const dictionaryEntry = await plugin.apiService.generateContent(grundformsPrompt, word, true);
+
+        const parsed = grundformsOutputSchema.safeParse(JSON.parse(dictionaryEntry));
+        
+        if (parsed.error) {
+            console.error({zodError: parsed.error, output: dictionaryEntry});
+            await plugin.fileService.appendToFile(file.path, "Contact t.me/@clockblocker");
+            return;
+        }
+
+        const grundforms = parsed.data.map(({rechtschreibung, grundform, ...rest}) => ({rechtschreibung, grundform, ...rest, isGrundform: word === rechtschreibung && rechtschreibung === grundform})).sort(({isGrundform}) => isGrundform ? 1 : 0);
+        console.log('grundforms', grundforms);
+        await plugin.fileService.appendToFile(file.path, grundforms.toString());
 
     } catch (error) {
         new Notice(`Error: ${error.message}`);

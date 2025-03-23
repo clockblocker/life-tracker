@@ -18,7 +18,7 @@ export class ApiService {
         }
     }
 
-    async generateContent(systemPrompt: string, userInput: string, responseSchema?: ResponseSchema): Promise<string> {
+    async generateContent(systemPrompt: string, userInput: string, responseSchema?: boolean): Promise<string> {
         try {
             let response: string | null = null;
             // Remove leading tab characters from the system prompt
@@ -47,7 +47,6 @@ export class ApiService {
                 topK: 64,
                 maxOutputTokens: 1024, 
                 responseMimeType: `application/json`,
-                responseSchema,
             };
 
             const chatKey = systemPrompt;

@@ -18,7 +18,7 @@ const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const CommonFeildsSchema = z.object({
     rechtschreibung: z.string(),
     grundform: z.string(),
-    emojiBeschreibung: z.string().emoji(), // Up to 3 emojies per note. Aim for less, if possible
+    emojiBeschreibungs: z.array(z.string().emoji()), // Describe the common meanings with emojies; Up to 3 emojies per meaning. Aim for less, if possible
 });
 
 const WortartSchema = z.enum([
@@ -70,7 +70,7 @@ const SeparabilitySchema = z.enum(["Trennbar", "Untrennbar"]);
 const GoverningPrepositionSchema = z.enum([
   "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
   "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
-  "außerhalb", "entlang", "mithilfe", "seit", "über",
+  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
 ]);
 
 const VerbSchema = z.object({
@@ -151,6 +151,7 @@ const RedewendungSchema = z.object({
 
 const UnbekanntSchema = z.object({
     wortart: z.literal(WortartSchema.Enum.Unbekannt),
+    comment: z.string(),
     ...CommonFeildsSchema.shape,
 });
 
