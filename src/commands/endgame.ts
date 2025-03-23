@@ -14,11 +14,11 @@ const formatEmoji = (g: Grundform) => `${g.emojiBeschreibungs.join(" | ")}`;
 const formatNomGenus = (g: Nomen) => {
     switch (g.genus) {
         case Genus.Feminin:
-            return `<span class="custom-color-for-die">[[Grammatik/Artikel/List/die|die]]</span>`;
+            return `<span class="custom-color-for-die">die</span>`;
         case Genus.Neutrum:
-            return `<span class="custom-color-for-das">[[Grammatik/Artikel/List/das|das]]</span>`;
+            return `<span class="custom-color-for-das">das</span>`;
         case Genus.Maskulin:
-            return `<span class="custom-color-for-der">[[Grammatik/Artikel/List/der|der]]</span>`;
+            return `<span class="custom-color-for-der">der</span>`;
     }
 };
 
