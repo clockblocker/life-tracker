@@ -14,7 +14,7 @@ export const generate_dictionary_entry = `<assistant_role>You are an expert ling
 
 <formatting>
 <emojis>Use an appropriate emoji representing the word’s meaning.</emojis>
-<noun_gender>For **nouns**, include a second emoji to indicate grammatical gender:  
+<noun_gender>For **nouns**, include a second emoji to indicate grammatical genus:  
 - 🔴 for **feminine** nouns  
 - 🟢 for **neuter** nouns  
 - 🔵 for **masculine** nouns  

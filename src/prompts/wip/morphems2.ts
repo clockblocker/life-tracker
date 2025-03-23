@@ -31,7 +31,7 @@ export const morphems2 = `<assistant_role>You are a German morphological analysi
    - If a linking morpheme is present, it **must appear** in the morphological breakdown (step 1) like this ${s}linking morpheme${s}.  
    - In the lexical breakdown (step 2), **linking morphemes** can appear or be omitted depening on wether it helps with readability, or not  
 
-4. **Edge Cases**  
+4. **Edge Kasuss**  
    - **Extremely long compounds**: continue to split them systematically (e.g., *Arbeitsplatzcomputersystem*).  
    - **Foreign roots**: handle as recognized segments if commonly used in German (e.g., *Computer*).  
    - **Ambiguous compounds**: choose the most probable segmentation.  

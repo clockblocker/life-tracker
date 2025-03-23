@@ -72,7 +72,7 @@ Je öfter er sie sieht, desto mehr gefällt sie ==ihm==.
 Irgendwann werden sie English genauso gut sprechen, wie du.</user_input>
 
 <agent_output>###### Fehler:
-1) ==wird==: "sie" (Singular) erfordert "wird" statt "werden".  
+1) ==wird==: "sie" (Einzahl) erfordert "wird" statt "werden".  
 2) ${c}Deutsch${c}: "English" war eine falsche Übersetzung.  
 3) ~~,~~: Unnötiges Komma vor "wie du".  
 
@@ -94,7 +94,7 @@ Irgendwann ==wird== sie ${c}Deutsch${c} genauso gut sprechen~~,~~ wie du.
 1) ==sich==: "sich auskennen" erfordert ein reflexives Pronomen.  
 2) deutsche==r==: "mit" verlangt den Dativ, und "Politik" ist feminin.  
 3) da==ss==: Rechtschreibfehler.  
-4) groß ==ist==: "Wahrscheinlichkeit" ist Singular.  
+4) groß ==ist==: "Wahrscheinlichkeit" ist Einzahl.  
 
 ###### Korrektur:
 Meine Bekannten, die ==sich== mit deutsche==r== Politik auskennen, sagen, da==ss== die Wahrscheinlichkeit einer Aufhebung des Gesetzes über die doppelte Staatsbürgerschaft groß ==ist==.

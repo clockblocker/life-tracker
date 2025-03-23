@@ -1,15 +1,18 @@
 import { z } from "zod";
 
-const GenderSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
-const CaseSchema = z.enum(["Nominativ", "Akkusativ", "Dativ", "Genitiv"]);
+const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
+const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
+const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
+
+const NomenDeklinationSchema = z.enum(["Stark", "Schwach"]);
 
 const CommonFeildsSchema = z.object({
-    correctSpelling: z.string(),
+    rechtschreibung: z.string(),
     grundform: z.string(),
-    emojiDescription: z.string(), // Up to 3 emojies per word. Aim for less, if possible
+    emojiBeschreibung: z.string(), // Up to 3 emojies per word. Aim for less, if possible
 });
 
-const PartOfSpeechTypeSchema = z.enum([
+const WortartSchema = z.enum([
   "Nomen",
   "Pronomen",
   "Verb",
@@ -17,23 +20,20 @@ const PartOfSpeechTypeSchema = z.enum([
   "Adverb",
   "Artikel",
   "Partikel",
+  "Praeposition",
   "Konjunktion",
-  "Präposition",
-  "Interjektion",
   "Numerale",
   "Praefix",
-  "Onomatopoeia",
-  "ParticipialAdjective",
-  "Idiom",
-  "Unknown"
+  "PartizipialesAdjektiv",
+  "Redewendung",
+  "Interjektion",
+  "Unbekannt"
 ]);
 
-const DeclensionSchema = z.enum(["Stark", "Schwach"]);
-
 const NomenSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Nomen),
-  gender: GenderSchema,
-  declension: DeclensionSchema,
+  wortart: z.literal(WortartSchema.Enum.Nomen),
+  genus: GenusSchema,
+  deklination: NomenDeklinationSchema,
   isProperNoun: z.optional(z.boolean()),
   ...CommonFeildsSchema.shape,
 });
@@ -49,12 +49,11 @@ const PronomenTypeSchema = z.enum([
     "Quantifikativ",
 ]);
 
-const NumberTagSchema = z.enum(["Singular", "Plural"]);
 const PronomenSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Pronomen),
+  wortart: z.literal(WortartSchema.Enum.Pronomen),
   pronomenType: PronomenTypeSchema,
-  number: z.optional(z.array(NumberTagSchema)),
-  gender: z.optional(z.array(GenderSchema)),
+  number: z.optional(z.array(NumerusSchema)),
+  genus: z.optional(z.array(GenusSchema)),
   ...CommonFeildsSchema.shape,
 });
 
@@ -66,7 +65,7 @@ const GoverningPrepositionSchema = z.enum([
 ]);
 
 const VerbSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Verb),
+  wortart: z.literal(WortartSchema.Enum.Verb),
   canBeRexlexiv: z.optional(z.boolean()),
   separability: z.optional(SeparabilitySchema),
   verbForms: z.array(z.array(z.string())),
@@ -75,83 +74,78 @@ const VerbSchema = z.object({
 });
 
 const AdjektivSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Adjektiv),
+  wortart: z.literal(WortartSchema.Enum.Adjektiv),
   ...CommonFeildsSchema.shape,
 });
   
 const PartizipVarianteSchema = z.enum(["P1", "P2"]);
-const ParticipialAdjectiveSchema = AdjektivSchema.omit({ type: true }).extend({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.ParticipialAdjective),
+const PartizipialesAdjektivSchema = AdjektivSchema.omit({ wortart: true }).extend({
+  wortart: z.literal(WortartSchema.Enum.PartizipialesAdjektiv),
   partizipvariante: PartizipVarianteSchema,
 });
 
 const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
 const AdverbSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Adverb),
+  wortart: z.literal(WortartSchema.Enum.Adverb),
   category: z.array(AdverbCategorySchema),
   ...CommonFeildsSchema.shape,
 });
 
 const ArtikelTypeSchema = z.enum(["Bestimmt", "Unbestimmt"]);
 const ArtikelSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Artikel),
+  wortart: z.literal(WortartSchema.Enum.Artikel),
   artikelType: ArtikelTypeSchema,
   ...CommonFeildsSchema.shape,
 });
 
 const PartikelTypeSchema = z.enum(["Intensität", "Fokus", "Negation", "Abtönung", "Konnektiv"]);
 const PartikelSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Partikel),
+  wortart: z.literal(WortartSchema.Enum.Partikel),
   partikelType: z.array(PartikelTypeSchema),
   ...CommonFeildsSchema.shape,
 });
 
 const KonjunktionTypeSchema = z.enum(["Koordinierend", "Subordinierend"]);
 const KonjunktionSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Konjunktion),
+  wortart: z.literal(WortartSchema.Enum.Konjunktion),
   konjunktionType: KonjunktionTypeSchema,
   ...CommonFeildsSchema.shape,
 });
 
-const PräpositionSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Präposition),
-  possibleGoverningCases: z.optional(z.array(CaseSchema)),
-  ...CommonFeildsSchema.shape,
-});
-
-const InterjektionSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Interjektion),
+const PraepositionSchema = z.object({
+  wortart: z.literal(WortartSchema.Enum.Praeposition),
+  possibleGoverningKasuss: z.optional(z.array(KasusSchema)),
   ...CommonFeildsSchema.shape,
 });
 
 const NumeraleTypeSchema = z.enum(["Grundzahl", "Ordnungszahl", "Bruchzahl", "Multiplikativ", "Kollektiv"]);
 const NumeraleSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Numerale),
+  wortart: z.literal(WortartSchema.Enum.Numerale),
   numeraleType: z.array(NumeraleTypeSchema),
   ...CommonFeildsSchema.shape,
 });
 
 const PraefixSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Praefix),
+  wortart: z.literal(WortartSchema.Enum.Praefix),
   ...CommonFeildsSchema.shape,
 });
 
-const OnomatopoeiaSchema = z.object({
-  type: z.literal(PartOfSpeechTypeSchema.Enum.Onomatopoeia),
+const InterjektionSchema = z.object({
+  wortart: z.literal(WortartSchema.Enum.Interjektion),
   ...CommonFeildsSchema.shape,
 });
 
-const IdiomSchema = z.object({
-    type: z.literal(PartOfSpeechTypeSchema.Enum.Idiom),
+const RedewendungSchema = z.object({
+    wortart: z.literal(WortartSchema.Enum.Redewendung),
     ...CommonFeildsSchema.shape,
 });
 
-const UnknownSchema = z.object({
-    type: z.literal(PartOfSpeechTypeSchema.Enum.Unknown),
+const UnbekanntSchema = z.object({
+    wortart: z.literal(WortartSchema.Enum.Unbekannt),
     ...CommonFeildsSchema.shape,
 });
 
-const PartOfSpeechSchema = z.discriminatedUnion("type", [
+const GrundformSchema = z.discriminatedUnion("wortart", [
   NomenSchema,
   PronomenSchema,
   VerbSchema,
@@ -160,31 +154,29 @@ const PartOfSpeechSchema = z.discriminatedUnion("type", [
   ArtikelSchema,
   PartikelSchema,
   KonjunktionSchema,
-  PräpositionSchema,
-  InterjektionSchema,
+  PraepositionSchema,
   NumeraleSchema,
   PraefixSchema,
-  OnomatopoeiaSchema,
-  ParticipialAdjectiveSchema,
-  IdiomSchema,
-  UnknownSchema,
+  InterjektionSchema,
+  PartizipialesAdjektivSchema,
+  RedewendungSchema,
+  UnbekanntSchema,
 ]);
 
 export {
-  GenderSchema,
-  CaseSchema,
-  PartOfSpeechTypeSchema,
-  DeclensionSchema,
+  GenusSchema,
+  KasusSchema,
+  WortartSchema,
   NomenSchema,
   PronomenTypeSchema,
-  NumberTagSchema,
+  NumerusSchema,
   PronomenSchema,
   SeparabilitySchema,
   GoverningPrepositionSchema,
   VerbSchema,
   AdjektivSchema,
   PartizipVarianteSchema,
-  ParticipialAdjectiveSchema,
+  PartizipialesAdjektivSchema,
   AdverbCategorySchema,
   AdverbSchema,
   ArtikelTypeSchema,
@@ -193,32 +185,11 @@ export {
   PartikelSchema,
   KonjunktionTypeSchema,
   KonjunktionSchema,
-  PräpositionSchema,
-  InterjektionSchema,
+  PraepositionSchema,
   NumeraleTypeSchema,
   NumeraleSchema,
   PraefixSchema,
-  OnomatopoeiaSchema,
-  PartOfSpeechSchema,
-  IdiomSchema,
+  InterjektionSchema,
+  GrundformSchema,
+  RedewendungSchema,
 };
-
-// const DegreeSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
-
-// const VerbFormTagSchema = z.enum(["Präsens", "Präteritum", "Perfekt", "Imperativ", "K1", "K2", "P1", "P2", "ZuInfinitiv"]);
-
-// const DerivedAdjectiveSchema = z.enum(["Verbaladjektiv", "NominalAdjektiv"]);
-
-// Adv ->  degree: z.optional(z.array(DegreeSchema)),
-// Adj ->  degree: z.optional(z.array(DegreeSchema)),
-
-// Artikel:
-// gender: GenderSchema,
-// case: CaseSchema,
-//   case: z.optional(z.array(CaseSchema)),
-
-// const FormSchema = z.enum(["Grundform", "Flektiert"]);
-
-
-// const RegularitySchema = z.enum(["Regelmäßig", "Unregelmäßig"]);
-// const ConjugationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);

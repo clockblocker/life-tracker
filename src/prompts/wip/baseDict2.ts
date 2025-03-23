@@ -27,7 +27,7 @@ export const baseDict2 = `<assistant_role>You are an expert linguist specializin
    
 3. <formatting>
    - **<emojis>**: Place an appropriate emoji at the start of each entry that represents the word’s meaning. For words with multiple senses, list the emojis for each sense in order, separated by " | ".
-   - **<noun_gender>**: For **nouns**, add a second emoji indicating grammatical gender:
+   - **<noun_gender>**: For **nouns**, add a second emoji indicating grammatical genus:
      - 🔴 for feminine  
      - 🟢 for neuter  
      - 🔵 for masculine  
@@ -166,7 +166,7 @@ here, hither
 <german_word>See</german_word>
 <agent_output>
 🏞️ 🔵 der [[See]], [zeː] | 🌊 🔴 die [[See]]
-die [[Seen]] | kein Plural
+die [[Seen]] | kein Mehrzahl
 
 ---
 

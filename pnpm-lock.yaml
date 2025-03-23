@@ -1311,7 +1311,7 @@ snapshots:
 
   dir-glob@3.0.1:
     dependencies:
-      path-type: 4.0.0
+      path-wortart: 4.0.0
 
   doctrine@3.0.0:
     dependencies:
@@ -1319,7 +1319,7 @@ snapshots:
 
   dom-serializer@2.0.0:
     dependencies:
-      domelementtype: 2.3.0
+      domelementwortart: 2.3.0
       domhandler: 5.0.3
       entities: 4.5.0
 
@@ -1327,12 +1327,12 @@ snapshots:
 
   domhandler@5.0.3:
     dependencies:
-      domelementtype: 2.3.0
+      domelementwortart: 2.3.0
 
   domutils@3.2.2:
     dependencies:
       dom-serializer: 2.0.0
-      domelementtype: 2.3.0
+      domelementwortart: 2.3.0
       domhandler: 5.0.3
 
   dunder-proto@1.0.1:
@@ -1594,7 +1594,7 @@ snapshots:
 
   htmlparser2@8.0.2:
     dependencies:
-      domelementtype: 2.3.0
+      domelementwortart: 2.3.0
       domhandler: 5.0.3
       domutils: 3.2.2
       entities: 4.5.0

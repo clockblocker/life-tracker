@@ -77,7 +77,7 @@ Irgendwann werden sie English genauso gut sprechen, wie du.</user_input>
 <agent_output>Irgendwann ==wird== sie ==Deutsch== genauso gut sprechen~~,~~ wie du.
 
 ###### Erklärung:
-1) ==wird==: "sie" (Singular) erfordert "wird" statt "werden
+1) ==wird==: "sie" (Einzahl) erfordert "wird" statt "werden
 2) ==Deutsch==: "English" war eine falsche Übersetzung
 3) ~~,~~: Unnötiges Komma vor "wie du
 </agent_output>
@@ -92,7 +92,7 @@ Irgendwann werden sie English genauso gut sprechen, wie du.</user_input>
 1) ==sich==: "sich auskennen" erfordert ein reflexives Pronomen
 2) deutsche==r==: "mit" verlangt den Dativ, und "Politik" ist feminin
 3) da==ss==: Rechtschreibfehler
-4) groß ==ist==: "Wahrscheinlichkeit" ist Singular
+4) groß ==ist==: "Wahrscheinlichkeit" ist Einzahl
 </agent_output>
 </example>
 
@@ -116,7 +116,7 @@ Irgendwann werden sie English genauso gut sprechen, wie du.</user_input>
 1) ==in der Stadt sind==: Ergänzung zur Klarstellung, wo sich die Autos befinden
 2) ~~weniger~~ ==geringer==: "geringer" ist stilistisch passender für Umweltbelastung
 3) ==die== Umweltbelastung: Artikel erforderlich
-4) ==ist==: "Umweltbelastung" ist Singular, daher "ist" statt "es gibt
+4) ==ist==: "Umweltbelastung" ist Einzahl, daher "ist" statt "es gibt
 
 ###### Stilistische Verbesserung:
 Urbanisten argumentieren, dass eine geringere Anzahl an Autos in der Stadt zu einer reduzierten Umweltbelastung durch Autoabgase führt.
@@ -155,7 +155,7 @@ Und schließlich empfinden die Bewohner die leisen, sauberen und sicheren autofr
 <agent_output>Auf der anderen Seite ==wird== ihnen eine große These gegenübergestellt: "Der staatliche Notfallschutz benötigt die autozentrierte Infrastruktur."
 
 ###### Erklärung:
-1) ==wird==: Das Subjekt "eine große These" ist Singular, daher muss das Verb angeglichen werden
+1) ==wird==: Das Subjekt "eine große These" ist Einzahl, daher muss das Verb angeglichen werden
 
 </agent_output>
 </example>
@@ -309,7 +309,7 @@ Und schließlich empfinden die Bewohner die leisen, sauberen und sicheren autofr
 // Stadt,,
 // mit,,
 // offentlichen,,
-// Transport, Verkehrsmitteln, idiomatic
+// Transport, Verkehrsmitteln, Redewendungatic
 // erriehen,erreichen,
 // konnen,können, umlaut
 // .,,
