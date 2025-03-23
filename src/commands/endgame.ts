@@ -7,7 +7,6 @@ import { Grundform, Wortart, Nomen, Genus } from 'prompts/endgame/zod/types';
 // if g agj = g adv => only agj, collapse emojies, filter the same emojies  
 // if 2 verbs => leave only one, collapse emojies, filter the same emojies  
 // make them link to /path/of/a/part/of/speach if the document [[g]] does not exist
-
 // <span class="custom-red">die</span>
 
 const formatEmoji = (g: Grundform) => `${g.emojiBeschreibungs.join(" | ")}`;
@@ -22,33 +21,62 @@ const formatNomGenus = (g: Nomen) => {
     }
 };
 
-const makeLink = (g: Grundform) => {
+const formatLinkToGrundformNote = (g: Grundform, noteForGrundformIsAlreadyCreated: boolean) => {
+    const ok = noteForGrundformIsAlreadyCreated;
+
+    if (g.grundform.length < 2) {
+        return ok ? `[[${g.grundform}]]` : "";
+    }
+
+    switch (g.wortart) {
+        case Wortart.Unbekannt:
+            return "";   
+        case Wortart.PartizipialesAdjektiv:
+            return ok ? `[[${g.grundform}]]` : `[[Worter/Grundform/${Wortart.Verb}/${g.grundform[0]}/${g.grundform[1]}/${g.grundform}|${g.grundform}]]`
+        case Wortart.Praefix:
+            return `[[Grammatik/Praefix/List/${g.grundform} (Praefix)|${g.grundform}]]`;
+        case Wortart.Praeposition:
+            return `[[Grammatik/Praeposition/List/${g.grundform} (Praeposition)|${g.grundform}]]`;
+        case Wortart.Pronomen:
+            return `[[Grammatik/Pronomen/List/${g.grundform} (Pronomen)|${g.grundform}]]`;
+        case Wortart.Konjunktion:
+            return `[[Grammatik/Konjunktion/List/${g.grundform} (Konjunktion)|${g.grundform}]]`;
+        case Wortart.Partikel:
+            return `[[Grammatik/Partikel/List/${g.grundform} (Partikel)|${g.grundform}]]`;
+        case Wortart.Artikel:
+            return `[[Grammatik/Artikel/List/${g.grundform} (Artikel)|${g.grundform}]]`;
+        default:
+            return ok ? `[[${g.grundform}]]` : `[[Worter/Grundform/${g.wortart}/${g.grundform[0]}/${g.grundform[1]}/${g.grundform}|${g.grundform}]]`
+}}
+
+const formatGrundform = (g: Grundform, noteForGrundformIsAlreadyCreated: boolean) => {
+
+    console.log(noteForGrundformIsAlreadyCreated, g)
+    const ok = noteForGrundformIsAlreadyCreated;
+
     switch (g.wortart) {
         case Wortart.Unbekannt:
             return g.comment;   
         case Wortart.Nomen:
-            return `${formatEmoji(g)} ${formatNomGenus(g)} [[${g.grundform}]] *${g.wortart}*`
+            return `${formatEmoji(g)} ${formatNomGenus(g)} ${formatLinkToGrundformNote(g, ok)} *${g.wortart}*`
         case Wortart.PartizipialesAdjektiv:
-            return `${formatEmoji(g)} [[${g.grundform}]] *${Wortart.Verb}*`;
-        case Wortart.Praefix:
-            return `${formatEmoji(g)} [[Grammatik/Praefix/List/${g.grundform} (Praefix)|${g.grundform}]] *${Wortart.Verb}*`;
-        case Wortart.Praeposition:
-            return `${formatEmoji(g)} [[Grammatik/Praeposition/List/${g.grundform} (Praeposition)|${g.grundform}]] *${Wortart.Praeposition}*`;
-        case Wortart.Pronomen:
-            return `${formatEmoji(g)} [[Grammatik/Pronomen/List/${g.grundform} (Pronomen)|${g.grundform}]] *${Wortart.Pronomen}*`;
-        case Wortart.Konjunktion:
-            return `${formatEmoji(g)} [[Grammatik/Konjunktion/List/${g.grundform} (Konjunktion)|${g.grundform}]] *${Wortart.Konjunktion}*`;
-        case Wortart.Partikel:
-            return `${formatEmoji(g)} [[Grammatik/Partikel/List/${g.grundform} (Partikel)|${g.grundform}]] *${Wortart.Partikel}*`;
-        case Wortart.Artikel:
-            return `${formatEmoji(g)} [[Grammatik/Artikel/List/${g.grundform} (Artikel)|${g.grundform}]] *${Wortart.Artikel}*`;
+            return `${formatEmoji(g)} ${formatLinkToGrundformNote(g, ok)} *${Wortart.Verb}*`;
         default:
-            return `${formatEmoji(g)} [[${g.grundform}]] *${g.wortart}*`
+            return `${formatEmoji(g)} ${formatLinkToGrundformNote(g, ok)} *${g.wortart}*`
     }
 }
 
+async function doesGrundformNoteExist(plugin: TextEaterPlugin, file: TFile, g: Grundform) {
+    const targetFile = plugin.app.metadataCache.getFirstLinkpathDest(g.grundform, file.path);
+    return !!targetFile;
+}
+
 async function endgameInfCase(plugin: TextEaterPlugin, file: TFile, grundforms: Grundform[]) {
-    const links = grundforms.map((g) => makeLink(g)).join("\n")
+    const linksPromises = grundforms.map(async (g) => {
+        const exists = await doesGrundformNoteExist(plugin, file, g);
+        return formatGrundform(g, exists);
+    });
+    const links = (await Promise.all(linksPromises)).join("\n");
     await plugin.fileService.appendToFile(file.path, links);
 }
 
