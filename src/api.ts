@@ -10,9 +10,7 @@ export class ApiService {
 
     constructor(private settings: TextEaterSettings, private vault: Vault) {
         try {
-            if (this.settings.apiProvider === 'deepseek') {
-                // No initialization needed here
-            } else if (this.settings.apiProvider === 'google') {
+            if (this.settings.apiProvider === 'google') {
                 this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
             }
         } catch (error) {
@@ -20,84 +18,50 @@ export class ApiService {
         }
     }
 
-    async generateContent(systemPrompt: string, userInput: string): Promise<string> {
+    async generateContent(systemPrompt: string, userInput: string, structured?: boolean): Promise<string> {
         try {
             let response: string | null = null;
             // Remove leading tab characters from the system prompt
             systemPrompt = systemPrompt.replace(/^\t+/gm, '');
 
-            if (this.settings.apiProvider === 'deepseek') {
-                if (!this.settings.deepseekApiKey) {
-                    throw new Error('DeepSeek API key not configured.');
-                }
-
-                const url = 'https://api.deepseek.com/v1/generation/inference';
-                const deepseekData = {
-                    model: 'deepseek-chat',
-                    messages: [
-                        {
-                            role: 'system',
-                            content: systemPrompt
-                        },
-                        {
-                            role: 'user',
-                            content: userInput
-                        }
-                    ],
-                    stream: false,
-                };
-
-                const res = await requestUrl({
-                    url: url,
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${this.settings.deepseekApiKey}`
-                    },
-                    body: JSON.stringify(deepseekData)
-                });
-
-                if (res.status !== 200) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-
-                const deepseekResponse = res.json;
-                response = deepseekResponse.choices[0].message.content;
-
-            } else if (this.settings.apiProvider === 'google') {
+            if (this.settings.apiProvider === 'google') {
                 if (!this.settings.googleApiKey) {
                     throw new Error('Google API key not configured.');
-                }
-                if (!this.genAI) {
-                    this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
-                }
-
-                const generationConfig: GenerationConfig = {
-                    temperature: 0,
-                    topP: 0.95,
-                    topK: 64,
-                    maxOutputTokens: 8192,
-                };
-
-                const chatKey = systemPrompt;
-                if (!this.chatSessions[chatKey]) {
-                    const model = this.genAI.getGenerativeModel({
-                        model: this.model,
-                        systemInstruction: systemPrompt
-                    });
-                    this.chatSessions[chatKey] = model.startChat({
-                        generationConfig: generationConfig,
-                        history: [],
-                    });
-                }
-
-                const chatSession = this.chatSessions[chatKey];
-                const result = await chatSession.sendMessage(userInput);
-                response = result.response.text();
-
-            } else {
+                } 
                 throw new Error('API provider not configured correctly.');
             }
+
+            if (!this.genAI) {
+                this.genAI = new GoogleGenerativeAI(this.settings.googleApiKey);
+            }
+
+            const generationConfig: GenerationConfig = !structured ? {
+                temperature: 0,
+                topP: 0.95,
+                topK: 64,
+                maxOutputTokens: 2048,
+            } : {
+                temperature: 0,
+                topP: 0.95,
+                topK: 64,
+                maxOutputTokens: 1024,  
+            };
+
+            const chatKey = systemPrompt;
+            if (!this.chatSessions[chatKey]) {
+                const model = this.genAI.getGenerativeModel({
+                    model: this.model,
+                    systemInstruction: systemPrompt
+                });
+                this.chatSessions[chatKey] = model.startChat({
+                    generationConfig: generationConfig,
+                    history: [],
+                });
+            }
+
+            const chatSession = this.chatSessions[chatKey];
+            const result = await chatSession.sendMessage(userInput);
+            response = result.response.text();
 
             const logResponse = response === null ? "" : response;
             return logResponse;

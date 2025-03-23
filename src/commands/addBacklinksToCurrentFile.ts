@@ -29,7 +29,7 @@ export default async function addBacklinksToCurrentFile(file: TFile, backlink: s
                 if (item.path) {
                     filePath = item.path;
                 } else {
-                    const firstLetter = item.name[0].toUpperKasus();
+                    const firstLetter = item.name[0].toUpperCase();
                     const folderPath = normalizePath(`Worter/${firstLetter}`);
                     
                     const folder = vault.getFolderByPath(folderPath);

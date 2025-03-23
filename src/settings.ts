@@ -47,9 +47,8 @@ export class SettingsTab extends PluginSettingTab {
             .addDropdown(dropdown => {
                 dropdown
                     .addOption('google', 'Google')
-                    .addOption('deepseek', 'DeepSeek')
                     .setValue(this.plugin.settings.apiProvider)
-                    .onChange(async (value: 'google' | 'deepseek') => {
+                    .onChange(async (value: 'google') => {
                         this.plugin.settings.apiProvider = value;
                         await this.plugin.saveSettings();
                     });

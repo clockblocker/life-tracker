@@ -1,7 +1,7 @@
 export interface TextEaterSettings {
     deepseekApiKey: string;
     googleApiKey: string;
-    apiProvider: 'deepseek' | 'google';
+    apiProvider: 'google';
 }
 
 export const DEFAULT_SETTINGS: TextEaterSettings = {
