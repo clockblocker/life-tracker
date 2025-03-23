@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
 const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
@@ -18,7 +18,7 @@ const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const CommonFeildsSchema = z.object({
     rechtschreibung: z.string(),
     grundform: z.string(),
-    emojiBeschreibung: z.string(), // Up to 3 emojies per note. Aim for less, if possible
+    emojiBeschreibung: z.string().emoji(), // Up to 3 emojies per note. Aim for less, if possible
 });
 
 const WortartSchema = z.enum([

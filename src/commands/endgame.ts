@@ -3,6 +3,7 @@ import TextEaterPlugin from '../main';
 import { prompts } from 'prompts';
 import { longDash } from 'utils';
 import { grundformsPrompt } from 'prompts/endgame/prompts/grundforms/grundformsPrompt';
+import { ResponseSchema } from '@google/generative-ai';
 
 function extractFirstBracketedWord(text: string) {
     const match = text.match(/\[\[([^\]]+)\]\]/);
@@ -52,12 +53,8 @@ async function incertClipbordContentsInContextsBlock(baseBlock: string): Promise
 
 export default async function endgame(plugin: TextEaterPlugin, editor: Editor, file: TFile, callBack?: () => void) {
     const word = file.basename;
-    const sysprompt = grundformsPrompt.instructions + grundformsPrompt.examples;
     try {
-        const [dictionaryEntry] = await Promise.all([
-            plugin.apiService.generateContent(sysprompt, word, grundformsPrompt.schema),
-        ]);
-
+        const dictionaryEntry = await plugin.apiService.generateContent(grundformsPrompt, word);
         await plugin.fileService.appendToFile(file.path, dictionaryEntry);
 
     } catch (error) {

@@ -24,10 +24,11 @@ export class ApiService {
             // Remove leading tab characters from the system prompt
             systemPrompt = systemPrompt.replace(/^\t+/gm, '');
 
-            if (this.settings.apiProvider === 'google') {
+            if (this.settings.apiProvider !== 'google') {
                 if (!this.settings.googleApiKey) {
                     throw new Error('Google API key not configured.');
                 } 
+                console.log('this.settings.apiProvider', this.settings.apiProvider);
                 throw new Error('API provider not configured correctly.');
             }
 
