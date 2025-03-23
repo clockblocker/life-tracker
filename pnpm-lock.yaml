@@ -23,6 +23,9 @@ importers:
       zod:
         specifier: ^3.24.2
         version: 3.24.2
+      zod-to-openapi:
+        specifier: ^0.2.1
+        version: 0.2.1(zod@3.24.2)
     devDependencies:
       '@types/codemirror':
         specifier: ^5.60.15
@@ -724,6 +727,9 @@ packages:
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
+  lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
@@ -794,6 +800,9 @@ packages:
         optional: true
       zod:
         optional: true
+
+  openapi3-ts@2.0.2:
+    resolution: {integrity: sha512-TxhYBMoqx9frXyOgnRHufjQfPXomTIHYKhSKJ6jHfj13kS8OEIhvmE8CTuQyKtjjWttAjX5DPxM1vmalEpo8Qw==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -980,9 +989,19 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
+  yaml@1.10.2:
+    resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
+    engines: {node: '>= 6'}
+
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  zod-to-openapi@0.2.1:
+    resolution: {integrity: sha512-F+3aAYcWcboNYXCmu4qqiZA1Cwwgxp06VF4DOeGE7l4cWdyxSABNBH8QSRGbC4ajSKU1h/prF+yQh7bQkYGVpw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+    peerDependencies:
+      zod: ~3.5.1
 
   zod@3.24.2:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
@@ -1311,7 +1330,7 @@ snapshots:
 
   dir-glob@3.0.1:
     dependencies:
-      path-wortart: 4.0.0
+      path-type: 4.0.0
 
   doctrine@3.0.0:
     dependencies:
@@ -1319,7 +1338,7 @@ snapshots:
 
   dom-serializer@2.0.0:
     dependencies:
-      domelementwortart: 2.3.0
+      domelementtype: 2.3.0
       domhandler: 5.0.3
       entities: 4.5.0
 
@@ -1327,12 +1346,12 @@ snapshots:
 
   domhandler@5.0.3:
     dependencies:
-      domelementwortart: 2.3.0
+      domelementtype: 2.3.0
 
   domutils@3.2.2:
     dependencies:
       dom-serializer: 2.0.0
-      domelementwortart: 2.3.0
+      domelementtype: 2.3.0
       domhandler: 5.0.3
 
   dunder-proto@1.0.1:
@@ -1594,7 +1613,7 @@ snapshots:
 
   htmlparser2@8.0.2:
     dependencies:
-      domelementwortart: 2.3.0
+      domelementtype: 2.3.0
       domhandler: 5.0.3
       domutils: 3.2.2
       entities: 4.5.0
@@ -1658,6 +1677,8 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
+  lodash@4.17.21: {}
+
   math-intrinsics@1.1.0: {}
 
   merge2@1.4.1: {}
@@ -1715,6 +1736,10 @@ snapshots:
       zod: 3.24.2
     transitivePeerDependencies:
       - encoding
+
+  openapi3-ts@2.0.2:
+    dependencies:
+      yaml: 1.10.2
 
   optionator@0.9.4:
     dependencies:
@@ -1864,6 +1889,15 @@ snapshots:
 
   wrappy@1.0.2: {}
 
+  yaml@1.10.2: {}
+
   yocto-queue@0.1.0: {}
+
+  zod-to-openapi@0.2.1(zod@3.24.2):
+    dependencies:
+      lodash: 4.17.21
+      openapi3-ts: 2.0.2
+      typescript: 4.7.4
+      zod: 3.24.2
 
   zod@3.24.2: {}

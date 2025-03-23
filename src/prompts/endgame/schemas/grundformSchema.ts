@@ -6,6 +6,15 @@ const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const NomenDeklinationSchema = z.enum(["Stark", "Schwach"]);
 
+const VergleichsformSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
+const VerbFormTagSchema = z.enum(["Praesens", "Praeteritum", "Perfekt", "Imperativ", "K1", "K2", "P1", "P2", "ZuInfinitiv"]);
+
+const FormSchema = z.enum(["Grundform", "Flektiert"]);
+const RegelmaessigkeitsSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+
+const ConjugationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
+const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
+
 const CommonFeildsSchema = z.object({
     rechtschreibung: z.string(),
     grundform: z.string(),
@@ -163,7 +172,10 @@ const GrundformSchema = z.discriminatedUnion("wortart", [
   UnbekanntSchema,
 ]);
 
+const grundformsOutputSchema = z.array(GrundformSchema);
+
 export {
+  grundformsOutputSchema,
   GenusSchema,
   KasusSchema,
   WortartSchema,
@@ -192,4 +204,10 @@ export {
   InterjektionSchema,
   GrundformSchema,
   RedewendungSchema,
+  VergleichsformSchema,
+  VerbFormTagSchema,
+  FormSchema,
+  RegelmaessigkeitsSchema,
+  ConjugationSchema,
+  AdjektivDeklinationSchema,
 };

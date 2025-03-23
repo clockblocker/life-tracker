@@ -44,7 +44,8 @@ export class ApiService {
                 temperature: 0,
                 topP: 0.95,
                 topK: 64,
-                maxOutputTokens: 1024,  
+                maxOutputTokens: 1024, 
+                responseMimeType: `application/json`,
             };
 
             const chatKey = systemPrompt;
