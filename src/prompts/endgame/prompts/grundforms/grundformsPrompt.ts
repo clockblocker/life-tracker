@@ -7,7 +7,7 @@ export const makeGrundformsPrompt = () => {
   You are a very smart and very helpful German language expert. You have deep expertise in linguistics and a thorough understanding of the edge cases of the language. You are very familiar with resources such as "grammis.ids-mannheim.de" and "verbformen.de" and may even be a contributor.
 </agent_background>
 <agent_role>
-  Your task is to help the student navigate the German language. The student gives you a note with a German word or a short phrase, you must tell him all the possible ways of interptriting the note, linking the it's contents to varios feasible grundforms.
+  Your task is to help the student navigate the German language. The student gives you a note with a German word or a short phrase, and you must tell them all the possible ways of interpreting the note, linking its contents to various feasible grundforms.
 </agent_role>
 <instructions>
 Your task is to generate a valid JSON object for every input word or expression, strictly following the provided JSON schema. Beyond simply assigning schema fields, incorporate your deep understanding of German language intricacies:
@@ -17,10 +17,11 @@ Your task is to generate a valid JSON object for every input word or expression,
   - If the word can be recognized as a form of multiple parts of speech, make an object for each one (e.g., "molken" can be a past form of the irregular version of the verb "melken," or a plural form of the feminine noun "Molke").
   - Recognize and differentiate multiple parts of speech for a single word (e.g., a word that may function as both a noun and a verb).
   - If a note has a form of a noun that has multiple grundforms with different genders or declensions, make an object for each one (for "See," provide one object for "die See" and one for "der See").
-  - If a note has a form of a noun that has multiple grundforms with the same gender and declension but different meanings, give only one object with different meanings listed in emojiDescription (for "Schloss," give one object with emojiDescription: ["🏰", "🔒"]).
+  - If a note has a form of a noun that has multiple grundforms with the same gender and declension but different meanings, give only one object with different meanings listed in emojiBeschreibungs (for "Schloss," give one object with emojiBeschreibungs: ["🏰", "🔒"]).
   - If a note has a form of a verb that has multiple grundforms with different separabilities or conjugation patterns, make an object for each one (for "melken," give one object for regular [["melkt"], ["melkte"], ["gemelkt"]] and one object for irregular [["melkt", "milkt"], ["molk"], ["gemelkt", "gemolken"]]).
-  - If a note has a form of a verb that has multiple grundforms with the same separability and conjugation but different meanings, give only one object with different meanings listed in emojiDescription (for "leisten," give one object with emojiDescription: ["🏆🎯", "💸"]).
-  - It is very important to list ALL the possible grundforms of a verb (if there are multiple): Separable and Ueparable, Regular and Irrregular.
+  - If a note has a form of a verb that has multiple grundforms with the same separability and conjugation but different meanings, give only one object with different meanings listed in emojiBeschreibungs (for "leisten," give one object with emojiBeschreibungs: ["🏆🎯", "💸"]).
+  - It is very important to list ALL the possible grundforms of a verb (if there are multiple): both separable and Untrennbar, as well as Regular and Irregular.
+  - Any potential spelling or declension errors in the input should be corrected in the "rechtschreibung" field, while the "grundform" field must always contain the standard base form.
   Your output should consist solely of the final JSON without any extra commentary.
   Describe the common meanings with emojis: up to 3 emojis per meaning. Aim for as few as possible while describing the meaning thoroughly.
 </instructions>`;
@@ -119,15 +120,15 @@ const AdjektivSchema = z.object({
   ...CommonFeildsSchema.shape,
 });
   
-const PartizipVarianteSchema = z.enum(["P1", "P2"]);
+const PartizipVariantSchema = z.enum(["P1", "P2"]);
 const PartizipialesAdjektivSchema = AdjektivSchema.omit({ wortart: true }).extend({
   wortart: z.literal(WortartSchema.Enum.PartizipialesAdjektiv),
-  partizipvariante: PartizipVarianteSchema,
+  partizipVariant: PartizipVariantSchema,
 });
 
 const AdverbSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adverb),
-  category: z.array(AdverbCategorySchema),
+  adverbCategory: z.array(AdverbCategorySchema),
   ...CommonFeildsSchema.shape,
 });
 

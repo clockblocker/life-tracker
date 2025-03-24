@@ -4,7 +4,7 @@ const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
 const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
 const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
-const NomenDeklinationSchema = z.enum(["Stark", "Schwach"]);
+const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
 const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 
@@ -91,15 +91,15 @@ const AdjektivSchema = z.object({
   ...CommonFeildsSchema.shape,
 });
   
-const PartizipVarianteSchema = z.enum(["P1", "P2"]);
+const PartizipVariantSchema = z.enum(["P1", "P2"]);
 const PartizipialesAdjektivSchema = AdjektivSchema.omit({ wortart: true }).extend({
   wortart: z.literal(WortartSchema.Enum.PartizipialesAdjektiv),
-  partizipvariante: PartizipVarianteSchema,
+  partizipVariant: PartizipVariantSchema,
 });
 
 const AdverbSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adverb),
-  category: z.array(AdverbCategorySchema),
+  adverbCategory: z.array(AdverbCategorySchema),
   ...CommonFeildsSchema.shape,
 });
 
@@ -186,7 +186,7 @@ export {
   GoverningPrepositionSchema,
   VerbSchema,
   AdjektivSchema,
-  PartizipVarianteSchema,
+  PartizipVariantSchema,
   PartizipialesAdjektivSchema,
   AdverbCategorySchema,
   AdverbSchema,
@@ -209,6 +209,7 @@ export {
   RegelmaessigkeitSchema,
   ConjugationSchema,
   AdjektivDeklinationSchema,
+  NomenDeklinationSchema,
 };
 
 

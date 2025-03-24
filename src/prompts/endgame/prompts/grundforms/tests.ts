@@ -1,9 +1,9 @@
-import { Trennbarkeit, Regelmaessigkeit } from "prompts/endgame/zod/types";
+import { Trennbarkeit, Regelmaessigkeit, Genus, Wortart, NomenDeklination, Kasus, PartizipVariant, PartikelType, AdverbCategory, Numerus, PronomenType } from "prompts/endgame/zod/types";
 
 const sitzen = {
   "sitzen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "sitzen",
       grundform: "sitzen",
       emojiBeschreibungs: ["💺"],
@@ -15,19 +15,19 @@ const sitzen = {
 const sitz = {
   "sitz": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "sitz",
       grundform: "sitzen",
       emojiBeschreibungs: ["💺"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Sitz",
       grundform: "Sitz",
       emojiBeschreibungs: ["🪑"],
-      genus: "Maskulin",
-      deklination: "Stark",
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -35,7 +35,7 @@ const sitz = {
 const untergen = {
   "untergen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "untergehen",
       grundform: "untergehen",
       emojiBeschreibungs: ["🌅"],
@@ -48,7 +48,7 @@ const untergen = {
 const aufgepast = {
   "aufgepast": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "aufgepasst",
       grundform: "aufpassen",
       emojiBeschreibungs: ["👀"],
@@ -61,12 +61,12 @@ const aufgepast = {
 const Hoffungen = {
   "Hoffungen": [
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Hoffnungen",
       grundform: "Hoffnung",
       emojiBeschreibungs: ["🙏"],
-      genus: "Feminin",
-      deklination: "Stark",
+      genus: Genus.Feminin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -74,7 +74,7 @@ const Hoffungen = {
 const hangstauf = {
   "hangstauf": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "hängst auf",
       grundform: "aufhängen",
       emojiBeschreibungs: ["🖼️"],
@@ -87,19 +87,19 @@ const hangstauf = {
 const nieser = {
   "nieser": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "niest",
       grundform: "niesen",
       emojiBeschreibungs: ["🤧"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Nieser",
       grundform: "Nieser",
       emojiBeschreibungs: ["🤧"],
-      genus: "Maskulin",
-      deklination: "Schwach",
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Schwach,
     }
   ]
 };
@@ -107,7 +107,7 @@ const nieser = {
 const klares = {
   "klares": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "klares",
       grundform: "klar",
       emojiBeschreibungs: ["✨"],
@@ -118,25 +118,25 @@ const klares = {
 const klar = {
   "klar": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "klar",
       grundform: "klar",
       emojiBeschreibungs: ["✨"],
     },
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "klar",
       grundform: "klar",
       emojiBeschreibungs: ["✨"],
-      category: ["Grad"],
+      adverbCategory: [AdverbCategory.Grad],
     },
     {
-      wortart: "Nomen",
-      rechtschreibung: "Klare",
-      grundform: "Klare",
+      wortart: Wortart.Nomen,
+      rechtschreibung: "Klar",
+      grundform: "Klar",
       emojiBeschreibungs: ["✨"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -144,7 +144,7 @@ const klar = {
 const hiemwerken = {
   "hiemwerken": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "heimwerken",
       grundform: "heimwerken",
       emojiBeschreibungs: ["🔨"],
@@ -152,12 +152,12 @@ const hiemwerken = {
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Heimwerken",
       grundform: "Heimwerk",
       emojiBeschreibungs: ["🛠"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -165,7 +165,7 @@ const hiemwerken = {
 const unbandiges = {
   "unbandiges": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "unbandiges",
       grundform: "unbändig",
       emojiBeschreibungs: ["🔥"],
@@ -176,27 +176,26 @@ const unbandiges = {
 const backen = {
   "backen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "backen",
       grundform: "backen",
       emojiBeschreibungs: ["🍞"],
-      trennbarkeit: Trennbarkeit.Trennbar,
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "backen",
       grundform: "backen",
       emojiBeschreibungs: ["🍞"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Backe",
       grundform: "Backe",
       emojiBeschreibungs: ["😊"],
-      genus: "Feminin",
-      deklination: "Stark",
+      genus: Genus.Feminin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -204,12 +203,12 @@ const backen = {
 const Rechercheergbnisse = {
   "Rechercheergbnisse": [
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Rechercheergebnisse",
       grundform: "Rechercheergebnis",
       emojiBeschreibungs: ["🔍"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -217,20 +216,20 @@ const Rechercheergbnisse = {
 const See = {
   "See": [
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "See",
       grundform: "See",
       emojiBeschreibungs: ["🏞"],
-      genus: "Maskulin",
-      deklination: "Stark",
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Stark,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "See",
       grundform: "See",
       emojiBeschreibungs: ["🌊"],
-      genus: "Feminin",
-      deklination: "Stark",
+      genus: Genus.Feminin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -238,22 +237,22 @@ const See = {
 const trotz = {
   "trotz": [
     {
-      wortart: "Praeposition",
+      wortart: Wortart.Praeposition,
       rechtschreibung: "trotz",
       grundform: "trotz",
       emojiBeschreibungs: ["🛡"],
       possibleGoverningKasuss: ["Genitiv"],
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Trotz",
       grundform: "Trotz",
       emojiBeschreibungs: ["😤"],
-      genus: "Maskulin",
-      deklination: "Stark",
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Stark,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "trotzen",
       grundform: "trotzen",
       emojiBeschreibungs: ["😤"],
@@ -265,14 +264,14 @@ const trotz = {
 const mit = {
   "mit": [
     {
-      wortart: "Praeposition",
+      wortart: Wortart.Praeposition,
       rechtschreibung: "mit",
       grundform: "mit",
       emojiBeschreibungs: ["🤝"],
-      possibleGoverningKasuss: ["Dativ"],
+      possibleGoverningKasuss: [Kasus.Dativ],
     },
     {
-      wortart: "Praefix",
+      wortart: Wortart.Praefix,
       rechtschreibung: "mit",
       grundform: "mit",
       emojiBeschreibungs: ["🤝"],
@@ -283,14 +282,14 @@ const mit = {
 const an = {
   "an": [
     {
-      wortart: "Praeposition",
+      wortart: Wortart.Praeposition,
       rechtschreibung: "an",
       grundform: "an",
       emojiBeschreibungs: ["📍"],
-      possibleGoverningKasuss: ["Dativ", "Akkusativ"],
+      possibleGoverningKasuss: [Kasus.Dativ, Kasus.Akkusativ],
     },
     {
-      wortart: "Praefix",
+      wortart: Wortart.Praefix,
       rechtschreibung: "an",
       grundform: "an",
       emojiBeschreibungs: ["📍"],
@@ -301,19 +300,19 @@ const an = {
 const selbst = {
   "selbst": [
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "selbst",
       grundform: "selbst",
       emojiBeschreibungs: ["🙋"],
-      category: ["Modal"],
+      adverbCategory: [AdverbCategory.Modal],
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Selbst",
       grundform: "Selbst",
       emojiBeschreibungs: ["🪞"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     },
   ]
 };
@@ -321,25 +320,25 @@ const selbst = {
 const uber = {
   "uber": [
     {
-      wortart: "Praeposition",
+      wortart: Wortart.Praeposition,
       rechtschreibung: "über",
       grundform: "über",
       emojiBeschreibungs: ["🔝"],
-      possibleGoverningKasuss: ["Dativ", "Akkusativ"],
+      possibleGoverningKasuss: [Kasus.Dativ, Kasus.Akkusativ],
     },
     {
-      wortart: "Praefix",
+      wortart: Wortart.Praefix,
       rechtschreibung: "über",
       grundform: "über",
       emojiBeschreibungs: ["🔝"],
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Uber",
       grundform: "Uber",
       emojiBeschreibungs: ["🏙️"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
       eigenname: true,
     }
   ]
@@ -348,7 +347,7 @@ const uber = {
 const umfaren = {
   "umfaren": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "umfahren",
       grundform: "umfahren",
       emojiBeschreibungs: ["🚗🔄"],
@@ -356,7 +355,7 @@ const umfaren = {
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "umfahren",
       grundform: "umfahren",
       emojiBeschreibungs: ["🚗💥"],
@@ -364,12 +363,12 @@ const umfaren = {
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Umfahren",
       grundform: "Umfahrt",
       emojiBeschreibungs: ["🚗🔄"],
-      genus: "Feminin",
-      deklination: "Stark",
+      genus: Genus.Feminin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -377,11 +376,11 @@ const umfaren = {
 const geoffnet = {
   "geoffnet": [
     {
-      wortart: "PartizipialesAdjektiv",
+      wortart: Wortart.PartizipialesAdjektiv,
       rechtschreibung: "geöffnet",
       grundform: "öffnen",
       emojiBeschreibungs: ["🚪👐"],
-      partizipvariante: "P2",
+      partizipVariant: PartizipVariant.P2,
     },
   ]
 };
@@ -389,7 +388,7 @@ const geoffnet = {
 const verfallen = {
   "verfallen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "verfallen",
       grundform: "verfallen",
       emojiBeschreibungs: ["🏚️"],
@@ -397,11 +396,11 @@ const verfallen = {
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
     {
-      wortart: "PartizipialesAdjektiv",
+      wortart: Wortart.PartizipialesAdjektiv,
       rechtschreibung: "verfallen",
       grundform: "verfallen",
       emojiBeschreibungs: ["🏚️"],
-      partizipvariante: "P2",
+      partizipVariant: PartizipVariant.P2,
     }
   ]
 };
@@ -409,15 +408,15 @@ const verfallen = {
 const Schloss = {
   "Schloss": [
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Schloss",
       grundform: "Schloss",
       emojiBeschreibungs: ["🏰", "🔒"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "schließen",
       grundform: "schließen",
       emojiBeschreibungs: ["🚪"],
@@ -429,7 +428,7 @@ const Schloss = {
 const gehobener = {
   "gehobener": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "gehoben",
       grundform: "gehoben",
       emojiBeschreibungs: ["🎩"],
@@ -440,11 +439,11 @@ const gehobener = {
 const wahlwiese = {
   "wahlwiese": [
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "wahlweise",
       grundform: "wahlweise",
       emojiBeschreibungs: ["🔀"],
-      category: ["Modal"],
+      adverbCategory: [AdverbCategory.Modal],
     }
   ]
 };
@@ -452,18 +451,18 @@ const wahlwiese = {
 const deutschen = {
   "deutschen": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "deutschen",
       grundform: "deutsch",
       emojiBeschreibungs: ["🇩🇪"],
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Deutsche",
       grundform: "Deutsche",
       emojiBeschreibungs: ["🇩🇪"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -471,25 +470,25 @@ const deutschen = {
 const deutsch = {
   "deutsch": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "deutsch",
       grundform: "deutsch",
       emojiBeschreibungs: ["🇩🇪"],
     },
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "deutsch",
       grundform: "deutsch",
       emojiBeschreibungs: ["🇩🇪"],
-      category: ["Modal"],
+      adverbCategory: [AdverbCategory.Modal],
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Deutsche",
       grundform: "Deutsche",
       emojiBeschreibungs: ["🇩🇪"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -497,19 +496,26 @@ const deutsch = {
 const Laden = {
   "Laden": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "laden",
       grundform: "laden",
-      emojiBeschreibungs: ["📦"],
+      emojiBeschreibungs: ["📦➡️🚚"],
+      regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
+    },
+    {
+      wortart: Wortart.Verb,
+      rechtschreibung: "laden",
+      grundform: "laden",
+      emojiBeschreibungs: ["✉️➡️👥"],
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Laden",
       grundform: "Laden",
-      emojiBeschreibungs: ["🏪"],
-      genus: "Maskulin",
-      deklination: "Stark",
+      emojiBeschreibungs: ["🏪🛍️"],
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -517,7 +523,7 @@ const Laden = {
 const gefallen = {
   "gefallen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "gefallen",
       grundform: "gefallen",
       emojiBeschreibungs: ["👍"],
@@ -525,11 +531,11 @@ const gefallen = {
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
     {
-      wortart: "PartizipialesAdjektiv",
+      wortart: Wortart.PartizipialesAdjektiv,
       rechtschreibung: "gefallen",
       grundform: "gefallen",
       emojiBeschreibungs: ["👍"],
-      partizipvariante: "P2",
+      partizipVariant: PartizipVariant.P2,
     }
   ]
 };
@@ -537,22 +543,22 @@ const gefallen = {
 const Wende = {
   "Wende": [
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Wende",
       grundform: "Wende",
       emojiBeschreibungs: ["🔄"],
-      genus: "Feminin",
-      deklination: "Stark",
+      genus: Genus.Feminin,
+      deklination: NomenDeklination.Stark,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "wende",
       grundform: "wenden",
       emojiBeschreibungs: ["🔄"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "wende",
       grundform: "wenden",
       emojiBeschreibungs: ["👉💬"],
@@ -564,7 +570,7 @@ const Wende = {
 const stapelbaren = {
   "stapelbaren": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "stapelbaren",
       grundform: "stapelbar",
       emojiBeschreibungs: ["📦"],
@@ -575,17 +581,17 @@ const stapelbaren = {
 const vorbei = {
   "vorbei": [
     {
-      wortart: "Praeposition",
+      wortart: Wortart.Praeposition,
       rechtschreibung: "vorbei",
       grundform: "vorbei",
       emojiBeschreibungs: ["🏃‍♂️💨"],
     },
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "vorbei",
       grundform: "vorbei",
       emojiBeschreibungs: ["🏁"],
-      category: ["Lokal"],
+      adverbCategory: [AdverbCategory.Lokal],
     }
   ]
 };
@@ -598,7 +604,7 @@ Männer!`
 const shit = {
   [`${mystery}`]: [
     {
-      wortart: "Unbekannt", 
+      wortart: Wortart.Unbekannt, 
       rechtschreibung: "Unbekannt",
       grundform: "Unbekannt",
       emojiBeschreibungs: ["❓"],
@@ -610,7 +616,7 @@ const shit = {
 const augeben = {
   "augeben": [
     {
-      wortart: "Unbekannt", 
+      wortart: Wortart.Unbekannt, 
       rechtschreibung: "Unbekannt",
       grundform: "Unbekannt",
       emojiBeschreibungs: ["❓"],
@@ -623,7 +629,7 @@ const augeben = {
 const spazirengegangen = {
   "ging spaziren": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "ging spazieren",
       grundform: "spazieren gehen",
       emojiBeschreibungs: ["🚶‍♂️"],
@@ -636,11 +642,11 @@ const spazirengegangen = {
 const doch = {
   "doch": [
     {
-      wortart: "Partikel",
+      wortart: Wortart.Partikel,
       rechtschreibung: "doch",
       grundform: "doch",
       emojiBeschreibungs: ["💬"],
-      partikelType: ["Konnektiv"],
+      partikelType: [PartikelType.Konnektiv],
     }
   ]
 };
@@ -648,7 +654,7 @@ const doch = {
 const Redewendung1 = {
   "Das Eis zwischen sie ist gebrochen": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "Das Eis brechen",
       grundform: "Das Eis brechen",
       emojiBeschreibungs: ["❄️🧊"],
@@ -660,26 +666,26 @@ const Redewendung1 = {
 const schafen = {
   "schafen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "schaffen",
       grundform: "schaffen",
       emojiBeschreibungs: ["💪✅"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "schaffen",
       grundform: "schaffen",
       emojiBeschreibungs: ["✨🌍"],
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Schafen",
       grundform: "Schaf",
       emojiBeschreibungs: ["🐑"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -687,14 +693,14 @@ const schafen = {
 const mleken = {
   "mleken": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "melken",
       grundform: "melken",
       emojiBeschreibungs: ["🐄"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "melken",
       grundform: "melken",
       emojiBeschreibungs: ["🐄"],
@@ -706,14 +712,14 @@ const mleken = {
 const bewegen = {
   "bewegen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "bewegen",
       grundform: "bewegen",
       emojiBeschreibungs: ["💪➡️🪑"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "bewegen",
       grundform: "bewegen",
       emojiBeschreibungs: ["💬➡️😢"],
@@ -725,14 +731,14 @@ const bewegen = {
 const senden = {
   "senden": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "senden",
       grundform: "senden",
       emojiBeschreibungs: ["📤"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig
     },
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "senden",
       grundform: "senden",
       emojiBeschreibungs: ["📡"],
@@ -744,14 +750,14 @@ const senden = {
 const genau = {
   "genau": [
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "genau",
       grundform: "genau",
       emojiBeschreibungs: ["✔️"],
-      category: ["Modal"],
+      adverbCategory: [AdverbCategory.Modal],
     },
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "genau",
       grundform: "genau",
       emojiBeschreibungs: ["✔️"],
@@ -762,11 +768,11 @@ const genau = {
 const genauso = {
   "genauso": [
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "genauso",
       grundform: "genauso",
       emojiBeschreibungs: ["🤝"],
-      category: ["Modal"],
+      adverbCategory: [AdverbCategory.Modal],
     }
   ]
 };
@@ -774,7 +780,7 @@ const genauso = {
 const fussballbegeistert = {
   "fussballbegeistert": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "fußballbegeistert",
       grundform: "fußballbegeistert",
       emojiBeschreibungs: ["⚽️🔥"],
@@ -785,11 +791,11 @@ const fussballbegeistert = {
 const sofort = {
   "sofort": [
     {
-      wortart: "Adverb",
+      wortart: Wortart.Adverb,
       rechtschreibung: "sofort",
       grundform: "sofort",
       emojiBeschreibungs: ["⏱️"],
-      category: ["Temporal"],
+      adverbCategory: [AdverbCategory.Temporal],
     }
   ]
 };
@@ -797,11 +803,11 @@ const sofort = {
 const zwar = {
   "zwar": [
     {
-      wortart: "Partikel",
+      wortart: Wortart.Partikel,
       rechtschreibung: "zwar",
       grundform: "zwar",
       emojiBeschreibungs: ["🔗"],
-      partikelType: ["Konnektiv"],
+      partikelType: [PartikelType.Konnektiv],
     }
   ]
 };
@@ -809,22 +815,22 @@ const zwar = {
 const Weiss = {
   "Weiss": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "weiß",
       grundform: "wissen",
       emojiBeschreibungs: ["🧠"],
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Weiß",
       grundform: "Weiß",
       emojiBeschreibungs: ["⚪️"],
-      genus: "Neutrum",
-      deklination: "Stark",
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark,
     },
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "weiß",
       grundform: "weiß",
       emojiBeschreibungs: ["⚪️"],
@@ -835,19 +841,19 @@ const Weiss = {
 const wissen = {
   "wissen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "weiß",
       grundform: "wissen",
       emojiBeschreibungs: ["🧠"],
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Wissen",
       grundform: "Wissen",
       emojiBeschreibungs: ["🧠"],
-      genus: "Neutrum",
-      deklination: "Stark"
+      genus: Genus.Neutrum,
+      deklination: NomenDeklination.Stark
     },
   ]
 };
@@ -855,7 +861,7 @@ const wissen = {
 const erinern = {
   "erinern": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "erinnern",
       grundform: "erinnern",
       emojiBeschreibungs: ["🧠"],
@@ -867,7 +873,7 @@ const erinern = {
 const rechnen = {
   "rechnen": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "rechnen",
       grundform: "rechnen",
       emojiBeschreibungs: ["🧮"],
@@ -879,18 +885,18 @@ const rechnen = {
 const glaubiger = {
   "glaubiger": [
     {
-      wortart: "Adjektiv",
+      wortart: Wortart.Adjektiv,
       rechtschreibung: "gläubiger",
       grundform: "gläubig",
       emojiBeschreibungs: ["🙏"],
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Gläubiger",
       grundform: "Gläubiger",
       emojiBeschreibungs: ["💰"],
-      genus: "Maskulin",
-      deklination: "Stark",
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -898,29 +904,29 @@ const glaubiger = {
 const sie = {
   "sie": [
     {
-      wortart: "Pronomen",
+      wortart: Wortart.Pronomen,
       rechtschreibung: "sie",
       grundform: "sie",
       emojiBeschreibungs: ["👩"],
-      pronomenType: "Personal",
-      number: ["Einzahl"],
-      genus: ["Feminin"],
+      pronomenType: PronomenType.Personal,
+      number: [Numerus.Einzahl],
+      genus: [Genus.Feminin],
     },
     {
-      wortart: "Pronomen",
+      wortart: Wortart.Pronomen,
       rechtschreibung: "sie",
       grundform: "sie",
       emojiBeschreibungs: ["👥"],
-      pronomenType: "Personal",
-      number: ["Mehrzahl"],
+      pronomenType: PronomenType.Personal,
+      number: [Numerus.Mehrzahl],
     },
     {
-      wortart: "Pronomen",
+      wortart: Wortart.Pronomen,
       rechtschreibung: "Sie",
       grundform: "sie",
       emojiBeschreibungs: ["🧑‍💼"],
-      pronomenType: "Personal",
-      number: ["Einzahl", "Mehrzahl"],
+      pronomenType: PronomenType.Personal,
+      number: [Numerus.Einzahl, Numerus.Mehrzahl],
     }
   ]
 };
@@ -928,7 +934,7 @@ const sie = {
 const DasEisBrechen = {
   "eis zwischen ihnen ist gebrochen": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "das Eis zwischen ihnen ist gebrochen",
       grundform: "das Eis brechen",
       emojiBeschreibungs: ["🤝"],
@@ -939,9 +945,9 @@ const DasEisBrechen = {
 const halbenMette = {
   "halben Miete": [
     {
-      wortart: "Redewendung",
-      rechtschreibung: "halbe Miete",
-      grundform: "die halbe Miete",
+      wortart: Wortart.Redewendung,
+      rechtschreibung: "halben Miete",
+      grundform: "halbe Miete",
       emojiBeschreibungs: ["🔑🧩🎯"],
     }
   ]
@@ -950,7 +956,7 @@ const halbenMette = {
 const ganzUndGar = {
   "ganz und gar": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "ganz und gar",
       grundform: "ganz und gar",
       emojiBeschreibungs: ["💯👌"],
@@ -961,7 +967,7 @@ const ganzUndGar = {
 const tomatenAufDenAugen = {
   "tomaten auf den Augen?": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "Tomaten auf den Augen?",
       grundform: "Tomaten auf den Augen haben",
       emojiBeschreibungs: ["🍅🙈🤷‍♂️"],
@@ -970,11 +976,11 @@ const tomatenAufDenAugen = {
 };
 
 const baerenAufgebracht = {
-  "mir der Bär aufgebracht": [
+  "einen Bären aufbinden": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "Mir ist der Bär aufgebracht",
-      grundform: "Einen Bären aufbinden",
+      grundform: "einen Bären aufbinden",
       emojiBeschreibungs: ["🐻🤥🙄"],
     }
   ]
@@ -983,7 +989,7 @@ const baerenAufgebracht = {
 const durchUndDurch = {
   "durch und durch": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "durch und durch",
       grundform: "durch und durch",
       emojiBeschreibungs: ["💯👌"],
@@ -994,7 +1000,7 @@ const durchUndDurch = {
 const vollUndGanz = {
   "voll und ganz": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "voll und ganz",
       grundform: "voll und ganz",
       emojiBeschreibungs: ["🎯👌"],
@@ -1005,7 +1011,7 @@ const vollUndGanz = {
 const nullUndNichtig = {
   "null und nichtig": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "null und nichtig",
       grundform: "null und nichtig",
       emojiBeschreibungs: ["0️⃣🚫"],
@@ -1016,7 +1022,7 @@ const nullUndNichtig = {
 const klippUndKlar = {
   "klipp und klar": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "klipp und klar",
       grundform: "klipp und klar",
       emojiBeschreibungs: ["✅"],
@@ -1027,7 +1033,7 @@ const klippUndKlar = {
 const reinUndGar = {
   "rein und gar": [
     {
-      wortart: "Redewendung",
+      wortart: Wortart.Redewendung,
       rechtschreibung: "rein und gar",
       grundform: "rein und gar",
       emojiBeschreibungs: ["✨👌"],
@@ -1038,19 +1044,19 @@ const reinUndGar = {
 const molken = {
   "molken": [
     {
-      wortart: "Verb",
+      wortart: Wortart.Verb,
       rechtschreibung: "molken",
       grundform: "melken",
       emojiBeschreibungs: ["🐄"],
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig
     },
     {
-      wortart: "Nomen",
+      wortart: Wortart.Nomen,
       rechtschreibung: "Molken",
       grundform: "Molke",
       emojiBeschreibungs: ["🥛"],
-      genus: "Feminin",
-      deklination: "Stark",
+      genus: Genus.Feminin,
+      deklination: NomenDeklination.Stark,
     }
   ]
 };
@@ -1120,6 +1126,3 @@ export const tests = {
   ...schafen,
   ...wissen,
 };
-
-
-// export const b = `<examples>` + Object.entries(a).map(([k, v]) => `<example><note>${k.trim()}</note><grundforms>${(v)}</grundforms>`.replaceAll("\n      ", "").replaceAll(",  ", ",").replaceAll("\n    ", "").replaceAll("{  ", "{").replaceAll('>,<', '><').replaceAll(", ", ",").replaceAll(": ", ":").replaceAll("  \n  ","").replaceAll("\n]","]") + `</example>`) + `</examples>`;
