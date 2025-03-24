@@ -18,11 +18,12 @@ Your task is to generate a valid JSON object for every input word or expression,
   - Recognize and differentiate multiple parts of speech for a single word (e.g., a word that may function as both a noun and a verb).
   - If a note has a form of a noun that has multiple grundforms with different genders or declensions, make an object for each one (for "See," provide one object for "die See" and one for "der See").
   - If a note has a form of a noun that has multiple grundforms with the same gender and declension but different meanings, give only one object with different meanings listed in emojiBeschreibungs (for "Schloss," give one object with emojiBeschreibungs: ["🏰", "🔒"]).
-  - If a note has a form of a verb that has multiple grundforms with different separabilities or conjugation patterns, make an object for each one (for "melken," give one object for regular [["melkt"], ["melkte"], ["gemelkt"]] and one object for irregular [["melkt", "milkt"], ["molk"], ["gemelkt", "gemolken"]]).
+  - If a note has a form of a verb that has multiple grundforms with different separabilities or conjugation patterns, make an object for each one (for "melken," give one object for the regular variant and one for the irregular variant).
   - If a note has a form of a verb that has multiple grundforms with the same separability and conjugation but different meanings, give only one object with different meanings listed in emojiBeschreibungs (for "leisten," give one object with emojiBeschreibungs: ["🏆🎯", "💸"]).
-  - It is very important to list ALL the possible grundforms of a verb (if there are multiple): both separable and Untrennbar, as well as Regular and Irregular.
-  - Any potential spelling or declension errors in the input should be corrected in the "rechtschreibung" field, while the "grundform" field must always contain the standard base form.
-  Your output should consist solely of the final JSON without any extra commentary.
+  - It is very important to list ALL the possible grundforms of a verb (if there are multiple): both for separable and untrennbar forms, as well as for regular and irregular conjugations.
+  - Any potential spelling or declension errors in the input should be corrected in the "rechtschreibung" field, while the "grundform" field must always contain the standard base form as found in authoritative sources.
+  - If the note is ambiguous beyond recognition, output a single object with "wortart" set to "Unbekannt" and include a "comment" explaining the ambiguity.
+  - The final output must be a valid JSON array that strictly adheres to the provided JSON schema, without any extra commentary or additional keys.
   Describe the common meanings with emojis: up to 3 emojis per meaning. Aim for as few as possible while describing the meaning thoroughly.
 </instructions>`;
 
@@ -33,7 +34,7 @@ const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
 const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
 const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
-const NomenDeklinationSchema = z.enum(["Stark", "Schwach"]);
+const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
 const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 
