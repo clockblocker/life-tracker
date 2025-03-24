@@ -37,7 +37,7 @@ const VergleichsformSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 const VerbFormTagSchema = z.enum(["Praesens", "Praeteritum", "Perfekt", "Imperativ", "K1", "K2", "P1", "P2", "ZuInfinitiv"]);
 
 const FormSchema = z.enum(["Grundform", "Flektiert"]);
-const RegelmaessigkeitsSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
 
 const ConjugationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
@@ -93,7 +93,7 @@ const PronomenSchema = z.object({
   ...CommonFeildsSchema.shape,
 });
 
-const SeparabilitySchema = z.enum(["Trennbar", "Untrennbar"]);
+const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 const GoverningPrepositionSchema = z.enum([
   "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
   "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
@@ -103,7 +103,7 @@ const GoverningPrepositionSchema = z.enum([
 const VerbSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Verb),
   canBeRexlexiv: z.optional(z.boolean()),
-  separability: z.optional(SeparabilitySchema),
+  trennbarkeit: z.optional(TrennbarkeitSchema),
   verbForms: z.array(z.array(z.string())),
   notableGoverningPrepositions: z.optional(z.array(GoverningPrepositionSchema)),
   ...CommonFeildsSchema.shape,

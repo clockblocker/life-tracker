@@ -9,6 +9,9 @@ import { Grundform, Wortart, Nomen, Genus } from 'prompts/endgame/zod/types';
 // make them link to /path/of/a/part/of/speach if the document [[g]] does not exist
 // <span class="custom-red">die</span>
 
+// verbForms: [["melkt", "milkt"], ["molk"], ["gemelkt", "gemolken"]],
+
+
 const formatEmoji = (g: Grundform) => `${g.emojiBeschreibungs.join(" | ")}`;
 const formatNomGenus = (g: Nomen) => {
     switch (g.genus) {
@@ -50,8 +53,6 @@ const formatLinkToGrundformNote = (g: Grundform, noteForGrundformIsAlreadyCreate
 }}
 
 const formatGrundform = (g: Grundform, noteForGrundformIsAlreadyCreated: boolean) => {
-
-    console.log(noteForGrundformIsAlreadyCreated, g)
     const ok = noteForGrundformIsAlreadyCreated;
 
     switch (g.wortart) {

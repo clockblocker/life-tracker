@@ -5,15 +5,33 @@ const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
 const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const NomenDeklinationSchema = z.enum(["Stark", "Schwach"]);
+const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 
 const VergleichsformSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 const VerbFormTagSchema = z.enum(["Praesens", "Praeteritum", "Perfekt", "Imperativ", "K1", "K2", "P1", "P2", "ZuInfinitiv"]);
 
 const FormSchema = z.enum(["Grundform", "Flektiert"]);
-const RegelmaessigkeitsSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
 
 const ConjugationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
+
+const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
+const ArtikelTypeSchema = z.enum(["Bestimmt", "Unbestimmt"]);
+const PartikelTypeSchema = z.enum(["Intensität", "Fokus", "Negation", "Abtönung", "Konnektiv"]);
+const NumeraleTypeSchema = z.enum(["Grundzahl", "Ordnungszahl", "Bruchzahl", "Multiplikativ", "Kollektiv"]);
+const KonjunktionTypeSchema = z.enum(["Koordinierend", "Subordinierend"]);
+
+const PronomenTypeSchema = z.enum([
+  "Possessiv",
+  "Reflexiv",
+  "Personal",
+  "Generalisierendes",
+  "Demonstrativ",
+  "W-Pronomen",
+  "Indefinit",
+  "Quantifikativ",
+]);
 
 const CommonFeildsSchema = z.object({
     rechtschreibung: z.string(),
@@ -39,6 +57,12 @@ const WortartSchema = z.enum([
   "Unbekannt"
 ]);
 
+const GoverningPrepositionSchema = z.enum([
+  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
+  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
+  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
+]);
+
 const NomenSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Nomen),
   genus: GenusSchema,
@@ -46,17 +70,6 @@ const NomenSchema = z.object({
   isProperNoun: z.optional(z.boolean()),
   ...CommonFeildsSchema.shape,
 });
-
-const PronomenTypeSchema = z.enum([
-    "Possessiv",
-    "Reflexiv",
-    "Personal",
-    "Generalisierendes",
-    "Demonstrativ",
-    "W-Pronomen",
-    "Indefinit",
-    "Quantifikativ",
-]);
 
 const PronomenSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Pronomen),
@@ -66,19 +79,10 @@ const PronomenSchema = z.object({
   ...CommonFeildsSchema.shape,
 });
 
-const SeparabilitySchema = z.enum(["Trennbar", "Untrennbar"]);
-const GoverningPrepositionSchema = z.enum([
-  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
-  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
-  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
-]);
-
 const VerbSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Verb),
-  canBeRexlexiv: z.optional(z.boolean()),
-  separability: z.optional(SeparabilitySchema),
-  verbForms: z.array(z.array(z.string())),
-  notableGoverningPrepositions: z.optional(z.array(GoverningPrepositionSchema)),
+  trennbarkeit: z.optional(TrennbarkeitSchema),
+  regelmaessigkeit: RegelmaessigkeitSchema,
   ...CommonFeildsSchema.shape,
 });
 
@@ -93,28 +97,24 @@ const PartizipialesAdjektivSchema = AdjektivSchema.omit({ wortart: true }).exten
   partizipvariante: PartizipVarianteSchema,
 });
 
-const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
 const AdverbSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adverb),
   category: z.array(AdverbCategorySchema),
   ...CommonFeildsSchema.shape,
 });
 
-const ArtikelTypeSchema = z.enum(["Bestimmt", "Unbestimmt"]);
 const ArtikelSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Artikel),
   artikelType: ArtikelTypeSchema,
   ...CommonFeildsSchema.shape,
 });
 
-const PartikelTypeSchema = z.enum(["Intensität", "Fokus", "Negation", "Abtönung", "Konnektiv"]);
 const PartikelSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Partikel),
   partikelType: z.array(PartikelTypeSchema),
   ...CommonFeildsSchema.shape,
 });
 
-const KonjunktionTypeSchema = z.enum(["Koordinierend", "Subordinierend"]);
 const KonjunktionSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Konjunktion),
   konjunktionType: KonjunktionTypeSchema,
@@ -127,10 +127,8 @@ const PraepositionSchema = z.object({
   ...CommonFeildsSchema.shape,
 });
 
-const NumeraleTypeSchema = z.enum(["Grundzahl", "Ordnungszahl", "Bruchzahl", "Multiplikativ", "Kollektiv"]);
 const NumeraleSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Numerale),
-  numeraleType: z.array(NumeraleTypeSchema),
   ...CommonFeildsSchema.shape,
 });
 
@@ -184,7 +182,7 @@ export {
   PronomenTypeSchema,
   NumerusSchema,
   PronomenSchema,
-  SeparabilitySchema,
+  TrennbarkeitSchema,
   GoverningPrepositionSchema,
   VerbSchema,
   AdjektivSchema,
@@ -208,7 +206,14 @@ export {
   VergleichsformSchema,
   VerbFormTagSchema,
   FormSchema,
-  RegelmaessigkeitsSchema,
+  RegelmaessigkeitSchema,
   ConjugationSchema,
   AdjektivDeklinationSchema,
 };
+
+
+// canBeRexlexiv: z.optional(z.boolean()),
+// verbForms: z.array(z.array(z.string())),
+// notableGoverningPrepositions: z.optional(z.array(GoverningPrepositionSchema)),
+
+// numeraleType: z.array(NumeraleTypeSchema),
