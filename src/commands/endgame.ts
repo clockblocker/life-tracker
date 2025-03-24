@@ -53,17 +53,38 @@ const formatLinkToGrundformNote = (g: Grundform, noteForGrundformIsAlreadyCreate
             return ok ? `[[${g.grundform}]]` : `[[Worter/Grundform/${grundformWortartFromGrundform(g)}/${g.grundform[0]}/${g.grundform[1]}/${g.grundform}|${g.grundform}]]`
 }};
 
-const formatGrundform = (g: Grundform, noteForGrundformIsAlreadyCreated: boolean) => {
-    const ok = noteForGrundformIsAlreadyCreated;
-
-    switch (g.wortart) {
-        case Wortart.Unbekannt:
-            return g.comment;   
-        case Wortart.Nomen:
-            return `${formatEmoji(g)} ${formatNomGenus(g)} ${formatLinkToGrundformNote(g, ok)}`
-        default:
-            return `${formatEmoji(g)} ${formatLinkToGrundformNote(g, ok)} ${formattedWortartFromWortart(grundformWortartFromGrundform(g))}`
+const formatGrundform = (g: Grundform, exists: boolean, word: string): string => {
+    const grundformLower = g.grundform.toLowerCase();
+    const rechtschreibungLower = g.rechtschreibung.toLowerCase();
+    
+    const link = exists ? `[[${g.grundform}]]` : g.grundform;
+    const emoji = g.emojiBeschreibungs[0];
+    
+    if (grundformLower === word && word === rechtschreibungLower) {
+        // Exact match to the grundform
+        if (g.wortart === Wortart.Nomen) {
+            const article = articleFromGenus(g.genus);
+            return `${emoji} <span class="custom-color-for-${article}">${article}</span> ${link}`;
+        }
+        return `${emoji} ${link}`;
     }
+    
+    // Check if this is a form of the word
+    if (g.wortart === Wortart.Verb && word === rechtschreibungLower) {
+        return `*Form of a* *${g.wortart}* ${emoji} ${link}`;
+    }
+    
+    if (grundformLower === word) {
+        // Form of a
+        return `*Form of a* *${g.wortart}* ${emoji} ${link}`;
+    }
+    
+    // A misspelling of
+    if (g.wortart === Wortart.Nomen) {
+        const article = articleFromGenus(g.genus);
+        return `*A misspelling of* ${emoji} <span class="custom-color-for-${article}">${article}</span> ${link}`;
+    }
+    return `*A misspelling of* ${emoji} ${link}`;
 };
 
 async function doesGrundformNoteExist(plugin: TextEaterPlugin, file: TFile, g: Grundform) {
@@ -72,13 +93,15 @@ async function doesGrundformNoteExist(plugin: TextEaterPlugin, file: TFile, g: G
 };
 
 async function endgameInfCase(plugin: TextEaterPlugin, file: TFile, grundforms: Grundform[]) {
+    const word = file.basename.toLocaleLowerCase();
+    
     // First, merge objects based on the rules
     const mergedGrundforms = mergeGrundforms(grundforms);
 
     // Keep existing formatting logic
     const linksPromises = mergedGrundforms.map(async (g) => {
         const exists = await doesGrundformNoteExist(plugin, file, g);
-        return formatGrundform(g, exists);
+        return formatGrundform(g, exists, word);
     });
 
     const formattedLinks = await Promise.all(linksPromises);
@@ -199,14 +222,53 @@ export default async function endgame(plugin: TextEaterPlugin, editor: Editor, f
             return;
         }
 
-        const grundforms = parsed.data.map(({rechtschreibung, grundform, ...rest}) => ({rechtschreibung, grundform, ...rest, isGrundform: word === rechtschreibung && rechtschreibung === grundform})).sort(({isGrundform}) => isGrundform ? 1 : 0);
+        const grundforms = parsed.data
+            .map(({rechtschreibung, grundform, ...rest}) => ({
+                rechtschreibung, 
+                grundform, 
+                ...rest, 
+                isGrundform: word === rechtschreibung && rechtschreibung === grundform
+            }))
+            .sort((a, b) => {
+                const aScore = getGrundformScore(a, word);
+                const bScore = getGrundformScore(b, word);
+                return bScore - aScore;
+            });
+
         if (!grundforms.some(({isGrundform}) => isGrundform)) {
-            await endgameInfCase(plugin, file, parsed.data)
+            await endgameInfCase(plugin, file, grundforms)
         }
         
         console.log('grundforms', grundforms);
     } catch (error) {
         new Notice(`Error: ${error.message}`);
     }
-};
+}
+
+function getGrundformScore(g: Grundform, word: string): number {
+    const grundformLower = g.grundform.toLowerCase();
+    const rechtschreibungLower = g.rechtschreibung.toLowerCase();
+    
+    if (grundformLower === word && word === rechtschreibungLower) {
+        return 2;  // Exact match to the grundform
+    }
+    
+    // Check if this is a form of the word
+    if (word === rechtschreibungLower) {
+        return 1;  // Form of a
+    }
+    
+    return 0;  // A misspelling of
+}
+
+function articleFromGenus(genus: Genus): string {
+    switch (genus) {
+        case Genus.Feminin:
+            return "die";
+        case Genus.Neutrum:
+            return "das";
+        case Genus.Maskulin:
+            return "der";
+    }
+}
 

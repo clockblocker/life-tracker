@@ -405,6 +405,40 @@ const verfallen = {
   ]
 };
 
+const verfall = {
+  "verfall": [
+    {
+      wortart: Wortart.Verb,
+      rechtschreibung: "verfall",
+      grundform: "verfallen",
+      emojiBeschreibungs: ["🏚️"],
+      trennbarkeit: Trennbarkeit.Untrennbar,
+      regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
+    },
+    {
+      rechtschreibung: "Verfall",
+      grundform: "Verfall",
+      wortart: Wortart.Nomen,
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Stark,
+      emojiBeschreibungs: ["🏚️"],
+    }
+  ]
+};
+
+const derVerfall = {
+  "der verfall": [
+    {
+      rechtschreibung: "Verfall",
+      grundform: "Verfall",
+      wortart: Wortart.Nomen,
+      genus: Genus.Maskulin,
+      deklination: NomenDeklination.Stark,
+      emojiBeschreibungs: ["🏚️"],
+    }
+  ]
+};
+
 const schloss = {
   "schloss": [
     {
@@ -1142,4 +1176,6 @@ export const tests = {
   ...wissen,
   ...schaffen,
   ...DieKuhIstNunVomEis,
+  ...verfall,
+  ...derVerfall,
 };
