@@ -405,8 +405,8 @@ const verfallen = {
   ]
 };
 
-const Schloss = {
-  "Schloss": [
+const schloss = {
+  "schloss": [
     {
       wortart: Wortart.Nomen,
       rechtschreibung: "Schloss",
@@ -493,8 +493,8 @@ const deutsch = {
   ]
 };
 
-const Laden = {
-  "Laden": [
+const laden = {
+  "laden": [
     {
       wortart: Wortart.Verb,
       rechtschreibung: "laden",
@@ -540,8 +540,8 @@ const gefallen = {
   ]
 };
 
-const Wende = {
-  "Wende": [
+const wende = {
+  "wende": [
     {
       wortart: Wortart.Nomen,
       rechtschreibung: "Wende",
@@ -652,7 +652,7 @@ const doch = {
 };
 
 const Redewendung1 = {
-  "Das Eis zwischen sie ist gebrochen": [
+  "das eis zwischen sie ist gebrochen": [
     {
       wortart: Wortart.Redewendung,
       rechtschreibung: "Das Eis brechen",
@@ -662,9 +662,8 @@ const Redewendung1 = {
   ],
 };
 
-
-const schafen = {
-  "schafen": [
+const schaffen = {
+  "schaffen": [
     {
       wortart: Wortart.Verb,
       rechtschreibung: "schaffen",
@@ -679,6 +678,22 @@ const schafen = {
       emojiBeschreibungs: ["✨🌍"],
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
     },
+  ]
+};
+
+const DieKuhIstNunVomEis = {
+  "kuh ist nun vom eis": [
+    {
+      wortart: Wortart.Redewendung,
+      rechtschreibung: "Kuh ist nun vom Eis",
+      grundform: "die Kuh ist vom Eis",
+      emojiBeschreibungs: ["🐄🧊"],
+    }
+  ]
+};
+
+const schafen = {
+  "schafen": [
     {
       wortart: Wortart.Nomen,
       rechtschreibung: "Schafen",
@@ -812,8 +827,8 @@ const zwar = {
   ]
 };
 
-const Weiss = {
-  "Weiss": [
+const weiss = {
+  "weiss": [
     {
       wortart: Wortart.Verb,
       rechtschreibung: "weiß",
@@ -842,7 +857,7 @@ const wissen = {
   "wissen": [
     {
       wortart: Wortart.Verb,
-      rechtschreibung: "weiß",
+      rechtschreibung: "wissen",
       grundform: "wissen",
       emojiBeschreibungs: ["🧠"],
       regelmaessigkeit: Regelmaessigkeit.Unregelmaessig
@@ -965,10 +980,10 @@ const ganzUndGar = {
 };
 
 const tomatenAufDenAugen = {
-  "tomaten auf den Augen?": [
+  "hast do tomaten auf den augen?": [
     {
       wortart: Wortart.Redewendung,
-      rechtschreibung: "Tomaten auf den Augen?",
+      rechtschreibung: "Hast do Tomaten auf den Augen?",
       grundform: "Tomaten auf den Augen haben",
       emojiBeschreibungs: ["🍅🙈🤷‍♂️"],
     }
@@ -976,11 +991,11 @@ const tomatenAufDenAugen = {
 };
 
 const baerenAufgebracht = {
-  "einen Bären aufbinden": [
+  "und ihm einen bären aufzubinden?": [
     {
       wortart: Wortart.Redewendung,
-      rechtschreibung: "Mir ist der Bär aufgebracht",
-      grundform: "einen Bären aufbinden",
+      rechtschreibung: "und ihm einen Bären aufzubinden?",
+      grundform: "Jemandem einen Bären aufbinden",
       emojiBeschreibungs: ["🐻🤥🙄"],
     }
   ]
@@ -1070,7 +1085,7 @@ export const tests = {
   ...fussballbegeistert,
   ...sofort,
   ...zwar,
-  ...Weiss,
+  ...weiss,
   ...erinern,
   ...rechnen,
   ...nieser,
@@ -1095,17 +1110,17 @@ export const tests = {
   ...umfaren,
   ...geoffnet,
   ...verfallen,
-  ...Schloss,
+  ...schloss,
   ...gehobener,
   ...wahlwiese,
   ...deutschen,
-  ...Wende,
+  ...wende,
   ...stapelbaren,
   ...vorbei,
   ...spazirengegangen,
   ...doch,
   ...shit,
-  ...Laden,
+  ...laden,
   ...gefallen,
   ...Redewendung1,
   ...klar,
@@ -1125,4 +1140,6 @@ export const tests = {
   ...augeben,
   ...schafen,
   ...wissen,
+  ...schaffen,
+  ...DieKuhIstNunVomEis,
 };

@@ -82,7 +82,7 @@ async function endgameInfCase(plugin: TextEaterPlugin, file: TFile, grundforms: 
 }
 
 export default async function endgame(plugin: TextEaterPlugin, editor: Editor, file: TFile) {
-    const word = file.basename;
+    const word = file.basename.toLocaleLowerCase();
     try {
         const grundformsPrompt = makeGrundformsPrompt();
         const dictionaryEntry = await plugin.apiService.generateContent(grundformsPrompt, word, true);

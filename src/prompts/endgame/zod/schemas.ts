@@ -1,13 +1,5 @@
 import { z } from 'zod';
 
-const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
-const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
-const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
-
-const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
-const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
-const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
-
 const VergleichsformSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 const VerbFormTagSchema = z.enum(["Praesens", "Praeteritum", "Perfekt", "Imperativ", "K1", "K2", "P1", "P2", "ZuInfinitiv"]);
 
@@ -15,6 +7,16 @@ const FormSchema = z.enum(["Grundform", "Flektiert"]);
 
 const ConjugationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
+
+// ---
+
+const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
+const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
+const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
+
+const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
+const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 
 const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
 const ArtikelTypeSchema = z.enum(["Bestimmt", "Unbestimmt"]);
