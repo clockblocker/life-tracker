@@ -95,7 +95,7 @@ const NomenSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Nomen),
   genus: GenusSchema,
   deklination: NomenDeklinationSchema,
-  isProperNoun: z.optional(z.boolean()),
+  eigenname: z.optional(z.boolean()),
   ...CommonFeildsSchema.shape,
 });
 

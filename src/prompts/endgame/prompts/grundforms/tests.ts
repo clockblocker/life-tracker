@@ -251,7 +251,6 @@ const trotz = {
       emojiBeschreibungs: ["😤"],
       genus: "Maskulin",
       deklination: "Stark",
-      isProperNoun: false,
     },
     {
       wortart: "Verb",
@@ -341,7 +340,7 @@ const uber = {
       emojiBeschreibungs: ["🏙️"],
       genus: "Neutrum",
       deklination: "Stark",
-      isProperNoun: true,
+      eigenname: true,
     }
   ]
 };
@@ -416,7 +415,6 @@ const Schloss = {
       emojiBeschreibungs: ["🏰", "🔒"],
       genus: "Neutrum",
       deklination: "Stark",
-      isProperNoun: false,
     },
     {
       wortart: "Verb",
@@ -466,7 +464,6 @@ const deutschen = {
       emojiBeschreibungs: ["🇩🇪"],
       genus: "Neutrum",
       deklination: "Stark",
-      isProperNoun: false,
     }
   ]
 };
@@ -513,7 +510,6 @@ const Laden = {
       emojiBeschreibungs: ["🏪"],
       genus: "Maskulin",
       deklination: "Stark",
-      isProperNoun: false,
     }
   ]
 };
@@ -547,7 +543,6 @@ const Wende = {
       emojiBeschreibungs: ["🔄"],
       genus: "Feminin",
       deklination: "Stark",
-      isProperNoun: false,
     },
     {
       wortart: "Verb",
