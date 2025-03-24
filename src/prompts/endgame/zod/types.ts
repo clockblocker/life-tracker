@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigkeitSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema } from "./schemas";
+import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigkeitSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema } from "./schemas";
 
 export type Grundform = z.infer<typeof GrundformSchema>;
 export type Nomen = z.infer<typeof NomenSchema>;
@@ -35,3 +35,7 @@ export const Numerus = NumerusSchema.Enum;
 
 export type PronomenType = z.infer<typeof PronomenTypeSchema>;
 export const PronomenType = PronomenTypeSchema.Enum;
+
+export type Morphem = z.infer<typeof MorphemSchema>;
+export const Morphem = MorphemSchema.Enum;
+

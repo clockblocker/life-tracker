@@ -41,6 +41,8 @@ const CommonFeildsSchema = z.object({
     emojiBeschreibungs: z.array(z.string().emoji()), // Describe the common meanings with emojies; Up to 3 emojies per meaning. Aim for less, if possible
 });
 
+const praefix = "Praefix";
+
 const WortartSchema = z.enum([
   "Nomen",
   "Pronomen",
@@ -52,7 +54,7 @@ const WortartSchema = z.enum([
   "Praeposition",
   "Konjunktion",
   "Numerale",
-  "Praefix",
+  praefix,
   "PartizipialesAdjektiv",
   "Redewendung",
   "Interjektion",
@@ -175,6 +177,18 @@ const GrundformSchema = z.discriminatedUnion("wortart", [
 
 const grundformsOutputSchema = z.array(GrundformSchema);
 
+// ---
+
+const MorphemSchema = z.enum([
+  "Zirkumfix",
+  "Konversion",
+  praefix,
+  "Suffix",
+  "Stamm",
+  "Endung",
+  "Fugenelement"
+]);
+
 export {
   grundformsOutputSchema,
   GenusSchema,
@@ -212,6 +226,7 @@ export {
   ConjugationSchema,
   AdjektivDeklinationSchema,
   NomenDeklinationSchema,
+  MorphemSchema,
 };
 
 
