@@ -6,9 +6,12 @@ export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
 
     for (const g1 of grundforms) {
         // Create a composite key that includes both grundform and genus for nouns
+        // For verbs, include regelmaessigkeit in the key
         const key = g1.wortart === Wortart.Nomen 
             ? `${g1.grundform}-${g1.genus}`
-            : g1.grundform;
+            : g1.wortart === Wortart.Verb
+                ? `${g1.grundform}-${g1.regelmaessigkeit}`
+                : g1.grundform;
 
         if (processed.has(key)) continue;
 
@@ -20,7 +23,9 @@ export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
 
             const g2Key = g2.wortart === Wortart.Nomen 
                 ? `${g2.grundform}-${g2.genus}`
-                : g2.grundform;
+                : g2.wortart === Wortart.Verb
+                    ? `${g2.grundform}-${g2.regelmaessigkeit}`
+                    : g2.grundform;
 
             if (processed.has(g2Key)) continue;
 
@@ -30,18 +35,16 @@ export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
             }
         }
 
-        console.log("toMerge", toMerge)
-
         if (toMerge.length > 1) {
             // For nouns, keep separate entries for different genders
             if (g1.wortart === Wortart.Nomen) {
                 merged.push(...toMerge);
+            } else if (g1.wortart === Wortart.Verb) {
+                // For verbs, keep separate entries for different regelmaessigkeit
+                merged.push(...toMerge);
             } else {
                 // For other types, merge emojis
-                console.log("toMerge", toMerge)
                 const mergedEmojis = toMerge.flatMap(g => g.emojiBeschreibungs);
-                console.log("mergedEmojis", mergedEmojis)
-
                 merged.push({
                     ...toMerge[0],
                     emojiBeschreibungs: mergedEmojis
@@ -67,9 +70,9 @@ function canMergeGrundforms<G extends Grundform>(g1: G, g2: G): boolean {
         return true;
     }
 
-    // verb + verb = verb
+    // verb + verb = verb (only if same regelmaessigkeit)
     if (g1.wortart === Wortart.Verb && g2.wortart === Wortart.Verb) {
-        return true;
+        return g1.regelmaessigkeit === g2.regelmaessigkeit;
     }
 
     // verb + PartizipialesAdjektiv = verb
