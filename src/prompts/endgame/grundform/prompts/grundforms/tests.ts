@@ -971,7 +971,7 @@ const sie = {
       emojiBeschreibungs: ["👩"],
       pronomenType: PronomenType.Personal,
       number: [Numerus.Einzahl],
-      genus: [Genus.Feminin],
+      genera: [Genus.Feminin],
     },
     {
       wortart: Wortart.Pronomen,

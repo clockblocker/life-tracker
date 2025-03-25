@@ -79,7 +79,7 @@ const PronomenSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Pronomen),
   pronomenType: PronomenTypeSchema,
   number: z.optional(z.array(NumerusSchema)),
-  genus: z.optional(z.array(GenusSchema)),
+  genera: z.optional(z.array(GenusSchema)),
   ...CommonFeildsSchema.shape,
 });
 
