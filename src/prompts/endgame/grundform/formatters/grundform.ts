@@ -25,5 +25,5 @@ const formattedWortartFromGrundform = (g: Grundform) => {
 };
 
 export const formatGrundform = (g: GrundformsWithMatchStatus, grundformNoteExists: boolean): string => {
-    return `${formatMatchStatus(g)} ${formattedWortartFromGrundform(g)} ${formatEmojiBeschreibungs(g)} ${formatLinkToGrundformNote(g, grundformNoteExists)}`;
+    return [formatMatchStatus(g), formattedWortartFromGrundform(g), formatEmojiBeschreibungs(g), formatLinkToGrundformNote(g, grundformNoteExists)].filter(a => a).join(' ');
 };

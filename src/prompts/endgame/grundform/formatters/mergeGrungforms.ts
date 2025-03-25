@@ -30,13 +30,18 @@ export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
             }
         }
 
+        console.log("toMerge", toMerge)
+
         if (toMerge.length > 1) {
             // For nouns, keep separate entries for different genders
             if (g1.wortart === Wortart.Nomen) {
                 merged.push(...toMerge);
             } else {
                 // For other types, merge emojis
+                console.log("toMerge", toMerge)
                 const mergedEmojis = toMerge.flatMap(g => g.emojiBeschreibungs);
+                console.log("mergedEmojis", mergedEmojis)
+
                 merged.push({
                     ...toMerge[0],
                     emojiBeschreibungs: mergedEmojis

@@ -253,10 +253,22 @@ const trotz = {
     },
     {
       wortart: Wortart.Verb,
-      rechtschreibung: "trotzen",
+      rechtschreibung: "trotz",
       grundform: "trotzen",
       emojiBeschreibungs: ["😤"],
       regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
+    }
+  ]
+};
+
+const trozdem = {
+  "trozdem": [
+    {
+      wortart: Wortart.Adverb,
+      adverbCategory: [AdverbCategory.Modal],
+      rechtschreibung: "trotzdem",
+      grundform: "trotzdem",
+      emojiBeschreibungs: ["💪🔥"]
     }
   ]
 };
@@ -1110,6 +1122,33 @@ const molken = {
   ]
 };
 
+const schleifen = {
+  "schleifen": [
+    {
+      wortart: Wortart.Verb,
+      regelmaessigkeit: Regelmaessigkeit.Regelmaessig,
+      rechtschreibung: "schleifen",
+      grundform: "schleifen",
+      emojiBeschreibungs: ["⚙️✨"]
+    },
+    {
+      wortart: Wortart.Verb,
+      regelmaessigkeit: Regelmaessigkeit.Unregelmaessig,
+      rechtschreibung: "schleifen",
+      grundform: "schleifen",
+      emojiBeschreibungs: ["🚶‍♂️💤"],
+    },
+    {
+      wortart: Wortart.Nomen,
+      rechtschreibung: "Schleifen",
+      grundform: "Schleife",
+      emojiBeschreibungs: ["🎀"],
+      genus: Genus.Feminin,
+      deklination: NomenDeklination.Stark,
+    }
+  ]
+};
+
 export const tests = {
   ...molken,
   ...sie,
@@ -1178,4 +1217,6 @@ export const tests = {
   ...DieKuhIstNunVomEis,
   ...verfall,
   ...derVerfall,
+  ...trozdem,
+  ...schleifen,
 };

@@ -11,6 +11,7 @@ async function endgameInfCase(plugin: TextEaterPlugin, file: TFile, grundforms: 
     
     // First, merge objects based on the rules
     const mergedGrundforms = mergeGrundforms(grundforms);
+    console.log("mergedGrundforms", mergedGrundforms);
 
     // Sort by match status
     mergedGrundforms.sort((a, b) => compareGrundforms(a, b, word));
@@ -39,9 +40,9 @@ async function endgameInfCase(plugin: TextEaterPlugin, file: TFile, grundforms: 
         return acc;
     }, [] as string[]);
 
-    const links = groupedLinks.join("\n");
+    const linksRepr = groupedLinks.join("\n");
     
-    await plugin.fileService.appendToFile(file.path, links);
+    await plugin.fileService.appendToFile(file.path, linksRepr + "\n");
 };
 
 export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, grundforms: Grundform[], word: string): Promise<void> {
