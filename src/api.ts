@@ -19,6 +19,7 @@ export class ApiService {
     }
 
     async generateContent(systemPrompt: string, userInput: string, responseSchema?: boolean): Promise<string> {
+        const startTime = performance.now();
         try {
             let response: string | null = null;
             // Remove leading tab characters from the system prompt
@@ -64,13 +65,20 @@ export class ApiService {
             }
 
             const chatSession = this.chatSessions[chatKey];
+
+            // time it, log to console
             const result = await chatSession.sendMessage(userInput);
             response = result.response.text();
 
             const logResponse = response === null ? "" : response;
+            const endTime = performance.now();
+            const duration = endTime - startTime;
+            console.log(`Generated content for word "${userInput}" in ${duration.toFixed(2)}ms`);
             return logResponse;
         } catch (error: any) {
-            console.error('Error generating content:', error);
+            const endTime = performance.now();
+            const duration = endTime - startTime;
+            console.error(`Error generating content for word "${userInput}" after ${duration.toFixed(2)}ms:`, error);
             throw new Error(error.message);
         }
     }

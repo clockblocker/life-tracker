@@ -39,3 +39,10 @@ export const PronomenType = PronomenTypeSchema.Enum;
 export type Morphem = z.infer<typeof MorphemSchema>;
 export const Morphem = MorphemSchema.Enum;
 
+// ---
+
+export const MatchStatusSchema = z.enum(['ExactMatch', 'Form', 'Misspelling']);
+export const MatchStatus = MatchStatusSchema.Enum;
+export type MatchStatus = z.infer<typeof MatchStatusSchema>;
+
+export type GrundformsWithMatchStatus = Grundform & { matchStatus: MatchStatus };

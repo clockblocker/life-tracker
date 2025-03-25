@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { grundformsOutputSchema } from "../../zod/schemas";
 import { tests } from "./tests";
+import { grundformsOutputSchema } from "prompts/endgame/zod/schemas";
 
 export const makeGrundformsPrompt = () => {
   const instructions = `<agent_background>
@@ -27,7 +27,7 @@ Your task is to generate a valid JSON object for every given word or expression,
   Describe the common meanings with emojis: up to 3 emojis per meaning. Aim for as few as possible while describing the meaning thoroughly. Separate distict meanings in different elements of emojiBeschreibungs array. So for "Der Schloss" it is ["🏰", "🔒"], for leisten it is ["🏆🎯", "💸"], for sitzen it is ["💺"] and for "alles unter einen Hut bringen" it is ["🎩🧩🤹‍♂️"].
 </instructions>`;
 
-const schema = `<schema>
+  const schema = `<schema>
 const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
 const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
 const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
@@ -195,23 +195,23 @@ const grundformsOutputSchema = z.array(GrundformSchema);
 </schema>
 <outputformat>outputformat shall be formattes as grundformsOutputSchema</outputformat>`;
 
-const testsSchema = z.record(grundformsOutputSchema);
-const validationResult = testsSchema.safeParse(tests);
+  const testsSchema = z.record(grundformsOutputSchema);
+  const validationResult = testsSchema.safeParse(tests);
 
-if (!validationResult.success) {
-  console.error("Validation error:", validationResult.error);
-  return "";
-} else {
-  const examplesXML = `<examples>${
-    Object.entries(tests)
-      .map(
-        ([key, value]) =>
-          `<example><note>${key.toLowerCase().trim()}</note><grundforms>${JSON.stringify(
-            value
-          )}</grundforms></example>`
-      )
-      .join("")
-  }</examples>`;
-  return instructions + schema + examplesXML
-}
+  if (!validationResult.success) {
+    console.error("Validation error:", validationResult.error);
+    return "";
+  } else {
+    const examplesXML = `<examples>${
+      Object.entries(tests)
+        .map(
+          ([key, value]) =>
+            `<example><note>${key.toLowerCase().trim()}</note><grundforms>${JSON.stringify(
+              value
+            )}</grundforms></example>`
+        )
+        .join("")
+    }</examples>`;
+    return instructions + schema + examplesXML
+  }
 };
