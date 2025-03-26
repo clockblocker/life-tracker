@@ -1149,6 +1149,58 @@ const schleifen = {
   ]
 };
 
+const mietschuldenfreiheitsbescheinigung = {
+  "mietschuldenfreiheitsbescheinigung": [{
+    "wortart": Wortart.Nomen,
+    "genus": Genus.Feminin,
+    "deklination": NomenDeklination.Stark,
+    "rechtschreibung": "Mietschuldenfreiheitsbescheinigung",
+    "grundform": "Mietschuldenfreiheitsbescheinigung",
+    "emojiBeschreibungs": [
+        "🏠✅📄",
+    ]
+  }]
+};
+
+const arbeitsunfaehigkeitsbescheinigung = {
+  "arbeitsunfaehigkeitsbescheinigung": [{
+    "wortart": Wortart.Nomen,
+    "genus": Genus.Feminin,
+    "deklination": NomenDeklination.Stark,
+    "rechtschreibung": "Arbeitsunfaehigkeitsbescheinigung",
+    "grundform": "Arbeitsunfaehigkeitsbescheinigung",
+    "emojiBeschreibungs": [
+        "🤒🏥📄"
+    ]
+  }]
+};
+
+const bundesverfassungsgericht = {
+  "bundesverfassungsgericht": [{
+    "wortart": Wortart.Nomen,
+    "genus": Genus.Neutrum,
+    "deklination": NomenDeklination.Stark,
+    "rechtschreibung": "Bundesverfassungsgericht",
+    "grundform": "Bundesverfassungsgericht",
+    "emojiBeschreibungs": [
+        "⚖️🏛️📜"
+    ]
+  }]
+};
+
+const bildungsurlaub = {
+  "bildungsurlaub": [{
+    "wortart": Wortart.Nomen,
+    "genus": Genus.Maskulin,
+    "deklination": NomenDeklination.Stark,
+    "rechtschreibung": "Bildungsurlaub",
+    "grundform": "Bildungsurlaub",
+    "emojiBeschreibungs": [
+        "📚🏖️"
+    ]
+  }]
+};
+
 export const tests = {
   ...molken,
   ...sie,
@@ -1219,4 +1271,8 @@ export const tests = {
   ...derVerfall,
   ...trozdem,
   ...schleifen,
+  ...mietschuldenfreiheitsbescheinigung,
+  ...arbeitsunfaehigkeitsbescheinigung,
+  ...bundesverfassungsgericht,
+  ...bildungsurlaub,
 };

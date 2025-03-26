@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigkeitSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema } from "./schemas";
+import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigkeitSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema } from "./schemas";
 
 export type Grundform = z.infer<typeof GrundformSchema>;
 export type Nomen = z.infer<typeof NomenSchema>;
@@ -45,4 +45,15 @@ export const MatchStatusSchema = z.enum(['ExactMatch', 'Form', 'Misspelling']);
 export const MatchStatus = MatchStatusSchema.Enum;
 export type MatchStatus = z.infer<typeof MatchStatusSchema>;
 
-export type GrundformsWithMatchStatus = Grundform & { matchStatus: MatchStatus };
+export type GrundformWithMatchStatus = Grundform & { matchStatus: MatchStatus };
+
+export type GrundformKerl = Pick<Grundform, "grundform" | "wortart">;
+
+export type MorphemKerl = {grundform: string, morphem: Morphem};
+
+export type MorphemAnalysisOutput = z.infer<typeof morphemAnalysisOutputSchema>;
+
+// ---
+
+export type Backlink = {path: string, tags?: string[]};
+export type Block = {repr: string, backlinks: Backlink[]};

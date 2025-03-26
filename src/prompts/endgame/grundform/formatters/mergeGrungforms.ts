@@ -31,34 +31,3 @@ export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
 
     return merged;
 };
-
-// function canMergeGrundforms<G extends Grundform>(g1: G, g2: G): boolean {
-//     // adj + adj = adj
-//     if (g1.wortart === Wortart.Adjektiv && g2.wortart === Wortart.Adjektiv) {
-//         return true;
-//     }
-
-//     // adj + adv = adj
-//     if ((g1.wortart === Wortart.Adjektiv && g2.wortart === Wortart.Adverb) ||
-//         (g1.wortart === Wortart.Adverb && g2.wortart === Wortart.Adjektiv)) {
-//         return true;
-//     }
-
-//     // verb + verb = verb (merge all verbs with same grundform, case-insensitive)
-//     if (g1.wortart === Wortart.Verb && g2.wortart === Wortart.Verb) {
-//         return g1.grundform.toLowerCase() === g2.grundform.toLowerCase();
-//     }
-
-//     // verb + PartizipialesAdjektiv = verb
-//     if ((g1.wortart === Wortart.Verb && g2.wortart === Wortart.PartizipialesAdjektiv) ||
-//         (g1.wortart === Wortart.PartizipialesAdjektiv && g2.wortart === Wortart.Verb)) {
-//         return true;
-//     }
-
-//     // nom + nom (if the same gender)
-//     if (g1.wortart === Wortart.Nomen && g2.wortart === Wortart.Nomen) {
-//         return g1.genus === g2.genus;
-//     }
-
-//     return false;
-// };

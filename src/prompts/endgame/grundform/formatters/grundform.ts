@@ -1,4 +1,4 @@
-import { Genus, Nomen, Grundform, Wortart, GrundformsWithMatchStatus } from "prompts/endgame/zod/types";
+import { Genus, Nomen, Grundform, Wortart, GrundformWithMatchStatus } from "prompts/endgame/zod/types";
 import { formatLinkToGrundformNote } from "./link";
 import { formatMatchStatus } from "./match";
 
@@ -24,6 +24,6 @@ const formattedWortartFromGrundform = (g: Grundform) => {
     return `*${w}*`
 };
 
-export const formatGrundform = (g: GrundformsWithMatchStatus, grundformNoteExists: boolean): string => {
+export const formatGrundform = (g: GrundformWithMatchStatus, grundformNoteExists: boolean): string => {
     return [formatMatchStatus(g), formattedWortartFromGrundform(g), formatEmojiBeschreibungs(g), formatLinkToGrundformNote(g, grundformNoteExists)].filter(a => a).join(' ');
 };

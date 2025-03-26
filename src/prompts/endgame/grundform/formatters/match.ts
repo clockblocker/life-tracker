@@ -1,4 +1,4 @@
-import { Grundform, GrundformsWithMatchStatus, MatchStatus, Wortart } from "../../zod/types";
+import { Grundform, GrundformWithMatchStatus, MatchStatus, Wortart } from "../../zod/types";
 
 export function getMatchStatus(g: Grundform, word: string): MatchStatus {
     const grundformLower = g.grundform.toLowerCase();
@@ -27,7 +27,7 @@ export const reprFromMatchStatus: Record<MatchStatus, string>  = {
     [MatchStatus.Misspelling]: 'A misspelling of',
 };
 
-export const formatMatchStatus = ({ wortart, matchStatus }: GrundformsWithMatchStatus) => {
+export const formatMatchStatus = ({ wortart, matchStatus }: GrundformWithMatchStatus) => {
     const repr = wortart === Wortart.Unbekannt ? "" : reprFromMatchStatus[matchStatus];
     return repr ? `*${repr}*` : repr;
 };

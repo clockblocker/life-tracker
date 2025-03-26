@@ -10,6 +10,7 @@ import { C1_RICHTER_PROMPT_V2 } from "./wip/c1RichterCorrectedDECorrectionFirst"
 import { C1_RICHTER_PROMPT_V1 } from "./wip/c1RichterCorrectedDE";
 import { morphems2 } from "./wip/morphems2";
 import { baseDict2 } from "./wip/baseDict2";
+import { makeEndgameMorhpemsPrompt } from "./endgame/grundform/prompts/morphems/morphemsPrompt";
 
 export const prompts = {
    generate_dictionary_entry: baseDict2,
@@ -22,4 +23,7 @@ export const prompts = {
    c1Richter: C1_RICHTER_PROMPT_V1,
    c1Richter2: C1_RICHTER_PROMPT_V2,
    generate_valence_block,
+   endgame: {
+      morphems: makeEndgameMorhpemsPrompt(),
+   }
 };
