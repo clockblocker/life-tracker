@@ -48,6 +48,8 @@ async function endgameNoteCase(plugin: TextEaterPlugin, file: TFile, grundforms:
 
     const notExactMatches = grundforms.filter(g => g.matchStatus !== MatchStatus.ExactMatch);
     const links = await endgameLinkCase(plugin, file, notExactMatches);
+
+    console.log('blocks', blocks)
     
     return blocks.map(({repr}) => repr).join('\n\n---\n') + links + '\n';
 };
