@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigkeitSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema } from "./schemas";
+import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigkeitSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema, SteigerungsfaehigkeitSchema, VergleichsgradSchema } from "./schemas";
 
 export type Grundform = z.infer<typeof GrundformSchema>;
 export type Nomen = z.infer<typeof NomenSchema>;
@@ -38,6 +38,13 @@ export const PronomenType = PronomenTypeSchema.Enum;
 
 export type Morphem = z.infer<typeof MorphemSchema>;
 export const Morphem = MorphemSchema.Enum;
+
+// ---
+export type Steigerungsfaehigkeit = z.infer<typeof SteigerungsfaehigkeitSchema>;
+export const Steigerungsfaehigkeit = SteigerungsfaehigkeitSchema.Enum;
+
+export type Vergleichsgrad = z.infer<typeof VergleichsgradSchema>;
+export const Vergleichsgrad = VergleichsgradSchema.Enum;
 
 // ---
 

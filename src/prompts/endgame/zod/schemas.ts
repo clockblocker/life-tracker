@@ -16,6 +16,7 @@ const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+
 const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 
 const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
@@ -192,7 +193,22 @@ const morphemAnalysisOutputSchema = z.object({
   "zusammengesetztAus": z.optional(z.array(z.record(z.string(), WortartSchema)),),
 });
 
+const SteigerungsfaehigkeitSchema = z.enum(["Steigerungsfaehig", "Unsteigerungsfaehig"]);
+const VergleichsgradSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
+
+const AdjektivOutputSchema = z.array(z.object({
+  "adjektivstamm": z.object({
+    [VergleichsgradSchema.enum.Positiv]: z.string(),
+    [VergleichsgradSchema.enum.Komparativ]: z.string().optional(),
+    [VergleichsgradSchema.enum.Superlativ]: z.string().optional(),
+  }),
+  "regelmaessigkeit": RegelmaessigkeitSchema,
+  "steigerungsfaehigkeit": SteigerungsfaehigkeitSchema,
+}));
+
 export {
+  SteigerungsfaehigkeitSchema,
+  VergleichsgradSchema,
   grundformsOutputSchema,
   GenusSchema,
   KasusSchema,
@@ -231,6 +247,7 @@ export {
   NomenDeklinationSchema,
   MorphemSchema,
   morphemAnalysisOutputSchema,
+  AdjektivOutputSchema,
 };
 
 
