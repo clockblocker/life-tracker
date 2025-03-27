@@ -59,7 +59,8 @@ export default class TextEaterPlugin extends Plugin {
             editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
                 if (view.file) {
                     if (!checking) {
-                        endgame(this, editor, view.file)
+                        fillTemplate(this, editor, view.file);
+                        // endgame(this, editor, view.file)
                     }
                     return true;
                 }

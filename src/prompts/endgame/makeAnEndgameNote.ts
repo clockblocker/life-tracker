@@ -1,6 +1,6 @@
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
-import { doesGrundformNoteExist } from "./grundform/formatters/link";
+import { grundformNotePath } from "./grundform/formatters/link";
 import { compareGrundforms, getMatchStatus } from "./grundform/formatters/match";
 import { mergeGrundforms } from "./grundform/formatters/mergeGrungforms";
 import { Block, Grundform, GrundformWithMatchStatus, MatchStatus } from "./zod/types";
@@ -15,8 +15,8 @@ async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms:
     mergedGrundforms.sort((a, b) => compareGrundforms(a, b, word));
 
     const linksPromises = mergedGrundforms.map(async (g) => {
-        const exists = await doesGrundformNoteExist(plugin, file, g);
-        return formatGrundform(g, exists);
+        const path = await grundformNotePath(plugin, file, g);
+        return formatGrundform(g, path);
     });
 
     const formattedLinks = await Promise.all(linksPromises);

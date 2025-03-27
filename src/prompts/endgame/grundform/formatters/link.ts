@@ -1,21 +1,21 @@
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
-import { Grundform, GrundformKerl, MorphemKerl, Wortart } from "prompts/endgame/zod/types";
+import { GrundformKerl, MorphemKerl, Wortart } from "prompts/endgame/zod/types";
 
-export async function doesGrundformNoteExist(plugin: TextEaterPlugin, file: TFile, g: GrundformKerl) {
+export async function grundformNotePath(plugin: TextEaterPlugin, file: TFile, g: GrundformKerl) {
     const targetFile = plugin.app.metadataCache.getFirstLinkpathDest(g.grundform, file.path);
-    return !!targetFile;
+    return targetFile ? targetFile.path : null;
 }
 
 export const grundformWortartFromGrundform = (g: GrundformKerl) => {
     return g.wortart === Wortart.PartizipialesAdjektiv ? Wortart.Verb : g.wortart;
 };
 
-export const getPathToGrundformNote = (g: GrundformKerl, noteForGrundformIsAlreadyCreated: boolean) => {
-    const ok = noteForGrundformIsAlreadyCreated;
+export const getPathToGrundformNote = (g: GrundformKerl, grundformNotePath: string | null) => {
+    const ok = grundformNotePath !== null;
 
     if (g.grundform.length < 2) {
-        return ok ? `${g.grundform}` : "";
+        return ok ? `${grundformNotePath}|${g.grundform}` : "";
     }
 
     switch (g.wortart) {
@@ -34,7 +34,7 @@ export const getPathToGrundformNote = (g: GrundformKerl, noteForGrundformIsAlrea
         case Wortart.Artikel:
             return `Grammatik/${g.wortart}/List/${g.grundform} (${g.wortart})`;
         default:
-            return ok ? `${g.grundform}` : `Worter/Grundform/${grundformWortartFromGrundform(g)}/${g.grundform[0]}/${g.grundform[1]}/${g.grundform}`
+            return ok ? `${grundformNotePath}|${g.grundform}` : `Worter/Grundform/${grundformWortartFromGrundform(g)}/${g.grundform[0]}/${g.grundform[1]}/${g.grundform}`
 }};
 
 export function formatPathToGrundformNoteAsLink<G extends {grundform: string}>(g: G, path: string) {
@@ -46,15 +46,15 @@ export function formatPathToGrundformNoteAsLink<G extends {grundform: string}>(g
     return `[[${path}|${g.grundform}]]`
 };
 
-export async function formatLinkToGrundformNote(g: GrundformKerl, noteForGrundformIsAlreadyCreated: boolean) {
-    const path = await getPathToGrundformNote(g, noteForGrundformIsAlreadyCreated);
+export async function formatLinkToGrundformNote(g: GrundformKerl, grundformNotePath: string | null) {
+    const path = await getPathToGrundformNote(g, grundformNotePath);
     return formatPathToGrundformNoteAsLink(g, path);
 };
 
 export async function getPathsToGrundformNotes(plugin: TextEaterPlugin, file: TFile, kerls: GrundformKerl[]) {
     const pathsPromises = kerls.map(async (g) => {
-        const exists = await doesGrundformNoteExist(plugin, file, g);
-        return getPathToGrundformNote(g, exists);
+        const grundformPath = await grundformNotePath(plugin, file, g);
+        return getPathToGrundformNote(g, grundformPath);
     });
 
     return await Promise.all(pathsPromises);
