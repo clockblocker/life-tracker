@@ -19,9 +19,9 @@ Your role is to provide detailed morphemic analyses of German words. Decompose w
 
   const schema = `<schema>
 import { z } from "zod";
-const SteigerungsfaehigkeitSchema = z.enum(["Steigerungsfaehig", "Nicht steigerungsfaehig"]);
+const SteigerungsfaehigSchema = z.enum(["Steigerungsfaehig", "Nicht steigerungsfaehig"]);
 const VergleichsgradSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
-const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+const RegelmaessigSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
 
 const AdjektivOutputSchema = z.array(z.object({
   "adjektivstamm": z.object({
@@ -29,8 +29,8 @@ const AdjektivOutputSchema = z.array(z.object({
     [VergleichsgradSchema.enum.Komparativ]: z.string().optional(),
     [VergleichsgradSchema.enum.Superlativ]: z.string().optional(),
   }),
-  "regelmaessigkeit": RegelmaessigkeitSchema,
-  "steigerungsfaehigkeit": SteigerungsfaehigkeitSchema,
+  "regelmaessig": RegelmaessigSchema,
+  "steigerungsfaehig": SteigerungsfaehigSchema,
 }));
 
 </schema>

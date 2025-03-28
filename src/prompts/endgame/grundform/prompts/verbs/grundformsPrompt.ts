@@ -33,7 +33,7 @@ const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
 const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
-const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+const RegelmaessigSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
 const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 
 const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
@@ -102,7 +102,7 @@ const PronomenSchema = z.object({
 const VerbSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Verb),
   trennbarkeit: z.optional(TrennbarkeitSchema),
-  regelmaessigkeit: RegelmaessigkeitSchema,
+  regelmaessig: RegelmaessigSchema,
   ...CommonFeildsSchema.shape,
 });
 

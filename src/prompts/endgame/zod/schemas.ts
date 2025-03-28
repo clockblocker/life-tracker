@@ -10,12 +10,12 @@ const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 
 // ---
 
-const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
-const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
+const KasusSchema = z.enum(["N", "G", "D", "A"]); // ["Nominativ", "Genitiv", "Dativ", "Akkusativ"]
+const GenusSchema = z.enum(["F", "M", "N"]); // ["Feminin", "Maskulin", "Neutrum"]
 const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
-const RegelmaessigkeitSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
+const RegelmaessigSchema = z.boolean(); // "Regelmaessig", "Unregelmaessig"
 
 const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
 
@@ -85,7 +85,7 @@ const PronomenSchema = z.object({
 const VerbSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Verb),
   trennbarkeit: z.optional(TrennbarkeitSchema),
-  regelmaessigkeit: RegelmaessigkeitSchema,
+  regelmaessig: RegelmaessigSchema,
   ...CommonFeildsSchema.shape,
 });
 
@@ -193,7 +193,7 @@ const morphemAnalysisOutputSchema = z.object({
   "zusammengesetztAus": z.optional(z.array(z.record(z.string(), WortartSchema)),),
 });
 
-const SteigerungsfaehigkeitSchema = z.enum(["Steigerungsfaehig", "Unsteigerungsfaehig"]);
+const SteigerungsfaehigSchema = z.boolean(); // "Steigerungsfaehig", "Unsteigerungsfaehig"
 const VergleichsgradSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 
 const AdjektivOutputSchema = z.array(z.object({
@@ -202,12 +202,12 @@ const AdjektivOutputSchema = z.array(z.object({
     [VergleichsgradSchema.enum.Komparativ]: z.string().optional(),
     [VergleichsgradSchema.enum.Superlativ]: z.string().optional(),
   }),
-  "regelmaessigkeit": RegelmaessigkeitSchema,
-  "steigerungsfaehigkeit": SteigerungsfaehigkeitSchema,
+  "regelmaessig": RegelmaessigSchema,
+  "steigerungsfaehig": SteigerungsfaehigSchema,
 }));
 
 export {
-  SteigerungsfaehigkeitSchema,
+  SteigerungsfaehigSchema,
   VergleichsgradSchema,
   grundformsOutputSchema,
   GenusSchema,
@@ -241,7 +241,7 @@ export {
   VergleichsformSchema,
   VerbFormTagSchema,
   FormSchema,
-  RegelmaessigkeitSchema,
+  RegelmaessigSchema,
   ConjugationSchema,
   AdjektivDeklinationSchema,
   NomenDeklinationSchema,
@@ -254,5 +254,4 @@ export {
 // canBeRexlexiv: z.optional(z.boolean()),
 // verbForms: z.array(z.array(z.string())),
 // notableGoverningPrepositions: z.optional(z.array(GoverningPrepositionSchema)),
-
 // numeraleType: z.array(NumeraleTypeSchema),

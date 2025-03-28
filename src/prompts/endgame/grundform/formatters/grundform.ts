@@ -3,9 +3,9 @@ import { formatLinkToGrundformNote } from "./link";
 import { formatMatchStatus } from "./match";
 
 const articleFromGenus = {
-    [Genus.Feminin]: "die",
-    [Genus.Neutrum]: "das",
-    [Genus.Maskulin]: "der",
+    [Genus.F]: "die",
+    [Genus.N]: "das",
+    [Genus.M]: "der",
 };
 
 const formatNomGenus = ({genus: g}: Nomen) => {

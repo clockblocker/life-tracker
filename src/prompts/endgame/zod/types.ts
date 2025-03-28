@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigkeitSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema, SteigerungsfaehigkeitSchema, VergleichsgradSchema } from "./schemas";
+import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema, SteigerungsfaehigSchema, VergleichsgradSchema } from "./schemas";
 
 export type Grundform = z.infer<typeof GrundformSchema>;
 export type Nomen = z.infer<typeof NomenSchema>;
@@ -12,8 +12,8 @@ export const Genus = GenusSchema.Enum;
 export type Kasus = z.infer<typeof KasusSchema>;
 export const Kasus = KasusSchema.Enum;
 
-export type Regelmaessigkeit = z.infer<typeof RegelmaessigkeitSchema>;
-export const Regelmaessigkeit = RegelmaessigkeitSchema.Enum;
+export type Regelmaessigkeit = z.infer<typeof RegelmaessigSchema>;
+export const Regelmaessigkeit = RegelmaessigSchema.Enum;
 
 export type Trennbarkeit = z.infer<typeof TrennbarkeitSchema>;
 export const Trennbarkeit = TrennbarkeitSchema.Enum;
@@ -40,8 +40,8 @@ export type Morphem = z.infer<typeof MorphemSchema>;
 export const Morphem = MorphemSchema.Enum;
 
 // ---
-export type Steigerungsfaehigkeit = z.infer<typeof SteigerungsfaehigkeitSchema>;
-export const Steigerungsfaehigkeit = SteigerungsfaehigkeitSchema.Enum;
+export type Steigerungsfaehigkeit = z.infer<typeof SteigerungsfaehigSchema>;
+export const Steigerungsfaehigkeit = SteigerungsfaehigSchema.Enum;
 
 export type Vergleichsgrad = z.infer<typeof VergleichsgradSchema>;
 export const Vergleichsgrad = VergleichsgradSchema.Enum;
