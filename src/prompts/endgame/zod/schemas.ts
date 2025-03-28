@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const VergleichsformSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 const VerbFormTagSchema = z.enum(["Praesens", "Praeteritum", "Perfekt", "Imperativ", "K1", "K2", "P1", "P2", "ZuInfinitiv"]);
@@ -11,7 +11,6 @@ const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 // ---
 
 const KasusSchema = z.enum(["N", "G", "D", "A"]); // ["Nominativ", "Genitiv", "Dativ", "Akkusativ"]
-const GenusSchema = z.enum(["F", "M", "N"]); // ["Feminin", "Maskulin", "Neutrum"]
 const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
@@ -36,8 +35,18 @@ const PronomenTypeSchema = z.enum([
   "Quantifikativ",
 ]);
 
-const CommonFeildsSchema = z.object({
-    rechtschreibung: z.string(),
+const GoverningPrepositionSchema = z.enum([
+  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
+  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
+  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
+]);
+
+// ---
+const MatchSchema = z.enum(["Grundform", "Flexion", "Tippfehler", "Unbekannt"]);
+
+const GenusSchema = z.enum(["F", "M", "N"]); // ["Feminin", "Maskulin", "Neutrum"]
+
+const CommonGrundformsFeildsSchema = z.object({
     grundform: z.string(),
     emojiBeschreibungs: z.array(z.string().emoji()), // Describe the common meanings with emojies; Up to 3 emojies per meaning. Aim for less, if possible
 });
@@ -54,127 +63,110 @@ const WortartSchema = z.enum([
   "Konjunktion",
   "Numerale",
   "Praefix",
-  "PartizipialesAdjektiv",
   "Redewendung",
   "Interjektion",
   "Unbekannt"
 ]);
 
-const GoverningPrepositionSchema = z.enum([
-  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
-  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
-  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
-]);
-
-const NomenSchema = z.object({
+const NomenGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Nomen),
   genus: GenusSchema,
-  deklination: NomenDeklinationSchema,
   eigenname: z.optional(z.boolean()),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PronomenSchema = z.object({
+const PronomenGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Pronomen),
-  pronomenType: PronomenTypeSchema,
-  number: z.optional(z.array(NumerusSchema)),
-  genera: z.optional(z.array(GenusSchema)),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const VerbSchema = z.object({
+const VerbGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Verb),
-  trennbarkeit: z.optional(TrennbarkeitSchema),
-  regelmaessig: RegelmaessigSchema,
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const AdjektivSchema = z.object({
+const AdjektivGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adjektiv),
-  ...CommonFeildsSchema.shape,
-});
-  
-const PartizipVariantSchema = z.enum(["P1", "P2"]);
-const PartizipialesAdjektivSchema = AdjektivSchema.omit({ wortart: true }).extend({
-  wortart: z.literal(WortartSchema.Enum.PartizipialesAdjektiv),
-  partizipVariant: PartizipVariantSchema,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const AdverbSchema = z.object({
+const AdverbGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adverb),
-  adverbCategory: z.array(AdverbCategorySchema),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const ArtikelSchema = z.object({
+const ArtikelGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Artikel),
-  artikelType: ArtikelTypeSchema,
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PartikelSchema = z.object({
+const PartikelGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Partikel),
-  partikelType: z.array(PartikelTypeSchema),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const KonjunktionSchema = z.object({
+const KonjunktionGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Konjunktion),
-  konjunktionType: KonjunktionTypeSchema,
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PraepositionSchema = z.object({
+const PraepositionGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Praeposition),
-  possibleGoverningKasuss: z.optional(z.array(KasusSchema)),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const NumeraleSchema = z.object({
+const NumeraleGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Numerale),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PraefixSchema = z.object({
+const PraefixGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Praefix),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const InterjektionSchema = z.object({
+const InterjektionGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Interjektion),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const RedewendungSchema = z.object({
+const RedewendungGrundformSchema = z.object({
     wortart: z.literal(WortartSchema.Enum.Redewendung),
-    ...CommonFeildsSchema.shape,
+    ...CommonGrundformsFeildsSchema.shape,
 });
 
-const UnbekanntSchema = z.object({
+const UnbekanntGrundformSchema = z.object({
     wortart: z.literal(WortartSchema.Enum.Unbekannt),
     comment: z.string(),
-    ...CommonFeildsSchema.shape,
+    ...CommonGrundformsFeildsSchema.shape,
 });
 
 const GrundformSchema = z.discriminatedUnion("wortart", [
-  NomenSchema,
-  PronomenSchema,
-  VerbSchema,
-  AdjektivSchema,
-  AdverbSchema,
-  ArtikelSchema,
-  PartikelSchema,
-  KonjunktionSchema,
-  PraepositionSchema,
-  NumeraleSchema,
-  PraefixSchema,
-  InterjektionSchema,
-  PartizipialesAdjektivSchema,
-  RedewendungSchema,
-  UnbekanntSchema,
+  NomenGrundformSchema,
+  PronomenGrundformSchema,
+  VerbGrundformSchema,
+  AdjektivGrundformSchema,
+  AdverbGrundformSchema,
+  ArtikelGrundformSchema,
+  PartikelGrundformSchema,
+  KonjunktionGrundformSchema,
+  PraepositionGrundformSchema,
+  NumeraleGrundformSchema,
+  PraefixGrundformSchema,
+  InterjektionGrundformSchema,
+  RedewendungGrundformSchema,
+  UnbekanntGrundformSchema,
 ]);
 
-const grundformsOutputSchema = z.array(GrundformSchema);
+const grundformsOutputSchema = z.object({
+  [MatchSchema.enum.Grundform]: GrundformSchema.array().optional(), 
+  [MatchSchema.enum.Flexion]: GrundformSchema.array().optional(),
+  [MatchSchema.enum.Tippfehler]: GrundformSchema.array().optional(), 
+  [MatchSchema.enum.Unbekannt]: UnbekanntGrundformSchema.array().optional(), 
+}).refine(
+  data => Object.values(data).some(value => value !== undefined),
+  { message: "Mindestens ein Feld muss definiert sein" }
+);
 
 // ---
 
@@ -213,31 +205,29 @@ export {
   GenusSchema,
   KasusSchema,
   WortartSchema,
-  NomenSchema,
+  NomenGrundformSchema,
   PronomenTypeSchema,
   NumerusSchema,
-  PronomenSchema,
+  PronomenGrundformSchema,
   TrennbarkeitSchema,
   GoverningPrepositionSchema,
-  VerbSchema,
-  AdjektivSchema,
-  PartizipVariantSchema,
-  PartizipialesAdjektivSchema,
+  VerbGrundformSchema,
+  AdjektivGrundformSchema,
   AdverbCategorySchema,
-  AdverbSchema,
+  AdverbGrundformSchema,
   ArtikelTypeSchema,
-  ArtikelSchema,
+  ArtikelGrundformSchema,
   PartikelTypeSchema,
-  PartikelSchema,
+  PartikelGrundformSchema,
   KonjunktionTypeSchema,
-  KonjunktionSchema,
-  PraepositionSchema,
+  KonjunktionGrundformSchema,
+  PraepositionGrundformSchema,
   NumeraleTypeSchema,
-  NumeraleSchema,
-  PraefixSchema,
-  InterjektionSchema,
+  NumeraleGrundformSchema,
+  PraefixGrundformSchema,
+  InterjektionGrundformSchema,
   GrundformSchema,
-  RedewendungSchema,
+  RedewendungGrundformSchema,
   VergleichsformSchema,
   VerbFormTagSchema,
   FormSchema,
@@ -248,6 +238,7 @@ export {
   MorphemSchema,
   morphemAnalysisOutputSchema,
   AdjektivOutputSchema,
+  MatchSchema,
 };
 
 

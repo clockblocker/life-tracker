@@ -1,6 +1,6 @@
-import { Genus, Nomen, Grundform, Wortart, GrundformWithMatchStatus } from "prompts/endgame/zod/types";
+import { Genus, Nomen, Grundform, Wortart, GrundformWithMatch } from "prompts/endgame/zod/types";
 import { formatLinkToGrundformNote } from "./link";
-import { formatMatchStatus } from "./match";
+import { formatMatch } from "./match";
 
 const articleFromGenus = {
     [Genus.F]: "die",
@@ -18,12 +18,10 @@ const formattedWortartFromGrundform = (g: Grundform) => {
     const w = g.wortart;
     if (w === Wortart.Nomen) {
         return formatNomGenus(g)
-    } else if (w === Wortart.PartizipialesAdjektiv) {
-        return `*${Wortart.Verb}*`
-    }
+    } 
     return `*${w}*`
 };
 
-export const formatGrundform = (g: GrundformWithMatchStatus, grundformNotePath: string | null): string => {
-    return [formatMatchStatus(g), formattedWortartFromGrundform(g), formatEmojiBeschreibungs(g), formatLinkToGrundformNote(g, grundformNotePath)].filter(a => a).join(' ');
+export const formatGrundform = (g: GrundformWithMatch, grundformNotePath: string | null): string => {
+    return [formatMatch(g), formattedWortartFromGrundform(g), formatEmojiBeschreibungs(g), formatLinkToGrundformNote(g, grundformNotePath)].filter(a => a).join(' ');
 };

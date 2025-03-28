@@ -388,7 +388,7 @@ const umfaren = {
 const geoffnet = {
   "geoffnet": [
     {
-      wortart: Wortart.PartizipialesAdjektiv,
+      wortart: Wortart.Verb,
       rechtschreibung: "geöffnet",
       grundform: "öffnen",
       emojiBeschreibungs: ["🚪👐"],
@@ -407,13 +407,13 @@ const verfallen = {
       trennbarkeit: Trennbarkeit.Untrennbar,
       regelmaessig: false,
     },
-    {
-      wortart: Wortart.PartizipialesAdjektiv,
-      rechtschreibung: "verfallen",
-      grundform: "verfallen",
-      emojiBeschreibungs: ["🏚️"],
-      partizipVariant: PartizipVariant.P2,
-    }
+    // {
+    //   wortart: Wortart.PartizipialesAdjektiv,
+    //   rechtschreibung: "verfallen",
+    //   grundform: "verfallen",
+    //   emojiBeschreibungs: ["🏚️"],
+    //   partizipVariant: PartizipVariant.P2,
+    // }
   ]
 };
 
@@ -576,13 +576,13 @@ const gefallen = {
       trennbarkeit: Trennbarkeit.Untrennbar,
       regelmaessig: false,
     },
-    {
-      wortart: Wortart.PartizipialesAdjektiv,
-      rechtschreibung: "gefallen",
-      grundform: "gefallen",
-      emojiBeschreibungs: ["👍"],
-      partizipVariant: PartizipVariant.P2,
-    }
+    // {
+    //   wortart: Wortart.PartizipialesAdjektiv,
+    //   rechtschreibung: "gefallen",
+    //   grundform: "gefallen",
+    //   emojiBeschreibungs: ["👍"],
+    //   partizipVariant: PartizipVariant.P2,
+    // }
   ]
 };
 

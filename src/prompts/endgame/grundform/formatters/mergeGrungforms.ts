@@ -10,11 +10,7 @@ export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
     const m = new Map(grundforms.map(g => [keyFromGrundform(g), {...g, emojiBeschreibungs: [] as string[]}]));
     for (let g of grundforms) {
         const k = keyFromGrundform(g);
-        if (g.wortart === Wortart.PartizipialesAdjektiv) {
-            if (m.has(`${Wortart.Verb}-`)) {
-                continue;
-            }
-        } else if (g.wortart === Wortart.Adverb) {
+        if (g.wortart === Wortart.Adverb) {
             if (m.has(`${Wortart.Adjektiv}-`)) {
                 continue;
             }

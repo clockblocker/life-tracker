@@ -71,7 +71,6 @@ const WortartSchema = z.enum([
   "Konjunktion",
   "Numerale",
   "Praefix",
-  "PartizipialesAdjektiv",
   "Redewendung",
   "Interjektion",
   "Unbekannt"
@@ -109,12 +108,6 @@ const VerbSchema = z.object({
 const AdjektivSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adjektiv),
   ...CommonFeildsSchema.shape,
-});
-  
-const PartizipVariantSchema = z.enum(["P1", "P2"]);
-const PartizipialesAdjektivSchema = AdjektivSchema.omit({ wortart: true }).extend({
-  wortart: z.literal(WortartSchema.Enum.PartizipialesAdjektiv),
-  partizipVariant: PartizipVariantSchema,
 });
 
 const AdverbSchema = z.object({
@@ -186,7 +179,6 @@ const GrundformSchema = z.discriminatedUnion("wortart", [
   NumeraleSchema,
   PraefixSchema,
   InterjektionSchema,
-  PartizipialesAdjektivSchema,
   RedewendungSchema,
   UnbekanntSchema,
 ]);

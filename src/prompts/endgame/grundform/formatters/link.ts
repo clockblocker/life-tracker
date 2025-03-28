@@ -8,7 +8,7 @@ export async function grundformNotePath(plugin: TextEaterPlugin, file: TFile, g:
 }
 
 export const grundformWortartFromGrundform = (g: GrundformKerl) => {
-    return g.wortart === Wortart.PartizipialesAdjektiv ? Wortart.Verb : g.wortart;
+    return g.wortart;
 };
 
 export const getPathToGrundformNote = (g: GrundformKerl, grundformNotePath: string | null) => {

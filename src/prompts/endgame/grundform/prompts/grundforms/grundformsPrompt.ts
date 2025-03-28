@@ -11,50 +11,25 @@ export const makeGrundformsPrompt = () => {
 </agent_role>
 <instructions>
 Your task is to generate a valid JSON object for every given word or expression, strictly following the provided JSON schema. The input might contain errors and is case-insencitive. The output shall not contain mistakes and is case-sencitive. Beyond simply assigning schema fields, incorporate your deep understanding of German language intricacies:
+  - The note is case insensitive (e.g., a valid grundform of "sie" is "Sie").
   - If a note contains more than one word, try to look for a separable verb, or a well-known idiom inside (like "ich rufe an" contains "anrufen", or "sie sind ganz und gar normal" contains "ganz und gar"). If there are no known idioms separable verbs fallback to the "Unbekannt" case.
-  - The note might contain small errors and is case insensitive (e.g., a valid grundform of "sie" is "Sie").
-  - If the word in the note contains too many mistakes for unambiguous recognition (e.g., "augeben" can be "ausgeben" or "aufgeben"), fallback to the "Unbekannt" case.
   - If the word can be recognized as a form of multiple parts of speech, make an object for each one (e.g., "molken" can be a past form of the irregular version of the verb "melken," or a plural form of the feminine noun "Molke") - make a separate object for each one.
   - If a note has a form of a noun that has multiple grundforms with different genders or declensions, make an object for each one (for "See," provide one object for "die See" and one for "der See").
   - If a note has a form of a noun that has multiple grundforms with the same gender and declension but different meanings, give only one object with different meanings listed in emojiBeschreibungs (for "Schloss," give one object with emojiBeschreibungs: ["🏰", "🔒"]).
-  - If a note has a correctly spelled grunform of a verb that has multiple grundforms with different separabilities or conjugation patterns, make an object for each one (for "melken," give one object for the regular variant and one for the irregular variant).
-  - If a note has a correctly spelled grunform of a verb that has multiple grundforms with the same separability and conjugation but different meanings, give only one object with different meanings listed in emojiBeschreibungs (for "leisten," give one object with emojiBeschreibungs: ["🏆🎯", "💸"]).
-  - If a note has a form of a verb that has multiple grundforms with different separabilities or conjugation patterns, give one grundform object with difrent meanings listet in one emojiBeschreibungs
+  - If a note has a form of a verb that has multiple grundforms with different separabilities or conjugation patterns, give one grundform object with difrent meanings listed in one emojiBeschreibungs
   - It is very important to list ALL the possible grundforms of a verb (if there are multiple): both for separable and untrennbar forms, as well as for regular and irregular conjugations.
-  - Any potential spelling or declension errors in the input should be corrected in the "rechtschreibung" field, while the "grundform" field must always contain the standard base form as found in authoritative sources.
-  - If the note is ambiguous beyond recognition, output a single object with "wortart" set to "Unbekannt" and include a "comment" explaining the ambiguity.
+  
+  - The note might contain small errors ONLY IF there are no 
+  - If the word in the note contains too many mistakes for unambiguous recognition (e.g., "augeben" can be "ausgeben" or "aufgeben"), fallback to the "Unbekannt" case.
+  - If the note is ambiguous beyond recognition, fallback to "Unbekannt" and include a "comment" explaining the ambiguity.
   - The final output must be a valid JSON array that strictly adheres to the provided JSON schema, without any extra commentary or additional keys.
   Describe the common meanings with emojis: up to 3 emojis per meaning. Aim for as few as possible while describing the meaning thoroughly. Separate distict meanings in different elements of emojiBeschreibungs array. So for "Der Schloss" it is ["🏰", "🔒"], for leisten it is ["🏆🎯", "💸"], for sitzen it is ["💺"] and for "alles unter einen Hut bringen" it is ["🎩🧩🤹‍♂️"].
 </instructions>`;
 
   const schema = `<schema>
-const KasusSchema = z.enum(["Nominativ", "Genitiv", "Dativ", "Akkusativ"]);
-const GenusSchema = z.enum(["Feminin", "Maskulin", "Neutrum"]);
-const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
+const GenusSchema = z.enum(["F", "M", "N"]); // ["Feminin", "Maskulin", "Neutrum"]
 
-const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
-const RegelmaessigSchema = z.enum(["Regelmaessig", "Unregelmaessig"]);
-const TrennbarkeitSchema = z.enum(["Trennbar", "Untrennbar"]);
-
-const AdverbCategorySchema = z.enum(["Lokal", "Temporal", "Modal", "Kausal", "Grad"]);
-const ArtikelTypeSchema = z.enum(["Bestimmt", "Unbestimmt"]);
-const PartikelTypeSchema = z.enum(["Intensität", "Fokus", "Negation", "Abtönung", "Konnektiv"]);
-const NumeraleTypeSchema = z.enum(["Grundzahl", "Ordnungszahl", "Bruchzahl", "Multiplikativ", "Kollektiv"]);
-const KonjunktionTypeSchema = z.enum(["Koordinierend", "Subordinierend"]);
-
-const PronomenTypeSchema = z.enum([
-  "Possessiv",
-  "Reflexiv",
-  "Personal",
-  "Generalisierendes",
-  "Demonstrativ",
-  "W-Pronomen",
-  "Indefinit",
-  "Quantifikativ",
-]);
-
-const CommonFeildsSchema = z.object({
-    rechtschreibung: z.string(),
+const CommonGrundformsFeildsSchema = z.object({
     grundform: z.string(),
     emojiBeschreibungs: z.array(z.string().emoji()), // Describe the common meanings with emojies; Up to 3 emojies per meaning. Aim for less, if possible
 });
@@ -71,127 +46,112 @@ const WortartSchema = z.enum([
   "Konjunktion",
   "Numerale",
   "Praefix",
-  "PartizipialesAdjektiv",
   "Redewendung",
   "Interjektion",
   "Unbekannt"
 ]);
 
-const GoverningPrepositionSchema = z.enum([
-  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
-  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
-  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
-]);
-
-const NomenSchema = z.object({
+const NomenGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Nomen),
   genus: GenusSchema,
-  deklination: NomenDeklinationSchema,
   eigenname: z.optional(z.boolean()),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PronomenSchema = z.object({
+const PronomenGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Pronomen),
-  pronomenType: PronomenTypeSchema,
-  number: z.optional(z.array(NumerusSchema)),
-  genera: z.optional(z.array(GenusSchema)),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const VerbSchema = z.object({
+const VerbGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Verb),
-  trennbarkeit: z.optional(TrennbarkeitSchema),
-  regelmaessig: RegelmaessigSchema,
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const AdjektivSchema = z.object({
+const AdjektivGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adjektiv),
-  ...CommonFeildsSchema.shape,
-});
-  
-const PartizipVariantSchema = z.enum(["P1", "P2"]);
-const PartizipialesAdjektivSchema = AdjektivSchema.omit({ wortart: true }).extend({
-  wortart: z.literal(WortartSchema.Enum.PartizipialesAdjektiv),
-  partizipVariant: PartizipVariantSchema,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const AdverbSchema = z.object({
+const AdverbGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Adverb),
-  adverbCategory: z.array(AdverbCategorySchema),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const ArtikelSchema = z.object({
+const ArtikelGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Artikel),
-  artikelType: ArtikelTypeSchema,
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PartikelSchema = z.object({
+const PartikelGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Partikel),
-  partikelType: z.array(PartikelTypeSchema),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const KonjunktionSchema = z.object({
+const KonjunktionGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Konjunktion),
-  konjunktionType: KonjunktionTypeSchema,
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PraepositionSchema = z.object({
+const PraepositionGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Praeposition),
-  possibleGoverningKasuss: z.optional(z.array(KasusSchema)),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const NumeraleSchema = z.object({
+const NumeraleGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Numerale),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const PraefixSchema = z.object({
+const PraefixGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Praefix),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const InterjektionSchema = z.object({
+const InterjektionGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Interjektion),
-  ...CommonFeildsSchema.shape,
+  ...CommonGrundformsFeildsSchema.shape,
 });
 
-const RedewendungSchema = z.object({
+const RedewendungGrundformSchema = z.object({
     wortart: z.literal(WortartSchema.Enum.Redewendung),
-    ...CommonFeildsSchema.shape,
+    ...CommonGrundformsFeildsSchema.shape,
 });
 
-const UnbekanntSchema = z.object({
+const UnbekanntGrundformSchema = z.object({
     wortart: z.literal(WortartSchema.Enum.Unbekannt),
     comment: z.string(),
-    ...CommonFeildsSchema.shape,
+    ...CommonGrundformsFeildsSchema.shape,
 });
 
 const GrundformSchema = z.discriminatedUnion("wortart", [
-  NomenSchema,
-  PronomenSchema,
-  VerbSchema,
-  AdjektivSchema,
-  AdverbSchema,
-  ArtikelSchema,
-  PartikelSchema,
-  KonjunktionSchema,
-  PraepositionSchema,
-  NumeraleSchema,
-  PraefixSchema,
-  InterjektionSchema,
-  PartizipialesAdjektivSchema,
-  RedewendungSchema,
-  UnbekanntSchema,
+  NomenGrundformSchema,
+  PronomenGrundformSchema,
+  VerbGrundformSchema,
+  AdjektivGrundformSchema,
+  AdverbGrundformSchema,
+  ArtikelGrundformSchema,
+  PartikelGrundformSchema,
+  KonjunktionGrundformSchema,
+  PraepositionGrundformSchema,
+  NumeraleGrundformSchema,
+  PraefixGrundformSchema,
+  InterjektionGrundformSchema,
+  RedewendungGrundformSchema,
+  UnbekanntGrundformSchema,
 ]);
 
-const grundformsOutputSchema = z.array(GrundformSchema);
+const MatchSchema = z.enum(["Grundform", "Flexion", "Tippfehler", "Unbekannt"]);
+
+const grundformsOutputSchema = z.object({
+  [MatchSchema.enum.Grundform]: GrundformSchema.array().optional(), 
+  [MatchSchema.enum.Flexion]: GrundformSchema.array().optional(),
+  [MatchSchema.enum.Tippfehler]: GrundformSchema.array().optional(), 
+  [MatchSchema.enum.Unbekannt]: UnbekanntGrundformSchema.array().optional(), 
+}).refine(
+  data => Object.values(data).some(value => value !== undefined),
+  { message: "Mindestens ein Feld muss definiert sein" }
+);
 </schema>
 <outputformat>outputformat shall be formattes as grundformsOutputSchema</outputformat>`;
 
@@ -215,3 +175,4 @@ const grundformsOutputSchema = z.array(GrundformSchema);
     return instructions + schema + examplesXML
   }
 };
+

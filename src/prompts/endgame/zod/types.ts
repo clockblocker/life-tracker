@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { GrundformSchema, WortartSchema, NomenSchema, GenusSchema, RegelmaessigSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartizipVariantSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema, SteigerungsfaehigSchema, VergleichsgradSchema } from "./schemas";
+import { GrundformSchema, WortartSchema, NomenGrundformSchema, GenusSchema, RegelmaessigSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema, SteigerungsfaehigSchema, VergleichsgradSchema, MatchSchema } from "./schemas";
 
 export type Grundform = z.infer<typeof GrundformSchema>;
-export type Nomen = z.infer<typeof NomenSchema>;
+export type Nomen = z.infer<typeof NomenGrundformSchema>;
 export type Wortart = z.infer<typeof WortartSchema>;
 export const Wortart = WortartSchema.Enum;
 
@@ -13,16 +13,12 @@ export type Kasus = z.infer<typeof KasusSchema>;
 export const Kasus = KasusSchema.Enum;
 
 export type Regelmaessigkeit = z.infer<typeof RegelmaessigSchema>;
-export const Regelmaessigkeit = RegelmaessigSchema.Enum;
 
 export type Trennbarkeit = z.infer<typeof TrennbarkeitSchema>;
 export const Trennbarkeit = TrennbarkeitSchema.Enum;
 
 export type NomenDeklination = z.infer<typeof NomenDeklinationSchema>;
 export const NomenDeklination = NomenDeklinationSchema.Enum;
-
-export type PartizipVariant = z.infer<typeof PartizipVariantSchema>;
-export const PartizipVariant = PartizipVariantSchema.Enum;
 
 export type PartikelType = z.infer<typeof PartikelTypeSchema>;
 export const PartikelType = PartikelTypeSchema.Enum;
@@ -41,18 +37,16 @@ export const Morphem = MorphemSchema.Enum;
 
 // ---
 export type Steigerungsfaehigkeit = z.infer<typeof SteigerungsfaehigSchema>;
-export const Steigerungsfaehigkeit = SteigerungsfaehigSchema.Enum;
 
 export type Vergleichsgrad = z.infer<typeof VergleichsgradSchema>;
 export const Vergleichsgrad = VergleichsgradSchema.Enum;
 
 // ---
 
-export const MatchStatusSchema = z.enum(['ExactMatch', 'Form', 'Misspelling']);
-export const MatchStatus = MatchStatusSchema.Enum;
-export type MatchStatus = z.infer<typeof MatchStatusSchema>;
+export const Match = MatchSchema.Enum;
+export type Match = z.infer<typeof MatchSchema>;
 
-export type GrundformWithMatchStatus = Grundform & { matchStatus: MatchStatus };
+export type GrundformWithMatch = Grundform & { match: Match };
 
 export type GrundformKerl = Pick<Grundform, "grundform" | "wortart">;
 

@@ -1,40 +1,40 @@
-import { Grundform, GrundformWithMatchStatus, MatchStatus, Wortart } from "../../zod/types";
+import { Grundform, GrundformWithMatch, Match, Wortart } from "../../zod/types";
 
-export function getMatchStatus(g: Grundform, word: string): MatchStatus {
+export function getMatch(g: Grundform, word: string): Match {
     const grundformLower = g.grundform.toLowerCase();
     const rechtschreibungLower = g.rechtschreibung.toLowerCase();
     
     if (grundformLower === word && word === rechtschreibungLower) {
-        return MatchStatus.ExactMatch;
+        return Match.ExactMatch;
     }
     
     if (word === rechtschreibungLower) {
-        return MatchStatus.Form;
+        return Match.Form;
     }
     
-    return MatchStatus.Misspelling;
+    return Match.Misspelling;
 };
 
-export const matchScoreFromMatchStatus: Record<MatchStatus, number> = {
-    [MatchStatus.ExactMatch]: 2,
-    [MatchStatus.Form]: 1,
-    [MatchStatus.Misspelling]: 0,
+export const matchScoreFromMatch: Record<Match, number> = {
+    [Match.ExactMatch]: 2,
+    [Match.Form]: 1,
+    [Match.Misspelling]: 0,
 };
 
-export const reprFromMatchStatus: Record<MatchStatus, string>  = {
-    [MatchStatus.ExactMatch]: '',
-    [MatchStatus.Form]: 'Form of a',
-    [MatchStatus.Misspelling]: 'A misspelling of',
+export const reprFromMatch: Record<Match, string>  = {
+    [Match.ExactMatch]: '',
+    [Match.Form]: 'Form of a',
+    [Match.Misspelling]: 'A misspelling of',
 };
 
-export const formatMatchStatus = ({ wortart, matchStatus }: GrundformWithMatchStatus) => {
-    const repr = wortart === Wortart.Unbekannt ? "" : reprFromMatchStatus[matchStatus];
+export const formatMatch = ({ wortart, match }: GrundformWithMatch) => {
+    const repr = wortart === Wortart.Unbekannt ? "" : reprFromMatch[match];
     return repr ? `*${repr}*` : repr;
 };
 
 export function compareGrundforms(a: Grundform, b: Grundform, word: string): number {
-    const aScore = matchScoreFromMatchStatus[getMatchStatus(a, word)];
-    const bScore = matchScoreFromMatchStatus[getMatchStatus(b, word)];
+    const aScore = matchScoreFromMatch[getMatch(a, word)];
+    const bScore = matchScoreFromMatch[getMatch(b, word)];
 
     return bScore - aScore; 
 };

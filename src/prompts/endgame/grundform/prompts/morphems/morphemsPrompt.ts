@@ -32,7 +32,6 @@ const WortartSchema = z.enum([
   "Konjunktion",
   "Numerale",
   "Praefix",
-  "PartizipialesAdjektiv",
   "Redewendung",
   "Interjektion",
   "Unbekannt"
