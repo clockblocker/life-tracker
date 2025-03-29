@@ -3,7 +3,7 @@ import TextEaterPlugin from '../main';
 import { grundformsOutputSchema } from 'prompts/endgame/zod/schemas';
 import { Grundform, Wortart, Nomen, Genus } from 'prompts/endgame/zod/types';
 import { z } from "zod";
-import { makeGrundformsPrompt } from 'prompts/endgame/grundform/prompts/grundforms/grundformsPrompt';
+import { makeGrundformsPrompt } from 'prompts/endgame/grundform/wortart/grundforms/grundformsPrompt';
 import { makeAnEndgameNote } from 'prompts/endgame/makeAnEndgameNote';
 
 export default async function endgame(plugin: TextEaterPlugin, editor: Editor, file: TFile) {

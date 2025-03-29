@@ -4,6 +4,7 @@ import { prompts } from "prompts";
 import { morphemAnalysisOutputSchema } from "../zod/schemas";
 import { Backlink, Block, GrundformKerl, MorphemAnalysisOutput, MorphemKerl } from "../zod/types";
 import { getPathsToGrundformNotes, formatPathToGrundformNoteAsLink, getPathsToMorphemNotes } from "../grundform/formatters/link";
+import { promtMakerFromKeyword } from "../grundform/wortart/endgamePromptMakers";
 
 async function getZusammengesetztAusBlock(plugin: TextEaterPlugin, file: TFile, morphemAnalysis: MorphemAnalysisOutput): Promise<Block> {
     if (!morphemAnalysis.zusammengesetztAus) {
@@ -48,7 +49,8 @@ function getMorphemischeZerlegungBlock(morphemAnalysis: MorphemAnalysisOutput): 
 }
 
 export async function makeMorphemBlock(plugin: TextEaterPlugin, file: TFile, word: string): Promise<{ repr: string, backlinks: Backlink[] } | null> {
-    const generatedMorphemAnalysisOutput = await plugin.apiService.generateContent(prompts.endgame.morphems, word, true)
+    const prompt = promtMakerFromKeyword["Morphems"]();
+    const generatedMorphemAnalysisOutput = await plugin.apiService.generateContent(prompt, word, true)
     const parsedMorphemAnalysisOutput = morphemAnalysisOutputSchema.safeParse(JSON.parse(generatedMorphemAnalysisOutput));
         
     if (parsedMorphemAnalysisOutput.error) {

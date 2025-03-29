@@ -5,7 +5,7 @@ import { compareGrundforms } from "./grundform/formatters/match";
 import { mergeGrundforms } from "./grundform/formatters/mergeGrungforms";
 import { Block, Grundform, GrundformsOutput, GrundformWithMatch, Match } from "./zod/types";
 import { formatGrundform } from "./grundform/formatters/grundform";
-import { makeMorphemBlock } from "./blocks/morphems";
+import { makeMorphemBlock } from "./common-blocks/morphems";
 
 async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms: GrundformWithMatch[]): Promise<string> {
     console.log("\n\nendgameNoteCase")

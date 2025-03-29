@@ -10,7 +10,7 @@ import { C1_RICHTER_PROMPT_V2 } from "./wip/c1RichterCorrectedDECorrectionFirst"
 import { C1_RICHTER_PROMPT_V1 } from "./wip/c1RichterCorrectedDE";
 import { morphems2 } from "./wip/morphems2";
 import { baseDict2 } from "./wip/baseDict2";
-import { makeEndgameMorhpemsPrompt } from "./endgame/grundform/prompts/morphems/morphemsPrompt";
+import { makeEndgameMorhpemsPrompt } from "./endgame/grundform/wortart/morphems/morphemsPrompt";
 
 export const prompts = {
    generate_dictionary_entry: baseDict2,
