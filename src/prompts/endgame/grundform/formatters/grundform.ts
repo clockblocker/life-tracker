@@ -2,14 +2,14 @@ import { Genus, Nomen, Grundform, Wortart, GrundformWithMatch } from "prompts/en
 import { formatLinkToGrundformNote } from "./link";
 import { formatMatch } from "./match";
 
-const articleFromGenus = {
+const nomenativeArticleFromGenus = {
     [Genus.F]: "die",
     [Genus.N]: "das",
     [Genus.M]: "der",
 };
 
 const formatNomGenus = ({genus: g}: Nomen) => {
-    return `<span class="custom-color-for-${articleFromGenus[g]}">${articleFromGenus[g]}</span>`;
+    return `<span class="custom-color-for-${nomenativeArticleFromGenus[g]}">${nomenativeArticleFromGenus[g]}</span>`;
 };
 
 const formatEmojiBeschreibungs = (g: Grundform) => `${g.emojiBeschreibungs.join(" | ")}`;

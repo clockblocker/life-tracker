@@ -8,7 +8,6 @@ const Mann = {
                 "N": ["Mann"],
                 "G": ["Mannes", "Manns"],
                 "D": ["Mann", "Manne"],
-                "A": ["Mann"],
             }
         ],
         "Plural": [
@@ -16,7 +15,6 @@ const Mann = {
                 "N": ["Mannen"],
                 "G": ["Mannen"],
                 "D": ["Mannen"],
-                "A": ["Mannen"],
             }
         ]
     },
@@ -29,7 +27,6 @@ const Mann = {
                 "N": ["Mann"],
                 "G": ["Mannes", "Manns"],
                 "D": ["Mann", "Manne"],
-                "A": ["Mann"],
             }
         ],
         "Plural": [
@@ -37,7 +34,6 @@ const Mann = {
                 "N": ["Männer"],
                 "G": ["Männer"],
                 "D": ["Männern"],
-                "A": ["Männer"],
             }, 
         ]
     },
@@ -50,7 +46,6 @@ const Mann = {
                 "N": ["Mann"],
                 "G": ["Manns"],
                 "D": ["Mann"],
-                "A": ["Mann"],
             }
         ],
         "Plural": [
@@ -58,7 +53,6 @@ const Mann = {
                 "N": ["Leute"],
                 "G": ["Leute"],
                 "D": ["Leuten"],
-                "A": ["Leute"],
             }
         ]
     }]

@@ -1,9 +1,9 @@
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
-import { GrundformKerl, MorphemKerl, Wortart } from "prompts/endgame/zod/types";
+import { GrundformKerl, Match, MorphemKerl, Wortart } from "prompts/endgame/zod/types";
 
-export async function grundformNotePath(plugin: TextEaterPlugin, file: TFile, g: GrundformKerl) {
-    const targetFile = plugin.app.metadataCache.getFirstLinkpathDest(g.grundform, file.path);
+export async function getMaybeExistingNotePath(plugin: TextEaterPlugin, file: TFile, word: string) {
+    const targetFile = plugin.app.metadataCache.getFirstLinkpathDest(word, file.path);
     return targetFile ? targetFile.path : null;
 }
 
@@ -11,30 +11,35 @@ export const grundformWortartFromGrundform = (g: GrundformKerl) => {
     return g.wortart;
 };
 
-export const getPathToGrundformNote = (g: GrundformKerl, grundformNotePath: string | null) => {
-    const ok = grundformNotePath !== null;
+export const getPathToNote = ({ word, wortart, match, maybeExisitingNotePath }: {
+    word: string, 
+    wortart: Wortart,
+    match: Match,
+    maybeExisitingNotePath: string | null
+}) => {
+    const ok = maybeExisitingNotePath !== null;
 
-    if (g.grundform.length < 2) {
-        return ok ? `${grundformNotePath}|${g.grundform}` : "";
+    if (word.length < 2) {
+        return ok ? `${maybeExisitingNotePath}|${word}` : "";
     }
 
-    switch (g.wortart) {
+    switch (wortart) {
         case Wortart.Unbekannt:
             return "";   
         case Wortart.Praefix:
-            return `Grammatik/Morphem/${g.wortart}/List/${g.grundform} (${g.wortart})`;
+            return `Grammatik/Morphem/${wortart}/List/${word} (${wortart})`;
         case Wortart.Praeposition:
-            return `Grammatik/${g.wortart}/List/${g.grundform} (${g.wortart})`;
+            return `Grammatik/${wortart}/List/${word} (${wortart})`;
         case Wortart.Pronomen:
-            return `Grammatik/${g.wortart}/List/${g.grundform} (${g.wortart})`;
+            return `Grammatik/${wortart}/List/${word} (${wortart})`;
         case Wortart.Konjunktion:
-            return `Grammatik/${g.wortart}/List/${g.grundform} (${g.wortart})`;
+            return `Grammatik/${wortart}/List/${word} (${wortart})`;
         case Wortart.Partikel:
-            return `Grammatik/${g.wortart}/List/${g.grundform} (${g.wortart})`;
+            return `Grammatik/${wortart}/List/${word} (${wortart})`;
         case Wortart.Artikel:
-            return `Grammatik/${g.wortart}/List/${g.grundform} (${g.wortart})`;
+            return `Grammatik/${wortart}/List/${word} (${wortart})`;
         default:
-            return ok ? `${grundformNotePath}|${g.grundform}` : `Worter/Grundform/${grundformWortartFromGrundform(g)}/${g.grundform[0]}/${g.grundform[1]}/${g.grundform}`
+            return ok ? `${maybeExisitingNotePath}|${word}` : `Worter/${match}/${wortart}/${word[0]}/${word[1]}/${word}`
 }};
 
 export function formatPathToGrundformNoteAsLink<G extends {grundform: string}>(g: G, path: string) {
@@ -46,20 +51,30 @@ export function formatPathToGrundformNoteAsLink<G extends {grundform: string}>(g
     return `[[${path}|${g.grundform}]]`
 };
 
-export async function formatLinkToGrundformNote(g: GrundformKerl, grundformNotePath: string | null) {
-    const path = await getPathToGrundformNote(g, grundformNotePath);
+export async function formatLinkToGrundformNote(g: GrundformKerl, maybeExisitingNotePath: string | null) {
+    const path = await getPathToNote({
+        word: g.grundform, 
+        wortart: g.wortart, 
+        match: Match.Grundform,
+        maybeExisitingNotePath
+    });
     return formatPathToGrundformNoteAsLink(g, path);
 };
 
 export async function getPathsToGrundformNotes(plugin: TextEaterPlugin, file: TFile, kerls: GrundformKerl[]) {
     const pathsPromises = kerls.map(async (g) => {
-        const grundformPath = await grundformNotePath(plugin, file, g);
-        return getPathToGrundformNote(g, grundformPath);
+        const maybeExisitingNotePath = await getMaybeExistingNotePath(plugin, file, g.grundform);
+        return await getPathToNote({
+            word: g.grundform, 
+            wortart: g.wortart, 
+            match: Match.Grundform,
+            maybeExisitingNotePath
+        });
     });
 
     return await Promise.all(pathsPromises);
 }
 
 export function getPathsToMorphemNotes(kerls: MorphemKerl[]) {
-    return kerls.map(k => `Grammatik/Morphem/${k.morphem}/List/${k.grundform} (${k.morphem})`)
+    return kerls.map(k => `Grammatik/Morphem/${k.morphem}/List/${k.grundform[0]}/${k.grundform} (${k.morphem})`)
 }

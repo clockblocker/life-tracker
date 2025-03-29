@@ -4,7 +4,7 @@ const gut = {
   "gut": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "gut",
-      [Vergleichsgrad.Komparativ]: "bess",
+      [Vergleichsgrad.Komparativ]: "besser",
       [Vergleichsgrad.Superlativ]: "best",
     },
     regelmaessig: false,
@@ -16,7 +16,7 @@ const gross = {
   "groß": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "groß",
-      [Vergleichsgrad.Komparativ]: "größ",
+      [Vergleichsgrad.Komparativ]: "größer",
       [Vergleichsgrad.Superlativ]: "größt",
     },
     regelmaessig: false,
@@ -28,7 +28,7 @@ const klein = {
   "klein": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "klein",
-      [Vergleichsgrad.Komparativ]: "klein",
+      [Vergleichsgrad.Komparativ]: "kleiner",
       [Vergleichsgrad.Superlativ]: "kleinst",
     },
     regelmaessig: true,
@@ -60,7 +60,7 @@ const fleissig = {
   "fleißig": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "fleißig",
-      [Vergleichsgrad.Komparativ]: "fleißig",
+      [Vergleichsgrad.Komparativ]: "fleißiger",
       [Vergleichsgrad.Superlativ]: "fleißigst",
     },
     regelmaessig: true,
@@ -72,7 +72,7 @@ const selbstbewusst = {
   "selbstbewusst": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "selbstbewusst",
-      [Vergleichsgrad.Komparativ]: "selbstbewusst",
+      [Vergleichsgrad.Komparativ]: "selbstbewusster",
       [Vergleichsgrad.Superlativ]: "selbstbewusstest",
     },
     regelmaessig: true,
@@ -84,7 +84,7 @@ const hoch = {
   "hoch": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "hoch",
-      [Vergleichsgrad.Komparativ]: "höh",
+      [Vergleichsgrad.Komparativ]: "höher",
       [Vergleichsgrad.Superlativ]: "höchst",
     },
     regelmaessig: false,
@@ -96,7 +96,7 @@ const langsam = {
   "langsam": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "langsam",
-      [Vergleichsgrad.Komparativ]: "langsam",
+      [Vergleichsgrad.Komparativ]: "langsamer",
       [Vergleichsgrad.Superlativ]: "langsamst",
     },
     regelmaessig: true,
@@ -108,7 +108,7 @@ const fromm = {
   "fromm": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "fromm",
-      [Vergleichsgrad.Komparativ]: "fromm",
+      [Vergleichsgrad.Komparativ]: "frommer",
       [Vergleichsgrad.Superlativ]: "frommst",
     },
     regelmaessig: true,
@@ -117,7 +117,7 @@ const fromm = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "fromm",
-      [Vergleichsgrad.Komparativ]: "frömm",
+      [Vergleichsgrad.Komparativ]: "frömmer",
       [Vergleichsgrad.Superlativ]: "frömmst",
     },
     regelmaessig: false,
@@ -129,7 +129,7 @@ const glatt = {
   "glatt": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "glatt",
-      [Vergleichsgrad.Komparativ]: "glatt",
+      [Vergleichsgrad.Komparativ]: "glatter",
       [Vergleichsgrad.Superlativ]: "glattst",
     },
     regelmaessig: true,
@@ -138,7 +138,7 @@ const glatt = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "glatt",
-      [Vergleichsgrad.Komparativ]: "glätt",
+      [Vergleichsgrad.Komparativ]: "glätter",
       [Vergleichsgrad.Superlativ]: "glättst",
     },
     regelmaessig: false,
@@ -150,7 +150,7 @@ const arg = {
   "arg": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "arg",
-      [Vergleichsgrad.Komparativ]: "ärg",
+      [Vergleichsgrad.Komparativ]: "ärger",
       [Vergleichsgrad.Superlativ]: "ärgst",
     },
     regelmaessig: false,
@@ -162,7 +162,7 @@ const bange = {
   "bange": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "bange",
-      [Vergleichsgrad.Komparativ]: "bang",
+      [Vergleichsgrad.Komparativ]: "banger",
       [Vergleichsgrad.Superlativ]: "bangst",
     },
     regelmaessig: false,
@@ -171,7 +171,7 @@ const bange = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "bange",
-      [Vergleichsgrad.Komparativ]: "bäng",
+      [Vergleichsgrad.Komparativ]: "bänger",
       [Vergleichsgrad.Superlativ]: "bängst",
     },
     regelmaessig: false,
@@ -183,7 +183,7 @@ const blass = {
   "blass": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "blass",
-      [Vergleichsgrad.Komparativ]: "blass",
+      [Vergleichsgrad.Komparativ]: "blasser",
       [Vergleichsgrad.Superlativ]: "blassest",
     },
     regelmaessig: false,
@@ -192,7 +192,7 @@ const blass = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "blass",
-      [Vergleichsgrad.Komparativ]: "bläss",
+      [Vergleichsgrad.Komparativ]: "blässer",
       [Vergleichsgrad.Superlativ]: "blässest",
     },
     regelmaessig: false,
@@ -204,7 +204,7 @@ const dumm = {
   "dumm": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "dumm",
-      [Vergleichsgrad.Komparativ]: "dümm",
+      [Vergleichsgrad.Komparativ]: "dümmer",
       [Vergleichsgrad.Superlativ]: "dümmst",
     },
     regelmaessig: false,
@@ -216,7 +216,7 @@ const gesund = {
   "gesund": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "gesund",
-      [Vergleichsgrad.Komparativ]: "gesünd",
+      [Vergleichsgrad.Komparativ]: "gesünder",
       [Vergleichsgrad.Superlativ]: "gesündest",
     },
     regelmaessig: false,
@@ -225,7 +225,7 @@ const gesund = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "gesund",
-      [Vergleichsgrad.Komparativ]: "gesund",
+      [Vergleichsgrad.Komparativ]: "gesunder",
       [Vergleichsgrad.Superlativ]: "gesundest",
     },
     regelmaessig: true,
@@ -237,7 +237,7 @@ const grob = {
   "grob": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "grob",
-      [Vergleichsgrad.Komparativ]: "gröb",
+      [Vergleichsgrad.Komparativ]: "gröber",
       [Vergleichsgrad.Superlativ]: "gröbst",
     },
     regelmaessig: false,
@@ -249,7 +249,7 @@ const karg = {
   "karg": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "karg",
-      [Vergleichsgrad.Komparativ]: "karg",
+      [Vergleichsgrad.Komparativ]: "karger",
       [Vergleichsgrad.Superlativ]: "kargst",
     },
     regelmaessig: true,
@@ -258,7 +258,7 @@ const karg = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "karg",
-      [Vergleichsgrad.Komparativ]: "kärg",
+      [Vergleichsgrad.Komparativ]: "kärger",
       [Vergleichsgrad.Superlativ]: "kärgst",
     },
     regelmaessig: false,
@@ -270,7 +270,7 @@ const klug = {
   "klug": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "klug",
-      [Vergleichsgrad.Komparativ]: "klüg",
+      [Vergleichsgrad.Komparativ]: "klüger",
       [Vergleichsgrad.Superlativ]: "klügst",
     },
     regelmaessig: false,
@@ -282,7 +282,7 @@ const krank = {
   "krank": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "krank",
-      [Vergleichsgrad.Komparativ]: "kränk",
+      [Vergleichsgrad.Komparativ]: "kränker",
       [Vergleichsgrad.Superlativ]: "kränkst",
     },
     regelmaessig: false,
@@ -294,7 +294,7 @@ const nah = {
   "nah": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "nah",
-      [Vergleichsgrad.Komparativ]: "näh",
+      [Vergleichsgrad.Komparativ]: "näher",
       [Vergleichsgrad.Superlativ]: "nächst",
     },
     regelmaessig: false,
@@ -306,7 +306,7 @@ const nass = {
   "nass": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "nass",
-      [Vergleichsgrad.Komparativ]: "nass",
+      [Vergleichsgrad.Komparativ]: "nasser",
       [Vergleichsgrad.Superlativ]: "nassest",
     },
     regelmaessig: false,
@@ -315,7 +315,7 @@ const nass = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "nass",
-      [Vergleichsgrad.Komparativ]: "näss",
+      [Vergleichsgrad.Komparativ]: "nässer",
       [Vergleichsgrad.Superlativ]: "nässest",
     },
     regelmaessig: false,
@@ -327,7 +327,7 @@ const schmal = {
   "schmal": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "schmal",
-      [Vergleichsgrad.Komparativ]: "schmäl",
+      [Vergleichsgrad.Komparativ]: "schmäler",
       [Vergleichsgrad.Superlativ]: "schmälst",
     },
     regelmaessig: false,
@@ -336,7 +336,7 @@ const schmal = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "schmal",
-      [Vergleichsgrad.Komparativ]: "schmal",
+      [Vergleichsgrad.Komparativ]: "schmaler",
       [Vergleichsgrad.Superlativ]: "schmalst",
     },
     regelmaessig: true,
@@ -348,7 +348,7 @@ const schön = {
   "schön": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "schön",
-      [Vergleichsgrad.Komparativ]: "schön",
+      [Vergleichsgrad.Komparativ]: "schöner",
       [Vergleichsgrad.Superlativ]: "schönst",
     },
     regelmaessig: false,
@@ -360,7 +360,7 @@ const schwarz = {
   "schwarz": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "schwarz",
-      [Vergleichsgrad.Komparativ]: "schwärz",
+      [Vergleichsgrad.Komparativ]: "schwärzer",
       [Vergleichsgrad.Superlativ]: "schwärzest",
     },
     regelmaessig: false,
@@ -372,7 +372,7 @@ const teuer = {
   "teu": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "teu",
-      [Vergleichsgrad.Komparativ]: "teur",
+      [Vergleichsgrad.Komparativ]: "teurer",
       [Vergleichsgrad.Superlativ]: "teuerst",
     },
     regelmaessig: true,
@@ -384,7 +384,7 @@ const viel = {
   "viel": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "viel",
-      [Vergleichsgrad.Komparativ]: "mehr",
+      [Vergleichsgrad.Komparativ]: "mehrer",
       [Vergleichsgrad.Superlativ]: "meist",
     },
     regelmaessig: false,
@@ -396,7 +396,7 @@ const wenig = {
   "wenig": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "wenig",
-      [Vergleichsgrad.Komparativ]: "wenig",
+      [Vergleichsgrad.Komparativ]: "weniger",
       [Vergleichsgrad.Superlativ]: "wenigst",
     },
     regelmaessig: false,
@@ -405,7 +405,7 @@ const wenig = {
   {
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "wenig",
-      [Vergleichsgrad.Komparativ]: "mind",
+      [Vergleichsgrad.Komparativ]: "minder",
       [Vergleichsgrad.Superlativ]: "mindest",
     },
     regelmaessig: false,
@@ -417,7 +417,7 @@ const wild = {
   "wild": [{
     adjektivstamm: {
       [Vergleichsgrad.Positiv]: "wild",
-      [Vergleichsgrad.Komparativ]: "wild",
+      [Vergleichsgrad.Komparativ]: "wilder",
       [Vergleichsgrad.Superlativ]: "wildest",
     },
     regelmaessig: true,
