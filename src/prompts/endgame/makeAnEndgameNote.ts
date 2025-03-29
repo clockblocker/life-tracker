@@ -60,6 +60,9 @@ export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, ou
 
     let content = '';
 
+    console.log("output")
+    console.log(output)
+
     for (let [match, grundforms] of Object.entries(output)) {
         if (match === Match.Grundform) {
             content += (await endgameNoteCase(plugin, file, grundforms));

@@ -172,13 +172,15 @@ const GrundformSchema = z.discriminatedUnion("wortart", [
   UnbekanntGrundformSchema,
 ]);
 
-const grundformsOutputSchema = z.object({
+const grundformsOutputSchema = 
+z.object({ // This shall be a priority. We need to find every walid way to interprit the given input as a form of something 
   [MatchSchema.enum.Grundform]: GrundformSchema.array(), 
-}).or(z.object({
   [MatchSchema.enum.Flexion]: GrundformSchema.array(),
-}))
+})
 .or(z.object({
   [MatchSchema.enum.Grundform]: GrundformSchema.array(), 
+}))
+.or(z.object({
   [MatchSchema.enum.Flexion]: GrundformSchema.array(),
 }))
 .or(z.object({
@@ -193,9 +195,6 @@ const grundformsOutputSchema = z.object({
 
   const testsSchema = z.record(z.string(), grundformsOutputSchema);
   const validationResult = testsSchema.safeParse(tests);
-
-  console.log("tests");
-  console.log(tests);
 
   if (!validationResult.success) {
     console.error("Validation error:", validationResult.error);
