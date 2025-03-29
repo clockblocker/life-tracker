@@ -163,19 +163,20 @@ const GrundformSchema = z.discriminatedUnion("wortart", [
 ]);
 
 const grundformsOutputSchema = z.object({
-  [MatchSchema.enum.Grundform]: GrundformSchema.array().optional(), 
-  [MatchSchema.enum.Flexion]: GrundformSchema.array().optional(),
-})
+  [MatchSchema.enum.Grundform]: GrundformSchema.array(), 
+}).or(z.object({
+  [MatchSchema.enum.Flexion]: GrundformSchema.array(),
+}))
+.or(z.object({
+  [MatchSchema.enum.Grundform]: GrundformSchema.array(), 
+  [MatchSchema.enum.Flexion]: GrundformSchema.array(),
+}))
 .or(z.object({
   [MatchSchema.enum.Tippfehler]: GrundformSchema.array(), 
 }))
 .or(z.object({
   [MatchSchema.enum.Unbekannt]: UnbekanntGrundformSchema.array(), 
 }))
-.refine(
-  data => Object.values(data).some(value => value !== undefined),
-  { message: "Mindestens ein Feld muss definiert sein" }
-);
 
 // ---
 

@@ -12,7 +12,9 @@ export default async function endgame(plugin: TextEaterPlugin, editor: Editor, f
         const grundformsPrompt = makeGrundformsPrompt();
         const generatedGrundforms = await plugin.apiService.generateContent(grundformsPrompt, word, true);
 
-        const parsedGrungforms = grundformsOutputSchema.safeParse(JSON.parse(generatedGrundforms));
+        // Wrap the output in an object with the word as the key
+        const wrappedOutput = { [word]: JSON.parse(generatedGrundforms) };
+        const parsedGrungforms = grundformsOutputSchema.safeParse(wrappedOutput[word]);
         
         if (parsedGrungforms.error) {
             console.error({zodError: parsedGrungforms.error, output: generatedGrundforms});

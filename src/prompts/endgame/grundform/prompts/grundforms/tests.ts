@@ -629,7 +629,7 @@ const wende = {
       {
         wortart: Wortart.Nomen,
         grundform: "Wende",
-        emojiBeschreibungs: ["🧱 ➡️ 🇩🇪"],
+        emojiBeschreibungs: ["🧱➡️🇩🇪"],
         genus: Genus.F
       },
       {
@@ -662,7 +662,7 @@ const wenden = {
       {
         wortart: Wortart.Nomen,
         grundform: "Wende",
-        emojiBeschreibungs: ["🧱 ➡️ 🇩🇪"],
+        emojiBeschreibungs: ["🧱➡️🇩🇪"],
         genus: Genus.F
       },
       {
