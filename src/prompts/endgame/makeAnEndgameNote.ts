@@ -1,5 +1,5 @@
 import TextEaterPlugin from "main";
-import { TFile } from "obsidian";
+import { MarkdownView, TFile } from "obsidian";
 import { getMaybeExistingNotePath } from "./grundform/formatters/link";
 import { compareGrundforms } from "./grundform/formatters/match";
 import { mergeGrundforms } from "./grundform/formatters/mergeGrungforms";
@@ -54,7 +54,7 @@ async function endgameNoteCase(plugin: TextEaterPlugin, file: TFile, exactMatche
 
     console.log('blocks', blocks)
     
-    return blocks.map(({repr}) => repr).join('\n\n---\n') + '\n';
+    return blocks.map(({repr}) => repr).join('\n\n---\n');
 };
 
 export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, output: GrundformsOutput, word: string): Promise<void> {
@@ -78,12 +78,5 @@ export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, ou
         }
     }))
 
-
-    // if (Object.keys(output).some((match) => match === Match.Grundform)) {
-    //     content = await endgameNoteCase(plugin, file, output?.[Match.Grundform]);
-    // } else {
-    //     content = await endgameLinkCase(plugin, file, sortedGrundformWithMatch);
-    // }
-
-    await plugin.fileService.appendToFile(file.path, allParts.join("\n"));
+    await plugin.fileService.appendToFile(file.path, allParts.join("\n") + "\n");
 };

@@ -104,25 +104,17 @@ export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
     // Fixed mappings for nouns per gender.
     const nouns: Record<keyof CaseDeclension, string[]> = {
       [Genus.M]: ["Vater", "Sohn", "Ding", "Onkel"],
-      [Genus.F]:  ["Mutter", "Tochter", "Sache", "Tante"],
-      [Genus.N]:  ["Kind", "Baby", "Geschenk", "Mädchen"],
-      [Numerus.Mehrzahl]:   ["Väter", "Töchter", "Geschenke", "Mutter"]
-    };
-  
-    // Definite articles by gender and case.
-    const articles: Record<keyof CaseDeclension, { [Kasus.N]: string, [Kasus.D]: string, [Kasus.A]: string, [Kasus.G]: string }> = {
-      [Genus.M]: { [Kasus.N]: "Der", [Kasus.D]: "dem", [Kasus.A]: "den", [Kasus.G]: "des" },
-      [Genus.F]:  { [Kasus.N]: "Die", [Kasus.D]: "der", [Kasus.A]: "die", [Kasus.G]: "der" },
-      [Genus.N]:  { [Kasus.N]: "Das", [Kasus.D]: "dem", [Kasus.A]: "das", [Kasus.G]: "des" },
-      [Numerus.Mehrzahl]:   { [Kasus.N]: "Die", [Kasus.D]: "den", [Kasus.A]: "die", [Kasus.G]: "der" }
+      [Genus.F]: ["Mutter", "Tochter", "Sache", "Tante"],
+      [Genus.N]: ["Kind", "Baby", "Geschenk", "Mädchen"],
+      [Numerus.Mehrzahl]: ["Väter", "Töchter", "Geschenke", "Mutter"]
     };
   
     // Verb forms for the subject (nominative) by gender.
     const verbForms: Record<keyof CaseDeclension, string> = {
       [Genus.M]: "gibt",
-      [Genus.F]:  "gibt",
-      [Genus.N]:  "gibt",
-      [Numerus.Mehrzahl]:   "geben"
+      [Genus.F]: "gibt",
+      [Genus.N]: "gibt",
+      [Numerus.Mehrzahl]: "geben"
     };
   
     // Order of cases and genders.
@@ -143,10 +135,11 @@ export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
         // 2. The adjective form from the declensions object
         // 3. A noun (from the nouns mapping)
         const parts = cases.map((cas, idx) => {
-          const article = articles[gender][cas];
           const adj = d[dt][cas][gender].agj;
+          const article = d[dt][cas][gender].agj
           const noun = nouns[gender][idx];
-          return `*${article}* ${adj} *${noun}*`;
+          const [firstLetter, ...rest] = adj;
+          return article ? `*${article}* ${adj} *${noun}*` : `*${firstLetter.toUpperCase()}${rest.join('')}* ${adj} *${noun}*` ;
         });
   
         // The linking verb form is determined by the nominative gender.
