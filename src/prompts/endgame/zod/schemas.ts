@@ -11,7 +11,6 @@ const AdjektivDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 // ---
 
 const KasusSchema = z.enum(["N", "G", "D", "A"]); // ["Nominativ", "Genitiv", "Dativ", "Akkusativ"]
-const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const NomenDeklinationSchema = z.enum(["Stark", "Schwach", "Gemischt"]);
 const RegelmaessigSchema = z.boolean(); // "Regelmaessig", "Unregelmaessig"
@@ -24,6 +23,17 @@ const PartikelTypeSchema = z.enum(["Intensität", "Fokus", "Negation", "Abtönun
 const NumeraleTypeSchema = z.enum(["Grundzahl", "Ordnungszahl", "Bruchzahl", "Multiplikativ", "Kollektiv"]);
 const KonjunktionTypeSchema = z.enum(["Koordinierend", "Subordinierend"]);
 
+const GoverningPrepositionSchema = z.enum([
+  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
+  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
+  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
+]);
+
+// ---
+const MatchSchema = z.enum(["Grundform", "Flexion", "Tippfehler", "Unbekannt"]);
+
+const GenusSchema = z.enum(["F", "M", "N"]); // ["Feminin", "Maskulin", "Neutrum"]
+
 const PronomenTypeSchema = z.enum([
   "Possessiv",
   "Reflexiv",
@@ -35,16 +45,7 @@ const PronomenTypeSchema = z.enum([
   "Quantifikativ",
 ]);
 
-const GoverningPrepositionSchema = z.enum([
-  "an", "auf", "bei", "bis", "durch", "für", "gegen", "in", "mit", "nach",
-  "ohne", "um", "unter", "von", "vor", "während", "wegen", "trotz", "innerhalb",
-  "außerhalb", "entlang", "mithilfe", "seit", "über", "als"
-]);
-
-// ---
-const MatchSchema = z.enum(["Grundform", "Flexion", "Tippfehler", "Unbekannt"]);
-
-const GenusSchema = z.enum(["F", "M", "N"]); // ["Feminin", "Maskulin", "Neutrum"]
+const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const CommonGrundformsFeildsSchema = z.object({
     grundform: z.string(),
@@ -77,6 +78,9 @@ const NomenGrundformSchema = z.object({
 
 const PronomenGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Pronomen),
+  pronomenType: PronomenTypeSchema,
+  number: z.optional(z.array(NumerusSchema)),
+  genera: z.optional(z.array(GenusSchema)),
   ...CommonGrundformsFeildsSchema.shape,
 });
 
@@ -161,9 +165,14 @@ const GrundformSchema = z.discriminatedUnion("wortart", [
 const grundformsOutputSchema = z.object({
   [MatchSchema.enum.Grundform]: GrundformSchema.array().optional(), 
   [MatchSchema.enum.Flexion]: GrundformSchema.array().optional(),
-  [MatchSchema.enum.Tippfehler]: GrundformSchema.array().optional(), 
-  [MatchSchema.enum.Unbekannt]: UnbekanntGrundformSchema.array().optional(), 
-}).refine(
+})
+.or(z.object({
+  [MatchSchema.enum.Tippfehler]: GrundformSchema.array(), 
+}))
+.or(z.object({
+  [MatchSchema.enum.Unbekannt]: UnbekanntGrundformSchema.array(), 
+}))
+.refine(
   data => Object.values(data).some(value => value !== undefined),
   { message: "Mindestens ein Feld muss definiert sein" }
 );

@@ -1,9 +1,9 @@
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
 import { grundformNotePath } from "./grundform/formatters/link";
-import { compareGrundforms, getMatch } from "./grundform/formatters/match";
+import { compareGrundforms } from "./grundform/formatters/match";
 import { mergeGrundforms } from "./grundform/formatters/mergeGrungforms";
-import { Block, Grundform, GrundformWithMatch, Match } from "./zod/types";
+import { Block, Grundform, GrundformsOutput, GrundformWithMatch, Match } from "./zod/types";
 import { formatGrundform } from "./grundform/formatters/grundform";
 import { prompts } from "prompts";
 import { makeMorphemBlock } from "./blocks/morphems";
@@ -12,7 +12,7 @@ async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms:
     const word = file.basename.toLocaleLowerCase();
     
     const mergedGrundforms = mergeGrundforms(grundforms);
-    mergedGrundforms.sort((a, b) => compareGrundforms(a, b, word));
+    mergedGrundforms.sort((a, b) => compareGrundforms(a, b));
 
     const linksPromises = mergedGrundforms.map(async (g) => {
         const path = await grundformNotePath(plugin, file, g);
@@ -37,39 +37,42 @@ async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms:
     return groupedLinks.join("\n");
 };
 
-async function endgameNoteCase(plugin: TextEaterPlugin, file: TFile, grundforms: GrundformWithMatch[]): Promise<string> {
+async function endgameNoteCase(plugin: TextEaterPlugin, file: TFile, exactMatches: Grundform[]): Promise<string> {
     const word = file.basename.toLocaleLowerCase();
     let blocks: Block[] = [];
-
-    const exactMatches = grundforms.filter(g => g.match === Match.Grundform);
 
     const morphemBlock = await makeMorphemBlock(plugin, file, exactMatches[0].grundform);
     morphemBlock && blocks.push(morphemBlock);
 
-    const notExactMatches = grundforms.filter(g => g.match !== Match.Grundform);
-    const links = await endgameLinkCase(plugin, file, notExactMatches);
-
     console.log('blocks', blocks)
     
-    return blocks.map(({repr}) => repr).join('\n\n---\n') + links + '\n';
+    return blocks.map(({repr}) => repr).join('\n\n---\n') + '\n';
 };
 
-export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, grundforms: Grundform[], word: string): Promise<void> {
-    console.log('grundforms', grundforms);
+export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, output: GrundformsOutput, word: string): Promise<void> {
+    console.log('grundforms', output);
     
-    const sortedGrundformWithMatch: GrundformWithMatch[] = grundforms
-        .map((g) => ({...g, match: getMatch(g, word)}))
-        .sort((a, b) => {
-            return compareGrundforms(a, b, word);
-        }) as GrundformWithMatch[];
+    // const sortedGrundformWithMatch: GrundformWithMatch[] = grundforms
+    //     .map((g) => ({...g, match: getMatch(g, word)}))
+    //     .sort((a, b) => {
+    //         return compareGrundforms(a, b, word);
+    //     }) as GrundformWithMatch[];
 
     let content = '';
 
-    if (sortedGrundformWithMatch.some(({ match }) => match === Match.Grundform)) {
-        content = await endgameNoteCase(plugin, file, sortedGrundformWithMatch);
-    } else {
-        content = await endgameLinkCase(plugin, file, sortedGrundformWithMatch);
+    for (let [match, grundforms] of Object.entries(output)) {
+        if (match === Match.Grundform) {
+            content += (await endgameNoteCase(plugin, file, grundforms));
+        } else {
+            content += await endgameLinkCase(plugin, file, grundforms.map(g => ({...g, match: match as Match})));
+        }
     }
+
+    // if (Object.keys(output).some((match) => match === Match.Grundform)) {
+    //     content = await endgameNoteCase(plugin, file, output?.[Match.Grundform]);
+    // } else {
+    //     content = await endgameLinkCase(plugin, file, sortedGrundformWithMatch);
+    // }
 
     await plugin.fileService.appendToFile(file.path, content + "\n");
 };

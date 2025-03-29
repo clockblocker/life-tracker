@@ -27,7 +27,22 @@ Your task is to generate a valid JSON object for every given word or expression,
 </instructions>`;
 
   const schema = `<schema>
+const MatchSchema = z.enum(["Grundform", "Flexion", "Tippfehler", "Unbekannt"]);
+
 const GenusSchema = z.enum(["F", "M", "N"]); // ["Feminin", "Maskulin", "Neutrum"]
+
+const PronomenTypeSchema = z.enum([
+  "Possessiv",
+  "Reflexiv",
+  "Personal",
+  "Generalisierendes",
+  "Demonstrativ",
+  "W-Pronomen",
+  "Indefinit",
+  "Quantifikativ",
+]);
+
+const NumerusSchema = z.enum(["Einzahl", "Mehrzahl"]);
 
 const CommonGrundformsFeildsSchema = z.object({
     grundform: z.string(),
@@ -60,6 +75,9 @@ const NomenGrundformSchema = z.object({
 
 const PronomenGrundformSchema = z.object({
   wortart: z.literal(WortartSchema.Enum.Pronomen),
+  pronomenType: PronomenTypeSchema,
+  number: z.optional(z.array(NumerusSchema)),
+  genera: z.optional(z.array(GenusSchema)),
   ...CommonGrundformsFeildsSchema.shape,
 });
 
@@ -141,21 +159,24 @@ const GrundformSchema = z.discriminatedUnion("wortart", [
   UnbekanntGrundformSchema,
 ]);
 
-const MatchSchema = z.enum(["Grundform", "Flexion", "Tippfehler", "Unbekannt"]);
-
 const grundformsOutputSchema = z.object({
   [MatchSchema.enum.Grundform]: GrundformSchema.array().optional(), 
   [MatchSchema.enum.Flexion]: GrundformSchema.array().optional(),
-  [MatchSchema.enum.Tippfehler]: GrundformSchema.array().optional(), 
-  [MatchSchema.enum.Unbekannt]: UnbekanntGrundformSchema.array().optional(), 
-}).refine(
+})
+.or(z.object({
+  [MatchSchema.enum.Tippfehler]: GrundformSchema.array(), 
+}))
+.or(z.object({
+  [MatchSchema.enum.Unbekannt]: UnbekanntGrundformSchema.array(), 
+}))
+.refine(
   data => Object.values(data).some(value => value !== undefined),
   { message: "Mindestens ein Feld muss definiert sein" }
 );
 </schema>
 <outputformat>outputformat shall be formattes as grundformsOutputSchema</outputformat>`;
 
-  const testsSchema = z.record(grundformsOutputSchema);
+  const testsSchema = grundformsOutputSchema;
   const validationResult = testsSchema.safeParse(tests);
 
   if (!validationResult.success) {

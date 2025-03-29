@@ -1,4 +1,4 @@
-import { Trennbarkeit, Regelmaessigkeit, Genus, Wortart, NomenDeklination, Kasus, PartizipVariant, PartikelType, AdverbCategory, Numerus, PronomenType } from "prompts/endgame/zod/types";
+import { Trennbarkeit, Regelmaessigkeit, Genus, Wortart, NomenDeklination, Kasus, PartikelType, AdverbCategory, Numerus, PronomenType } from "prompts/endgame/zod/types";
 
 const sitzen = {
   "sitzen": [
@@ -392,7 +392,7 @@ const geoffnet = {
       rechtschreibung: "geöffnet",
       grundform: "öffnen",
       emojiBeschreibungs: ["🚪👐"],
-      partizipVariant: PartizipVariant.P2,
+      // partizipVariant: PartizipVariant.P2,
     },
   ]
 };
