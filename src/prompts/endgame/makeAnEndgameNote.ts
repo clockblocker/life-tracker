@@ -6,6 +6,7 @@ import { mergeGrundforms } from "./grundform/formatters/mergeGrungforms";
 import { Block, Grundform, GrundformsOutput, GrundformWithMatch, Match } from "./zod/types";
 import { formatGrundform } from "./grundform/formatters/grundform";
 import { makeMorphemBlock } from "./common-blocks/morphems";
+import { makeAdjektivBlock } from "./grundform/wortart/adjektiv/makeAdjektivBlocks";
 
 async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms: GrundformWithMatch[]): Promise<string> {
     console.log("\n\nendgameNoteCase")
@@ -50,7 +51,9 @@ async function endgameNoteCase(plugin: TextEaterPlugin, file: TFile, exactMatche
     console.log()
 
     const morphemBlock = await makeMorphemBlock(plugin, file, exactMatches[0].grundform);
+    const adjektivBlock = await makeAdjektivBlock(plugin, file, exactMatches[0].grundform);
     morphemBlock && blocks.push(morphemBlock);
+    adjektivBlock && blocks.push(adjektivBlock);
 
     console.log('blocks', blocks)
     
