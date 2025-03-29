@@ -4,8 +4,8 @@ function keyFromGrundform<G extends Grundform>(g: G) {
     return `${g.wortart}-${(g as any)?.genus || ""}`;
 }
 
-export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
-    const merged: G[] = [];
+export function mergeGrundforms<G extends Grundform>(grundforms: G[]): Record<string, G> {
+    const result: Record<string, G> = {};
 
     const m = new Map(grundforms.map(g => [keyFromGrundform(g), {...g, emojiBeschreibungs: [] as string[]}]));
     for (let g of grundforms) {
@@ -22,8 +22,8 @@ export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {
     }
 
     for (let v of m.values()) {
-        merged.push(v);
+        result[v.grundform] = v;
     }
 
-    return merged;
+    return result;
 };
