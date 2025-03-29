@@ -1,5 +1,5 @@
 import { Genus, Nomen, Grundform, Wortart, GrundformWithMatch } from "prompts/endgame/zod/types";
-import { formatLinkToGrundformNote } from "./link";
+import { getFormatLinkToGrundformNote } from "./link";
 import { formatMatch } from "./match";
 
 const nomenativeArticleFromGenus = {
@@ -22,6 +22,6 @@ const formattedWortartFromGrundform = (g: Grundform) => {
     return `*${w}*`
 };
 
-export const formatGrundform = (g: GrundformWithMatch, grundformNotePath: string | null): string => {
-    return [formatMatch(g), formattedWortartFromGrundform(g), formatEmojiBeschreibungs(g), formatLinkToGrundformNote(g, grundformNotePath)].filter(a => a).join(' ');
+export async function formatGrundform(g: GrundformWithMatch, grundformNotePath: string | null): Promise<string> {
+    return [formatMatch(g), formattedWortartFromGrundform(g), formatEmojiBeschreibungs(g), await getFormatLinkToGrundformNote(g, grundformNotePath)].filter(a => a).join(' ');
 };

@@ -3,7 +3,7 @@ import { TFile } from "obsidian";
 import { GrundformKerl, Match, MorphemKerl, Wortart } from "prompts/endgame/zod/types";
 
 export async function getMaybeExistingNotePath(plugin: TextEaterPlugin, file: TFile, word: string) {
-    const targetFile = plugin.app.metadataCache.getFirstLinkpathDest(word, file.path);
+    const targetFile = await plugin.app.metadataCache.getFirstLinkpathDest(word, file.path);
     return targetFile ? targetFile.path : null;
 }
 
@@ -17,10 +17,10 @@ export const getPathToNote = ({ word, wortart, match, maybeExisitingNotePath }: 
     match: Match,
     maybeExisitingNotePath: string | null
 }) => {
-    const ok = maybeExisitingNotePath !== null;
+    const noteExists = maybeExisitingNotePath !== null;
 
     if (word.length < 2) {
-        return ok ? `${maybeExisitingNotePath}|${word}` : "";
+        return noteExists ? `${maybeExisitingNotePath}|${word}` : "";
     }
 
     switch (wortart) {
@@ -39,26 +39,26 @@ export const getPathToNote = ({ word, wortart, match, maybeExisitingNotePath }: 
         case Wortart.Artikel:
             return `Grammatik/${wortart}/List/${word} (${wortart})`;
         default:
-            return ok ? `${maybeExisitingNotePath}|${word}` : `Worter/${match}/${wortart}/${word[0]}/${word[1]}/${word}`
+            return noteExists ? `${maybeExisitingNotePath}` : `Worter/${match}/${wortart}/${word[0]}/${word[1]}/${word}`
 }};
 
-export function formatPathToGrundformNoteAsLink<G extends {grundform: string}>(g: G, path: string) {
+export function formatPathToGrundformNoteAsLink({ word, path, noteExists }: { word: string, path: string, noteExists: boolean }) {
     if (!path) {
         return "";
-    } else if (!path.includes("/")) {
-        return `[[${path}]]`;
+    } else if (noteExists) {
+        return `[[${word}]]`;
     } 
-    return `[[${path}|${g.grundform}]]`
+    return `[[${path}|${word}]]`
 };
 
-export async function formatLinkToGrundformNote(g: GrundformKerl, maybeExisitingNotePath: string | null) {
-    const path = await getPathToNote({
+export async function getFormatLinkToGrundformNote(g: GrundformKerl, maybeExisitingNotePath: string | null) {
+    const path = getPathToNote({
         word: g.grundform, 
         wortart: g.wortart, 
         match: Match.Grundform,
         maybeExisitingNotePath
     });
-    return formatPathToGrundformNoteAsLink(g, path);
+    return formatPathToGrundformNoteAsLink({ word: g.grundform, path, noteExists: !!maybeExisitingNotePath });
 };
 
 export async function getPathsToGrundformNotes(plugin: TextEaterPlugin, file: TFile, kerls: GrundformKerl[]) {

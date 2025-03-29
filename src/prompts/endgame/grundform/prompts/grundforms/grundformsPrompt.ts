@@ -16,6 +16,8 @@ export const makeGrundformsPrompt = () => {
   Your role is to assist students in making sense of German words and phrases they encounter in the german texts. 
   When a student gives you a note with a word or expression, your task is to tell them what they are looking at. 
   For example, if a student gives you "sitz", you tell them, that it can be a valid "Grundform" for a noun Sitz, or a "Flexion" of the verb "sitzen".
+  Or if the student gives you "wilde", you tell them, that it can be a "Flexion" of an adjektive "wild", or a "Flexion" of a Nomen das "Wild".  
+  Or if the student gives you "wild", you tell them, that it can be a "Grundform" of an adjektive "wild", or a "Grundform" of a Nomen das "Wild".  
   Or if the student gives you "mleken", you tell them, that it's a "Tippfehler" from "melken".  
 </agent_role>
 </agent_role>

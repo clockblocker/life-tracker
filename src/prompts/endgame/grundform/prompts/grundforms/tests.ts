@@ -1311,9 +1311,60 @@ const bildungsurlaub = {
   }
 };
 
+const wild = {
+  "wild": {
+    [Match.Grundform]: [
+      {
+        wortart: Wortart.Adjektiv,
+        grundform: "wild",
+        emojiBeschreibungs: ["🦁"]
+      },
+      {
+        wortart: Wortart.Nomen,
+        grundform: "Wild",
+        emojiBeschreibungs: ["🦌"],
+        genus: Genus.N
+      }
+    ]
+  }
+};
+
+const wilder = {
+  "wilder": {
+    [Match.Flexion]: [
+      {
+        wortart: Wortart.Adjektiv,
+        grundform: "wild",
+        emojiBeschreibungs: ["🦁"]
+      }
+    ]
+  }
+};
+
+const wilde = {
+  "wilde": {
+    [Match.Flexion]: [
+      {
+        wortart: Wortart.Adjektiv,
+        grundform: "wild",
+        emojiBeschreibungs: ["🦁"]
+      },
+      {
+        wortart: Wortart.Nomen,
+        grundform: "Wild",
+        emojiBeschreibungs: ["🦌"],
+        genus: Genus.N
+      }
+    ]
+  }
+};
+
 export const tests = {
   ...molken,
   ...sie,
+  ...wild,
+  ...wilder,
+  ...wilde,
   ...glaubiger,
   ...genau,
   ...genauso,

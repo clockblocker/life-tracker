@@ -200,7 +200,7 @@ const morphemAnalysisOutputSchema = z.object({
 const SteigerungsfaehigSchema = z.boolean(); // "Steigerungsfaehig", "Unsteigerungsfaehig"
 const VergleichsgradSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 
-const AdjektivOutputSchema = z.array(z.object({
+const adjektivOutputSchema = z.array(z.object({
   "adjektivstamm": z.object({
     [VergleichsgradSchema.enum.Positiv]: z.string(),
     [VergleichsgradSchema.enum.Komparativ]: z.string().optional(),
@@ -249,7 +249,7 @@ export {
   NomenDeklinationSchema,
   MorphemSchema,
   morphemAnalysisOutputSchema,
-  AdjektivOutputSchema,
+  adjektivOutputSchema,
   MatchSchema,
 };
 

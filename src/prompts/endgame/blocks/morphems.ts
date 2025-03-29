@@ -22,7 +22,7 @@ async function getZusammengesetztAusBlock(plugin: TextEaterPlugin, file: TFile, 
 
     for (let i = 0; i < kerls.length; i++) {
         backlinks.push({path: paths[i]});
-        reprs.push(formatPathToGrundformNoteAsLink(kerls[i], paths[i]));
+        reprs.push(formatPathToGrundformNoteAsLink({ word: kerls[i].grundform, path: paths[i], noteExists: false }));
     }
 
     return { repr: reprs.join(' + '), backlinks };
@@ -41,7 +41,7 @@ function getMorphemischeZerlegungBlock(morphemAnalysis: MorphemAnalysisOutput): 
 
     for (let i = 0; i < kerls.length; i++) {
         backlinks.push({path: paths[i], tags: [`Morphem/${kerls[i].morphem}`]});
-        reprs.push(formatPathToGrundformNoteAsLink(kerls[i], paths[i]));
+        reprs.push(formatPathToGrundformNoteAsLink({ word: kerls[i].grundform, path: paths[i], noteExists: false }));
     }
 
     return { repr: reprs.join('|'), backlinks };

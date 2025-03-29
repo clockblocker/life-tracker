@@ -8,15 +8,22 @@ import { formatGrundform } from "./grundform/formatters/grundform";
 import { makeMorphemBlock } from "./blocks/morphems";
 
 async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms: GrundformWithMatch[]): Promise<string> {
+    console.log("\n\nendgameNoteCase")
+    console.log("grundforms")
+    console.log(grundforms)
+    console.log()
+
     const mergedGrundforms = mergeGrundforms(grundforms);
     mergedGrundforms.sort((a, b) => compareGrundforms(a, b));
 
-    const linksPromises = mergedGrundforms.map(async (g) => {
-        const path = await getMaybeExistingNotePath(plugin, file, g.grundform);
-        return formatGrundform(g, path);
-    });
+    const formattedLinks = await Promise.all(
+        mergedGrundforms.map(async (g) => {
+            const path = await getMaybeExistingNotePath(plugin, file, g.grundform);
+            return await formatGrundform(g, path);
+        })
+    );
 
-    const formattedLinks = await Promise.all(linksPromises);
+    console.log("formattedLinks", formattedLinks);
     
     const groupedLinks = formattedLinks.reduce((acc, link, index) => {
         const currentGrundform = mergedGrundforms[index];
@@ -36,6 +43,11 @@ async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms:
 
 async function endgameNoteCase(plugin: TextEaterPlugin, file: TFile, exactMatches: Grundform[]): Promise<string> {
     let blocks: Block[] = [];
+
+    console.log("\n\nendgameNoteCase")
+    console.log("exactMatches")
+    console.log(exactMatches)
+    console.log()
 
     const morphemBlock = await makeMorphemBlock(plugin, file, exactMatches[0].grundform);
     morphemBlock && blocks.push(morphemBlock);
