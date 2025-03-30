@@ -8,6 +8,7 @@ import { formatGrundform } from "./grundform/formatters/grundform";
 import { makeMorphemBlock } from "./common-blocks/morphems";
 import { makeAdjektivBlock } from "./grundform/wortart/adjektiv/makeAdjektivBlocks";
 import { addBlocksToNote } from "./noteManagement/new-note";
+import { BlockTitle } from "./noteManagement/types-and-constants";
 
 async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms: GrundformWithMatch[]): Promise<string> {
     console.log("\n\nendgameNoteCase")
@@ -82,5 +83,11 @@ export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, ou
     //     }
     // }))
 
-    await plugin.fileService.doTheThing(file.path, "text");
+    const { content, error } = await plugin.fileService.readFileContentByPath(file.path);
+    if (error) {
+        return;
+    }
+    await addBlocksToNote(content, {
+        [BlockTitle.Tags]: "#Tag1/subtag #Tag2/another_subtag"
+    })
 };

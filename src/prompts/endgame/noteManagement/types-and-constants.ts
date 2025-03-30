@@ -1,67 +1,51 @@
-export const BlockTitle = {
-    Formen: "Formen",
-    Kontexte: "Kontexte",
-    Synonyme: "Synonyme",
-    Morpheme: "Morpheme",
-    Translations: "Translations",
-    Related: "Related",
-    Flexion: "Flexion",
-    Grammatik: "Grammatik",
-    Tags: "Tags"
-}
+import { z } from "zod";
 
-export const ReprFromBlockTitle = {
-    [BlockTitle.Formen]: "Formen",
-    [BlockTitle.Kontexte]: "Deine Kontexte",
-    [BlockTitle.Synonyme]: "Semantische Beziehungen",
-    [BlockTitle.Morpheme]: "Morpheme",
-    [BlockTitle.Translations]: "Übersetzung",
-    [BlockTitle.Related]: "Verweise",
-    [BlockTitle.Flexion]: "Flexion",
-    [BlockTitle.Grammatik]: "Grammatik",
-    [BlockTitle.Tags]: "Tags",
+const titles = [
+  "Formen",
+  "Kontexte",
+  "Synonyme",
+  "Morpheme",
+  "Translations",
+  "Related",
+  "Flexion",
+  "Grammatik",
+  "Tags",
+] as const;
+// Assume these constants are defined elsewhere in your code:
+const BlockTitleSchema = z.enum(titles);
+
+export type BlockTitle = z.infer<typeof BlockTitleSchema>;
+export const BlockTitle = BlockTitleSchema.Enum;
+export const allBlockTitles = [...titles] as BlockTitle[];
+
+
+export const cssClassNameFromBlockTitle: Record<BlockTitle, string> = {
+  [BlockTitle.Formen]: "block_title_formen",
+  [BlockTitle.Kontexte]: "block_title_kontexte",
+  [BlockTitle.Synonyme]: "block_title_synonyme",
+  [BlockTitle.Morpheme]: "block_title_morpheme",
+  [BlockTitle.Translations]: "block_title_translations",
+  [BlockTitle.Related]: "block_title_related",
+  [BlockTitle.Flexion]: "block_title_flexion",
+  [BlockTitle.Grammatik]: "block_title_grammatik",
+  [BlockTitle.Tags]: "block_title_tags",
 };
 
-export const WeightsFromBlockTitle = {
-    [BlockTitle.Formen]: 0,
-    [BlockTitle.Kontexte]: 10,
-    [BlockTitle.Synonyme]: 20,
-    [BlockTitle.Morpheme]: 30,
-    [BlockTitle.Translations]: 40,
-    [BlockTitle.Related]: 50,
-    [BlockTitle.Flexion]: 60,
-    [BlockTitle.Grammatik]: 70,
-    [BlockTitle.Tags]: 100,
+export const elementStringFromBlockTitle: Record<BlockTitle, string> = {
+  [BlockTitle.Formen]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Formen]}">${BlockTitle.Formen}</span>`,
+  [BlockTitle.Kontexte]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Kontexte]}">${BlockTitle.Kontexte}</span>`,
+  [BlockTitle.Synonyme]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Synonyme]}">${BlockTitle.Synonyme}</span>`,
+  [BlockTitle.Morpheme]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Morpheme]}">${BlockTitle.Morpheme}</span>`,
+  [BlockTitle.Translations]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Translations]}">${BlockTitle.Translations}</span>`,
+  [BlockTitle.Related]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Related]}">${BlockTitle.Related}</span>`,
+  [BlockTitle.Flexion]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Flexion]}">${BlockTitle.Flexion}</span>`,
+  [BlockTitle.Grammatik]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Grammatik]}">${BlockTitle.Grammatik}</span>`,
+  [BlockTitle.Tags]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Tags]}">${BlockTitle.Tags}</span>`,
 };
 
-export const cssClassNameFromBlockTitle = {
-    [BlockTitle.Formen]: "block_title_formen",
-    [BlockTitle.Kontexte]: "block_title_kontexte",
-    [BlockTitle.Synonyme]: "block_title_synonyme",
-    [BlockTitle.Morpheme]: "block_title_morpheme",
-    [BlockTitle.Translations]: "block_title_translations",
-    [BlockTitle.Related]: "block_title_related",
-    [BlockTitle.Flexion]: "block_title_flexion",
-    [BlockTitle.Grammatik]: "block_title_grammatik",
-    [BlockTitle.Tags]: "block_title_tags",
-};
+export const BLOCK_DELIMETER = "---";
 
-export const blockTitleClass = "block_title"
-
-export const elementStringFromBlockTitle = {
-    [BlockTitle.Formen]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Formen]}">${ReprFromBlockTitle[BlockTitle.Formen]}</span>`,
-    [BlockTitle.Kontexte]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Kontexte]}">${ReprFromBlockTitle[BlockTitle.Kontexte]}</span>`,
-    [BlockTitle.Synonyme]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Synonyme]}">${ReprFromBlockTitle[BlockTitle.Synonyme]}</span>`,
-    [BlockTitle.Morpheme]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Morpheme]}">${ReprFromBlockTitle[BlockTitle.Morpheme]}</span>`,
-    [BlockTitle.Translations]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Translations]}">${ReprFromBlockTitle[BlockTitle.Translations]}</span>`,
-    [BlockTitle.Related]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Related]}">${ReprFromBlockTitle[BlockTitle.Related]}</span>`,
-    [BlockTitle.Flexion]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Flexion]}">${ReprFromBlockTitle[BlockTitle.Flexion]}</span>`,
-    [BlockTitle.Grammatik]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Grammatik]}">${ReprFromBlockTitle[BlockTitle.Grammatik]}</span>`,
-    [BlockTitle.Tags]: `<span class="${blockTitleClass} ${cssClassNameFromBlockTitle[BlockTitle.Tags]}">${ReprFromBlockTitle[BlockTitle.Tags]}</span>`,
-};
-
-export const BlockDelimeter = `
----`
+export const reprFromBlockSchema = z.record(BlockTitleSchema, z.string());
 
 const MeningfullBlockTitlesForEveryone = [BlockTitle.Formen, BlockTitle.Kontexte];
 const TechnikalBlockTitlesForEveryone = [BlockTitle.Related, BlockTitle.Tags];
