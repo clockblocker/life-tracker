@@ -7,6 +7,7 @@ import { Block, Grundform, GrundformsOutput, GrundformWithMatch, Match } from ".
 import { formatGrundform } from "./grundform/formatters/grundform";
 import { makeMorphemBlock } from "./common-blocks/morphems";
 import { makeAdjektivBlock } from "./grundform/wortart/adjektiv/makeAdjektivBlocks";
+import { addBlocksToNote } from "./noteManagement/new-note";
 
 async function endgameLinkCase(plugin: TextEaterPlugin, file: TFile, grundforms: GrundformWithMatch[]): Promise<string> {
     console.log("\n\nendgameNoteCase")
@@ -73,13 +74,13 @@ export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, ou
     console.log("output");
     console.log(output);
 
-    const allParts = await Promise.all(Object.entries(output).map(([match, grundforms]) => {
-        if (match === Match.Grundform) {
-            return endgameNoteCase(plugin, file, grundforms);
-        } else {
-            return endgameLinkCase(plugin, file, grundforms.map(g => ({...g, match: match as Match})));
-        }
-    }))
+    // const allParts = await Promise.all(Object.entries(output).map(([match, grundforms]) => {
+    //     if (match === Match.Grundform) {
+    //         return endgameNoteCase(plugin, file, grundforms);
+    //     } else {
+    //         return endgameLinkCase(plugin, file, grundforms.map(g => ({...g, match: match as Match})));
+    //     }
+    // }))
 
-    await plugin.fileService.appendToFile(file.path, allParts.join("\n") + "\n");
+    await plugin.fileService.doTheThing(file.path, "text");
 };
