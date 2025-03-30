@@ -2,7 +2,7 @@ import { Regelmaessigkeit, Steigerungsfaehigkeit, Vergleichsgrad } from "prompts
 
 const gut = {
   "gut": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["gut"],
       [Vergleichsgrad.Komparativ]: ["besser"],
       [Vergleichsgrad.Superlativ]: ["best"],
@@ -14,7 +14,7 @@ const gut = {
 
 const gross = {
   "groß": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["groß"],
       [Vergleichsgrad.Komparativ]: ["größer"],
       [Vergleichsgrad.Superlativ]: ["größt"],
@@ -26,7 +26,7 @@ const gross = {
 
 const klein = {
   "klein": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["klein"],
       [Vergleichsgrad.Komparativ]: ["kleiner"],
       [Vergleichsgrad.Superlativ]: ["kleinst"],
@@ -38,7 +38,7 @@ const klein = {
 
 const aussehend = {
   "aussehend": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["aussehend"],
     },
     regelmaessig: true,
@@ -48,7 +48,7 @@ const aussehend = {
 
 const tot = {
   "tot": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["tot"],
     },
     regelmaessig: true,
@@ -58,7 +58,7 @@ const tot = {
 
 const fleissig = {
   "fleißig": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["fleißig"],
       [Vergleichsgrad.Komparativ]: ["fleißiger"],
       [Vergleichsgrad.Superlativ]: ["fleißigst"],
@@ -70,7 +70,7 @@ const fleissig = {
 
 const selbstbewusst = {
   "selbstbewusst": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["selbstbewusst"],
       [Vergleichsgrad.Komparativ]: ["selbstbewusster"],
       [Vergleichsgrad.Superlativ]: ["selbstbewusstest"],
@@ -82,7 +82,7 @@ const selbstbewusst = {
 
 const hoch = {
   "hoch": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["hoch"],
       [Vergleichsgrad.Komparativ]: ["höher"],
       [Vergleichsgrad.Superlativ]: ["höchst"],
@@ -94,7 +94,7 @@ const hoch = {
 
 const langsam = {
   "langsam": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["langsam"],
       [Vergleichsgrad.Komparativ]: ["langsamer"],
       [Vergleichsgrad.Superlativ]: ["langsamst"],
@@ -106,7 +106,7 @@ const langsam = {
 
 const fromm = {
   "fromm": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["fromm"],
       [Vergleichsgrad.Komparativ]: ["frommer"],
       [Vergleichsgrad.Superlativ]: ["frommst"],
@@ -115,7 +115,7 @@ const fromm = {
     steigerungsfaehig: true,
   },
   {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["fromm"],
       [Vergleichsgrad.Komparativ]: ["frömmer"],
       [Vergleichsgrad.Superlativ]: ["frömmst"],
@@ -127,7 +127,7 @@ const fromm = {
 
 const glatt = {
   "glatt": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["glatt"],
       [Vergleichsgrad.Komparativ]: ["glatter"],
       [Vergleichsgrad.Superlativ]: ["glattst"],
@@ -136,7 +136,7 @@ const glatt = {
     steigerungsfaehig: true,
   }, 
   {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["glatt"],
       [Vergleichsgrad.Komparativ]: ["glätter"],
       [Vergleichsgrad.Superlativ]: ["glättst"],
@@ -148,7 +148,7 @@ const glatt = {
 
 const arg = {
   "arg": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["arg"],
       [Vergleichsgrad.Komparativ]: ["ärger"],
       [Vergleichsgrad.Superlativ]: ["ärgst"],
@@ -160,7 +160,7 @@ const arg = {
 
 const bange = {
   "bange": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["bange"],
       [Vergleichsgrad.Komparativ]: ["banger"],
       [Vergleichsgrad.Superlativ]: ["bangst"],
@@ -169,7 +169,7 @@ const bange = {
     steigerungsfaehig: true,
   },
   {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["bange"],
       [Vergleichsgrad.Komparativ]: ["bänger"],
       [Vergleichsgrad.Superlativ]: ["bängst"],
@@ -181,7 +181,7 @@ const bange = {
 
 const blass = {
   "blass": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["blass"],
       [Vergleichsgrad.Komparativ]: ["blasser"],
       [Vergleichsgrad.Superlativ]: ["blassest"],
@@ -190,7 +190,7 @@ const blass = {
     steigerungsfaehig: true,
   },
   {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["blass"],
       [Vergleichsgrad.Komparativ]: ["blässer"],
       [Vergleichsgrad.Superlativ]: ["blässest"],
@@ -202,7 +202,7 @@ const blass = {
 
 const dumm = {
   "dumm": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["dumm"],
       [Vergleichsgrad.Komparativ]: ["dümmer"],
       [Vergleichsgrad.Superlativ]: ["dümmst"],
@@ -215,7 +215,7 @@ const dumm = {
 const gesund = {
   "gesund": [
     {
-      adjektivstamm: {
+      adjektivstaemme: {
         [Vergleichsgrad.Positiv]: ["gesund"],
         [Vergleichsgrad.Komparativ]: ["gesunder"],
         [Vergleichsgrad.Superlativ]: ["gesundest"],
@@ -224,7 +224,7 @@ const gesund = {
       steigerungsfaehig: true,
     },
     {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["gesund"],
       [Vergleichsgrad.Komparativ]: ["gesünder"],
       [Vergleichsgrad.Superlativ]: ["gesündest"],
@@ -237,7 +237,7 @@ const gesund = {
 
 const grob = {
   "grob": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["grob"],
       [Vergleichsgrad.Komparativ]: ["gröber"],
       [Vergleichsgrad.Superlativ]: ["gröbst"],
@@ -249,7 +249,7 @@ const grob = {
 
 const karg = {
   "karg": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["karg"],
       [Vergleichsgrad.Komparativ]: ["karger"],
       [Vergleichsgrad.Superlativ]: ["kargst"],
@@ -258,7 +258,7 @@ const karg = {
     steigerungsfaehig: true,
   },
   {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["karg"],
       [Vergleichsgrad.Komparativ]: ["kärger"],
       [Vergleichsgrad.Superlativ]: ["kärgst"],
@@ -270,7 +270,7 @@ const karg = {
 
 const klug = {
   "klug": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["klug"],
       [Vergleichsgrad.Komparativ]: ["klüger"],
       [Vergleichsgrad.Superlativ]: ["klügst"],
@@ -282,7 +282,7 @@ const klug = {
 
 const krank = {
   "krank": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["krank"],
       [Vergleichsgrad.Komparativ]: ["kränker"],
       [Vergleichsgrad.Superlativ]: ["kränkst"],
@@ -294,7 +294,7 @@ const krank = {
 
 const nah = {
   "nah": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["nah"],
       [Vergleichsgrad.Komparativ]: ["näher"],
       [Vergleichsgrad.Superlativ]: ["nächst"],
@@ -306,7 +306,7 @@ const nah = {
 
 const nass = {
   "nass": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["nass"],
       [Vergleichsgrad.Komparativ]: ["nasser"],
       [Vergleichsgrad.Superlativ]: ["nassest"],
@@ -315,7 +315,7 @@ const nass = {
     steigerungsfaehig: true,
   },
   {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["nass"],
       [Vergleichsgrad.Komparativ]: ["nässer"],
       [Vergleichsgrad.Superlativ]: ["nässest"],
@@ -328,7 +328,7 @@ const nass = {
 const schmal = {
   "schmal": [
     {
-      adjektivstamm: {
+      adjektivstaemme: {
         [Vergleichsgrad.Positiv]: ["schmal"],
         [Vergleichsgrad.Komparativ]: ["schmaler"],
         [Vergleichsgrad.Superlativ]: ["schmalst"],
@@ -337,7 +337,7 @@ const schmal = {
       steigerungsfaehig: true,
     },
     {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["schmal"],
       [Vergleichsgrad.Komparativ]: ["schmäler"],
       [Vergleichsgrad.Superlativ]: ["schmälst"],
@@ -350,7 +350,7 @@ const schmal = {
 
 const schön = {
   "schön": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["schön"],
       [Vergleichsgrad.Komparativ]: ["schöner"],
       [Vergleichsgrad.Superlativ]: ["schönst"],
@@ -362,7 +362,7 @@ const schön = {
 
 const schwarz = {
   "schwarz": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["schwarz"],
       [Vergleichsgrad.Komparativ]: ["schwärzer"],
       [Vergleichsgrad.Superlativ]: ["schwärzest"],
@@ -374,7 +374,7 @@ const schwarz = {
 
 const teuer = {
   "teu": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["teu"],
       [Vergleichsgrad.Komparativ]: ["teurer"],
       [Vergleichsgrad.Superlativ]: ["teuerst"],
@@ -386,7 +386,7 @@ const teuer = {
 
 const viel = {
   "viel": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["viel"],
       [Vergleichsgrad.Komparativ]: ["mehrer"],
       [Vergleichsgrad.Superlativ]: ["meist"],
@@ -398,7 +398,7 @@ const viel = {
 
 const wenig = {
   "wenig": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["wenig"],
       [Vergleichsgrad.Komparativ]: ["weniger"],
       [Vergleichsgrad.Superlativ]: ["wenigst"],
@@ -407,7 +407,7 @@ const wenig = {
     steigerungsfaehig: true,
   },
   {
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["wenig"],
       [Vergleichsgrad.Komparativ]: ["minder"],
       [Vergleichsgrad.Superlativ]: ["mindest"],
@@ -419,7 +419,7 @@ const wenig = {
 
 const wild = {
   "wild": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["wild"],
       [Vergleichsgrad.Komparativ]: ["wilder"],
       [Vergleichsgrad.Superlativ]: ["wildest"],
@@ -431,7 +431,7 @@ const wild = {
 
 const sauer = {
   "sauer": [{
-    adjektivstamm: {
+    adjektivstaemme: {
       [Vergleichsgrad.Positiv]: ["sauer"],
       [Vergleichsgrad.Komparativ]: ["saurer", "sauerer"],
       [Vergleichsgrad.Superlativ]: ["saurste", "sauerste"],

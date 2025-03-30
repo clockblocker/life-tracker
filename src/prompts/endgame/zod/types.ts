@@ -6,6 +6,8 @@ export type Nomen = z.infer<typeof NomenGrundformSchema>;
 export type Wortart = z.infer<typeof WortartSchema>;
 export const Wortart = WortartSchema.Enum;
 
+
+// Genus, Kasus, NomenDeklination, Numerus 
 export type Genus = z.infer<typeof GenusSchema>;
 export const Genus = GenusSchema.Enum;
 

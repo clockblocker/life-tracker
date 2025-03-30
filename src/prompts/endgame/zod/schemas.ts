@@ -201,7 +201,7 @@ const SteigerungsfaehigSchema = z.boolean(); // "Steigerungsfaehig", "Unsteigeru
 const VergleichsgradSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 
 const adjektivOutputSchema = z.array(z.object({
-  "adjektivstamm": z.object({
+  "adjektivstaemme": z.object({
     [VergleichsgradSchema.enum.Positiv]: z.string().array(),
     [VergleichsgradSchema.enum.Komparativ]: z.string().array().optional(),
     [VergleichsgradSchema.enum.Superlativ]: z.string().array().optional(),

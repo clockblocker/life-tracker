@@ -13,7 +13,6 @@ export const makeEndgameAdjektivPrompt = () => {
 
 <instructions>
 Your task is to generate a valid JSON object for every given adjective, strictly following the provided JSON schema (adjektivOutputSchema). The JSON must include the adjective stem with its degrees (Positiv, Komparativ, and Superlativ) and flags for "regelmaessig" and "steigerungsfaehig". The input might contain errors and is case-insensitive, but the output must be correct and case-sensitive. Beyond simply mapping schema fields, apply your deep understanding of German adjective gradation:
-  - Recognize the correct base form (adjektivstamm) even if the input form is inflected.
   - For adjectives that have irregular gradation (e.g., "gut", "groß", "fromm", "glatt", "arg", "bange"), ensure you output the proper comparative and superlative forms.
   - If an adjective only has a base form (as with adjectives that are not gradable, e.g., "tot", "aussehend"), output only the Positiv and set steigerungsfaehig to false.
   - Some adjectives have multiple possible gradation forms (e.g., "fromm" or "glatt"); in such cases, list each possibility as a separate object within the array.
@@ -24,10 +23,10 @@ The output format shall be as defined by the adjektivOutputSchema. For example:
   
 For the adjective "gut":
 [{
-  "adjektivstamm": {
-    "Positiv": "gut",
-    "Komparativ": "besser",
-    "Superlativ": "best"
+  "adjektivstaemme": {
+    "Positiv": ["gut"],
+    "Komparativ": ["besser"],
+    "Superlativ": ["best]"
   },
   "regelmaessig": false,
   "steigerungsfaehig": true
@@ -35,10 +34,10 @@ For the adjective "gut":
 
 For "klein", the gradation is:
 [{
-  "adjektivstamm": {
-    "Positiv": "klein",
-    "Komparativ": "kleiner",
-    "Superlativ": "kleinst"
+  "adjektivstaemme": {
+    "Positiv": ["klein"],
+    "Komparativ": ["kleiner"],
+    "Superlativ": ["kleinst]"
   },
   "regelmaessig": true,
   "steigerungsfaehig": true
@@ -46,8 +45,8 @@ For "klein", the gradation is:
 
 For unsteigerungsfaehig "aussehend", the gradation is:
 [{
-  "adjektivstamm": {
-    "Positiv": "aussehend",
+  "adjektivstaemme": {
+    "Positiv": ["aussehend"],
   },
   "regelmaessig": true,
   "steigerungsfaehig": false,
@@ -56,19 +55,19 @@ For unsteigerungsfaehig "aussehend", the gradation is:
 For "fromm", that can be both regelmaessig and unregelmaessig gradation is:
 [
   {
-    "adjektivstamm": {
-      "Positiv": "fromm",
-      "Komparativ": "frommer",
-      "Superlativ": "frommst",
+    "adjektivstaemme": {
+      "Positiv": ["fromm"],
+      "Komparativ": ["frommer"],
+      "Superlativ": ["frommst"],
     },
     "regelmaessig": true,
     "steigerungsfaehig": true,
   },
   {
-    "adjektivstamm": {
-      "Positiv": "fromm",
-      "Komparativ": "frömmer",
-      "Superlativ": "frömmst",
+    "adjektivstaemme": {
+      "Positiv": ["fromm"],
+      "Komparativ": ["frömmer"],
+      "Superlativ": ["frömmst"],
     },
     "regelmaessig": false,
     "steigerungsfaehig": true,
@@ -78,13 +77,13 @@ For "fromm", that can be both regelmaessig and unregelmaessig gradation is:
 For "sauer", that's regelmaessig grand forms, can have miultiple valid writings: "sau(e)rer"/"sau(e)rste", the gradation is:
 const sauer = {
   "sauer": [{
-    adjektivstamm: {
-      [Vergleichsgrad.Positiv]: ["sauer"],
-      [Vergleichsgrad.Komparativ]: ["saurer", "sauerer"],
-      [Vergleichsgrad.Superlativ]: ["saurste", "sauerste"],
+    adjektivstaemme: {
+      "Positiv": ["sauer"],
+      "Komparativ": ["saurer", "sauerer"],
+      "Superlativ": ["saurste", "sauerste"],
     },
-    regelmaessig: true,
-    steigerungsfaehig: true,
+    "regelmaessig": true,
+    "steigerungsfaehig": true,
   }]
 };
 
@@ -95,7 +94,7 @@ import { z } from "zod";
 const VergleichsgradSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 
 const adjektivOutputSchema = z.array(z.object({
-  "adjektivstamm": z.object({
+  "adjektivstaemme": z.object({
     [VergleichsgradSchema.enum.Positiv]: z.string().array(),
     [VergleichsgradSchema.enum.Komparativ]: z.string().array().optional(),
     [VergleichsgradSchema.enum.Superlativ]: z.string().array().optional(),

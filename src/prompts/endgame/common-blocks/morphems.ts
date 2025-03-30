@@ -1,10 +1,10 @@
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
-import { prompts } from "prompts";
 import { morphemAnalysisOutputSchema } from "../zod/schemas";
 import { Backlink, Block, GrundformKerl, MorphemAnalysisOutput, MorphemKerl } from "../zod/types";
 import { getPathsToGrundformNotes, formatPathToGrundformNoteAsLink, getPathsToMorphemNotes } from "../grundform/formatters/link";
 import { promtMakerFromKeyword } from "../grundform/wortart/endgamePromptMakers";
+import { makeTagChain, Tag } from "../zod/consts";
 
 async function getZusammengesetztAusBlock(plugin: TextEaterPlugin, file: TFile, morphemAnalysis: MorphemAnalysisOutput): Promise<Block> {
     if (!morphemAnalysis.zusammengesetztAus) {
@@ -41,7 +41,8 @@ function getMorphemischeZerlegungBlock(morphemAnalysis: MorphemAnalysisOutput): 
     let reprs: string[] = [];
 
     for (let i = 0; i < kerls.length; i++) {
-        backlinks.push({path: paths[i], tags: [`Morphem/${kerls[i].morphem}`]});
+        const tags = [makeTagChain([Tag.Morphem, kerls[i].morphem])]
+        backlinks.push({path: paths[i], tags});
         reprs.push(formatPathToGrundformNoteAsLink({ word: kerls[i].grundform, path: paths[i], noteExists: false }));
     }
 

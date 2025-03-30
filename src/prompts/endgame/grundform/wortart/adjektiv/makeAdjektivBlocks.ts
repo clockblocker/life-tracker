@@ -1,10 +1,12 @@
-import { AdjektivOutput, Backlink, GrundformKerl, Match, Vergleichsgrad, Wortart } from "prompts/endgame/zod/types";
+import { AdjektivOutput, Backlink, Genus, GrundformKerl, Kasus, Match, NomenDeklination, Numerus, Vergleichsgrad, Wortart } from "prompts/endgame/zod/types";
 import { promtMakerFromKeyword } from "../endgamePromptMakers";
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
 import { adjektivOutputSchema } from "prompts/endgame/zod/schemas";
-import { AllDeclensions, getSentencesForAllDeclensions, makeAllDeclensionsFromAdjektivstamm } from "./formatter";
-import { getPathsToGrundformNotes, getPathsToNotes } from "../../formatters/link";
+import { getPathsToNotes } from "../../formatters/link";
+import { makeAllDeclensionsFromAdjektivstamm } from "./formatter";
+import { AllDeclensions, AllDeclensionsFromGrad, allDeclensionsFromGradKeys, AllDeclensionsFromGradSchema, allDeclensionsKeys, caseDeclensionKeys, declensionKeys, fromFromNomenDeklinationFromKasusFromCaseDeclension, PathFromWortFromGrad, PathFromWortFromGradSchema } from "./types-and-consts";
+import { makeTagChain, Tag } from "prompts/endgame/zod/consts";
 
 export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, word: string): Promise<{ repr: string, backlinks: Backlink[] } | null> {
     const prompt = promtMakerFromKeyword[Wortart.Adjektiv]();
@@ -23,7 +25,7 @@ export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, wo
 
     await makeBlocksForAdjektivOutputElement(plugin, file, adjektivOutput[0])
 
-    // const sentences = adjektivOutput.map(o => Object.values(o.adjektivstamm).map(a => getSentencesForAllDeclensions(makeAllDeclensionsFromAdjektivstamm(a))));
+    // const sentences = adjektivOutput.map(o => Object.values(o.adjektivstaemme).map(a => getSentencesForAllDeclensions(makeAllDeclensionsFromAdjektivstamm(a))));
     // const repr = sentences.map(i => i.map(ii => ii.map(iii => iii.join("\n")).join("\n\n")).join("\n\n---\n")).join("\n")
     const repr = 'dsadas';
     // const zusammengesetztAusBlock = await getZusammengesetztAusBlock(plugin, file, adjektivOutput);
@@ -33,85 +35,117 @@ export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, wo
 };
 
 async function makeBlocksForAdjektivOutputElement(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]) {
-    const { allDeclensionsFromGrad, pathFromWortFromGrad } = await makeDeclensionsMaps(
+    const { allDeclensionsFromGrad, pathFromWortFromGrad, error } = await makeDeclensionsMaps(
         plugin,
         file,
         adjektivOutputElement
     );
 
+    if (error) {
+        return [];
+    }
+
     const backlinksFromWord: Record<string, Backlink[]> = {};
-    const wordsSet = new Set();
 
-    // For each grad (Positiv, Komparativ, Superlativ)
-    for (const [grad, declensions] of allDeclensionsFromGrad.entries()) {
-        if (!declensions) {
-            continue; // skip if undefined
+    for (let grad of allDeclensionsFromGradKeys) {
+        const allDeclensions = allDeclensionsFromGrad?.[grad];
+        if (!allDeclensions) {
+            continue; 
         }
-
-        const pathFromWort = pathFromWortFromGrad.get(grad);
+        
+        const pathFromWort = pathFromWortFromGrad?.[grad];
         if (!pathFromWort) {
-            continue; // skip if undefined
+            continue; 
         }
+        
+        for (let art of allDeclensionsKeys) {
+            const i = allDeclensions[art];
+            if (i === undefined) { continue }
 
-        for (const [flexionsart, flexionsartDeclensions] of Object.entries(declensions) as [
-            keyof AllDeclensions,
-            AllDeclensions[keyof AllDeclensions]
-          ][]) {
-            for (const [fall, fallDeclensions] of Object.entries(flexionsartDeclensions) as [
-              keyof typeof flexionsartDeclensions,
-              typeof flexionsartDeclensions[keyof typeof flexionsartDeclensions]
-            ][]) {
-              for (const [genus, details] of Object.entries(fallDeclensions) as [
-                keyof typeof fallDeclensions,
-                typeof fallDeclensions[keyof typeof fallDeclensions]
-              ][]) {
-                const { agj } = details;
-                const existingBacklinks = backlinksFromWord[agj] || [];
-                
-                if (pathFromWort) {
-                    const path = pathFromWort[agj]
-                    backlinksFromWord[agj] = [...existingBacklinks, { path, tags: [`${Wortart.Adjektiv}/${adjektivOutputElement.regelmaessig ? "Regelmaessig" : "Unregelmaessig"}/${grad}/${flexionsart}`]}]
+            for (let kasus of declensionKeys) {
+                const ii = i[kasus];
+                if (ii === undefined) { continue }
+
+                for (let caseDec of caseDeclensionKeys) {
+                    const roots = ii[caseDec];
+                    roots.forEach(({ agj }) => {
+                        const existingBacklinks = backlinksFromWord[agj] || [];
+                        
+                        if (pathFromWort) {
+                            const path = pathFromWort[agj];
+                            const tags = makeTagChain([
+                                Wortart.Adjektiv,
+                                adjektivOutputElement.regelmaessig ? Tag.Regelmaessig : Tag.Unregelmaessig,
+                                adjektivOutputElement.steigerungsfaehig ? Tag.Steigerungsfaehig : Tag.Unsteigerungsfaehig,
+                                Wortart.Adjektiv,
+                                grad,
+                                art,
+                            ]);
+                            backlinksFromWord[agj] = [...existingBacklinks, { path, tags: [tags]}]
+                        }
+                    })
                 }
-              }
             }
-          }
+        }
     }
 
     console.log("backlinksFromWord", backlinksFromWord);
 }
 
+function getAllDeclensionsFromGrad(adjektivOutputElement: AdjektivOutput[-1]) {
+    const adjektivstaemmeFromGrad = adjektivOutputElement.adjektivstaemme;
 
-async function makeDeclensionsMaps(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]) {
-    const rootsFromGrad = adjektivOutputElement.adjektivstamm;
+    const unsafeAllDeclensionsFromGrad: any = {};
 
-    const allDeclensionsFromGrad = new Map<Vergleichsgrad, AllDeclensions | undefined>();
-    const allGrades = Object.values(Vergleichsgrad);
-
-    for (const grad of allGrades) {
-        const roots = rootsFromGrad[grad as keyof typeof rootsFromGrad];
+    for (const grad of allDeclensionsFromGradKeys) {
+        const roots = adjektivstaemmeFromGrad[grad as keyof typeof adjektivstaemmeFromGrad];
         if (roots) {
-            const declensions = makeAllDeclensionsFromAdjektivstamm(roots[0]);
-            allDeclensionsFromGrad.set(grad as Vergleichsgrad, declensions);
+            const declensions = makeAllDeclensionsFromAdjektivstamm(roots);
+            unsafeAllDeclensionsFromGrad[grad] = declensions;
         } 
     }
+
+    const parsedAllDeclensions = AllDeclensionsFromGradSchema.safeParse(unsafeAllDeclensionsFromGrad);
     
-    const promiseArray = allGrades.map(async (grad) => {
-    const declensions = allDeclensionsFromGrad.get(grad);
-    if (!declensions) {
-        return [grad, undefined] as const;
+    if (parsedAllDeclensions.error) {
+        console.error(parsedAllDeclensions.error);
+        return undefined;
     }
-    const path = await makePathFromWordFromAllDeclensions(plugin, file, declensions);
+
+    return parsedAllDeclensions.data;
+}
+
+async function makeDeclensionsMaps(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]): Promise<{ allDeclensionsFromGrad: undefined; pathFromWortFromGrad: undefined; error: true; } | { allDeclensionsFromGrad: AllDeclensionsFromGrad; pathFromWortFromGrad: PathFromWortFromGrad; error: false; }> {
+    const allDeclensionsFromGrad = getAllDeclensionsFromGrad(adjektivOutputElement);
+    if (allDeclensionsFromGrad === undefined) {
+        return { allDeclensionsFromGrad: undefined, pathFromWortFromGrad: undefined, error: true };
+    }
+
+    const promiseArray = allDeclensionsFromGradKeys.map(async (grad) => {
+        const declensions = allDeclensionsFromGrad[grad];
+        if (!declensions) {
+            return [grad, undefined] as const;
+        }
+
+        const path = await makePathFromWordFromAllDeclensions(plugin, file, declensions);
         return [grad, path] as const;
     });
     
     const results = await Promise.all(promiseArray);
     
-    const pathFromWortFromGrad = new Map<Vergleichsgrad, Record<string, string> | undefined>();
+    const unsafePathFromWortFromGrad: any = {};
     for (const [grad, path] of results) {
-        pathFromWortFromGrad.set(grad, path);
+        unsafePathFromWortFromGrad[grad] = path;
     }
 
-    return { allDeclensionsFromGrad, pathFromWortFromGrad };
+    const parsedPathFromWortFromGrad = PathFromWortFromGradSchema.safeParse(unsafePathFromWortFromGrad);
+    
+    if (parsedPathFromWortFromGrad.error) {
+        console.error(parsedPathFromWortFromGrad.error);
+        return { allDeclensionsFromGrad: undefined, pathFromWortFromGrad: undefined, error: true };
+    }
+
+    return { allDeclensionsFromGrad, pathFromWortFromGrad: parsedPathFromWortFromGrad.data, error: false };
 };
 
 async function makePathFromWordFromAllDeclensions(plugin: TextEaterPlugin, file: TFile, declensions: AllDeclensions) {
@@ -119,8 +153,8 @@ async function makePathFromWordFromAllDeclensions(plugin: TextEaterPlugin, file:
 
     Object.values(declensions).forEach((declension) => {
       Object.values(declension).forEach((caseDeclension) => {
-        Object.values(caseDeclension).forEach(({agj}) => {
-          agjSet.add(agj);
+        Object.values(caseDeclension).forEach((root) => {
+            root.forEach(({ agj }) => { agjSet.add(agj) })
         });
       });
     });
@@ -136,4 +170,3 @@ async function makePathFromWordFromAllDeclensions(plugin: TextEaterPlugin, file:
 
     return pathFromWort;
 };
-
