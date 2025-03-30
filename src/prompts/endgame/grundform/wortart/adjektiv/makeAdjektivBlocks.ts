@@ -1,4 +1,4 @@
-import { AdjektivOutput, Backlink, Genus, GrundformKerl, Kasus, Match, NomenDeklination, Numerus, Vergleichsgrad, Wortart } from "prompts/endgame/zod/types";
+import { AdjektivOutput, Backlink, Block, Genus, GrundformKerl, Kasus, Match, NomenDeklination, Numerus, Vergleichsgrad, Wortart } from "prompts/endgame/zod/types";
 import { promtMakerFromKeyword } from "../endgamePromptMakers";
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
@@ -8,7 +8,7 @@ import { makeAllDeclensionsFromAdjektivstamm } from "./formatter";
 import { AllDeclensions, AllDeclensionsFromGrad, allDeclensionsFromGradKeys, AllDeclensionsFromGradSchema, allDeclensionsKeys, caseDeclensionKeys, declensionKeys, fromFromNomenDeklinationFromKasusFromCaseDeclension, PathFromWortFromGrad, PathFromWortFromGradSchema } from "./types-and-consts";
 import { makeTagChain, Tag } from "prompts/endgame/zod/consts";
 
-export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, word: string): Promise<{ repr: string, backlinks: Backlink[] } | null> {
+export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, word: string): Promise<Block | null> {
     const prompt = promtMakerFromKeyword[Wortart.Adjektiv]();
     const generatedAdjektivOutput = await plugin.apiService.generateContent(prompt, word, true)
     const parsedAdjektivOutput = adjektivOutputSchema.safeParse(JSON.parse(generatedAdjektivOutput));
@@ -21,10 +21,10 @@ export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, wo
 
     const adjektivOutput = parsedAdjektivOutput.data;
 
-    console.log("adjektivOutput", adjektivOutput)
+    console.log("adjektivOutput", adjektivOutput);
 
-    await makeBlocksForAdjektivOutputElement(plugin, file, adjektivOutput[0])
-
+    const formSubblocks = await Promise.all(adjektivOutput.map((o) => makeBlocksForAdjektivOutputElement(plugin, file, o)));
+    console.log("formSubblocks", formSubblocks);
     // const sentences = adjektivOutput.map(o => Object.values(o.adjektivstaemme).map(a => getSentencesForAllDeclensions(makeAllDeclensionsFromAdjektivstamm(a))));
     // const repr = sentences.map(i => i.map(ii => ii.map(iii => iii.join("\n")).join("\n\n")).join("\n\n---\n")).join("\n")
     const repr = 'dsadas';
@@ -35,6 +35,28 @@ export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, wo
 };
 
 async function makeBlocksForAdjektivOutputElement(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]) {
+    const backlinksFromWord = await makebacklinksFromWord(plugin, file, adjektivOutputElement)
+
+    const backlinksMap = new Map();
+    Object.keys(backlinksFromWord).forEach(key => {
+        backlinksFromWord[key].forEach(({path, tags}) => {
+            if (!backlinksMap.has(path)) {
+                backlinksMap.set(path, new Set([]));
+            }
+            tags?.forEach(tag => {
+                backlinksMap.get(path).add(tag);
+            });
+        });
+    });
+
+    const backlinks = [...backlinksMap.entries()].map(([path, tagSet]) => ({path, tags: [...tagSet]}))
+    
+    return {repr: "123", backlinks};
+}
+
+type BacklinksFromWord = Record<string, Backlink[]>
+
+async function makebacklinksFromWord(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]) {
     const { allDeclensionsFromGrad, pathFromWortFromGrad, error } = await makeDeclensionsMaps(
         plugin,
         file,
@@ -42,10 +64,10 @@ async function makeBlocksForAdjektivOutputElement(plugin: TextEaterPlugin, file:
     );
 
     if (error) {
-        return [];
+        return {} as BacklinksFromWord;
     }
 
-    const backlinksFromWord: Record<string, Backlink[]> = {};
+    const backlinksFromWord: BacklinksFromWord = {};
 
     for (let grad of allDeclensionsFromGradKeys) {
         const allDeclensions = allDeclensionsFromGrad?.[grad];
@@ -89,7 +111,7 @@ async function makeBlocksForAdjektivOutputElement(plugin: TextEaterPlugin, file:
         }
     }
 
-    console.log("backlinksFromWord", backlinksFromWord);
+    return backlinksFromWord;
 }
 
 function getAllDeclensionsFromGrad(adjektivOutputElement: AdjektivOutput[-1]) {
