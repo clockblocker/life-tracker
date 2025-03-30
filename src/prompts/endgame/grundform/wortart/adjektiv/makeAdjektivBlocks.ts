@@ -1,4 +1,4 @@
-import { AdjektivOutput, Backlink, Block, Genus, GrundformKerl, Kasus, Match, NomenDeklination, Numerus, Vergleichsgrad, Wortart } from "prompts/endgame/zod/types";
+import { AdjektivOutput, Backlink, Block, GrundformKerl, Match, Wortart } from "prompts/endgame/zod/types";
 import { promtMakerFromKeyword } from "../endgamePromptMakers";
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
@@ -192,7 +192,6 @@ async function makePathFromWordFromAllDeclensions(plugin: TextEaterPlugin, file:
 
     const paths = await getPathsToNotes(plugin, file, kerls as (GrundformKerl & {match: Match})[]);
 
-    // Assume kerls.length === paths.lenth
     const pathFromWort = Object.fromEntries(
         kerls.map((k, i) => [k.grundform, paths[i]])
     ) as Record<string, string>;
