@@ -43,7 +43,7 @@ export const getPathToNote = ({ word, wortart, match, maybeExisitingNotePath }: 
             return noteExists ? `${maybeExisitingNotePath}` : `Worter/${match}/${wortart}/${word[0]}/${word[1]}/${word}`
 }};
 
-export function formatPathToGrundformNoteAsLink({ word, path, noteExists }: { word: string, path: string, noteExists: boolean }) {
+export function formatPathToNoteAsLink({ word, path, noteExists }: { word: string, path: string, noteExists: boolean }) {
     if (!path) {
         return "";
     } else if (noteExists) {
@@ -59,7 +59,7 @@ export async function getFormatLinkToGrundformNote(g: GrundformKerl, maybeExisit
         match: Match.Grundform,
         maybeExisitingNotePath
     });
-    return formatPathToGrundformNoteAsLink({ word: g.grundform, path, noteExists: !!maybeExisitingNotePath });
+    return formatPathToNoteAsLink({ word: g.grundform, path, noteExists: !!maybeExisitingNotePath });
 };
 
 export async function getPathsToGrundformNotes(plugin: TextEaterPlugin, file: TFile, kerls: GrundformKerl[]) {

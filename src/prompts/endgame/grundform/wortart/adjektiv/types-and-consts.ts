@@ -54,6 +54,7 @@ export type CaseDeclension = z.infer<typeof CaseDeclensionSchema>;
 export type AllDeclensions = z.infer<typeof AllDeclensionsSchema>;
 export type AllDeclensionsFromGrad = z.infer<typeof AllDeclensionsFromGradSchema>;
 export type PathFromWortFromGrad = z.infer<typeof PathFromWortFromGradSchema>;
+export type PathFromWort = z.infer<typeof PathFromWortSchema>;
 
 export const fromFromNomenDeklinationFromKasusFromCaseDeclension: AllDeclensions= {
     [NomenDeklination.Stark]: {

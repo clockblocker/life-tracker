@@ -2,7 +2,7 @@ import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
 import { morphemAnalysisOutputSchema } from "../zod/schemas";
 import { Backlink, Block, GrundformKerl, MorphemAnalysisOutput, MorphemKerl } from "../zod/types";
-import { getPathsToGrundformNotes, formatPathToGrundformNoteAsLink, getPathsToMorphemNotes } from "../grundform/formatters/link";
+import { getPathsToGrundformNotes, formatPathToNoteAsLink, getPathsToMorphemNotes } from "../grundform/formatters/link";
 import { promtMakerFromKeyword } from "../grundform/wortart/endgamePromptMakers";
 import { makeTagChain, Tag } from "../zod/consts";
 
@@ -23,7 +23,7 @@ async function getZusammengesetztAusBlock(plugin: TextEaterPlugin, file: TFile, 
 
     for (let i = 0; i < kerls.length; i++) {
         backlinks.push({path: paths[i]});
-        reprs.push(formatPathToGrundformNoteAsLink({ word: kerls[i].grundform, path: paths[i], noteExists: false }));
+        reprs.push(formatPathToNoteAsLink({ word: kerls[i].grundform, path: paths[i], noteExists: false }));
     }
 
     return { repr: reprs.join(' + '), backlinks };
@@ -43,7 +43,7 @@ function getMorphemischeZerlegungBlock(morphemAnalysis: MorphemAnalysisOutput): 
     for (let i = 0; i < kerls.length; i++) {
         const tags = [makeTagChain([Tag.Morphem, kerls[i].morphem])]
         backlinks.push({path: paths[i], tags});
-        reprs.push(formatPathToGrundformNoteAsLink({ word: kerls[i].grundform, path: paths[i], noteExists: false }));
+        reprs.push(formatPathToNoteAsLink({ word: kerls[i].grundform, path: paths[i], noteExists: false }));
     }
 
     return { repr: reprs.join('|'), backlinks };

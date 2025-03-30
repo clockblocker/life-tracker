@@ -1,6 +1,6 @@
 import { Genus, Kasus, NomenDeklination, Numerus } from "prompts/endgame/zod/types";
-import { z } from "zod";
-import { AllDeclensions, fromFromNomenDeklinationFromKasusFromCaseDeclension, AllDeclensionsSchema, Declensions, CaseDeclension, pronomen, verbForms, allDeclensionsKeys, caseDeclensionKeys, declensionKeys } from "./types-and-consts";
+import { AllDeclensions, fromFromNomenDeklinationFromKasusFromCaseDeclension, AllDeclensionsSchema, Declensions, CaseDeclension, pronomen, verbForms, allDeclensionsKeys, caseDeclensionKeys, declensionKeys, PathFromWort } from "./types-and-consts";
+import { formatPathToNoteAsLink } from "../../formatters/link";
 
 export function makeAllDeclensionsFromAdjektivstamm(roots: string[] | undefined): AllDeclensions | undefined {
     if (!roots) {
@@ -29,6 +29,20 @@ export function makeAllDeclensionsFromAdjektivstamm(roots: string[] | undefined)
     }
     return parsedAllDeclensions.data;
 };
+
+export function makeReprSentenceForRoot(root: string, pathFromWord: PathFromWort): string {
+    const links = ["e", "er", "em", "es", "en"].map(endung => {
+        const word = root + endung;
+        const path = pathFromWord?.[word];
+        if (path === undefined) {
+            return word;
+        }
+        return formatPathToNoteAsLink({ word, path, noteExists: false });
+    })
+    
+    // "Die klein[e] Mutter und ein klein[er] Sohn gaben klein[em] Vater ein klein[es] Geschenk klein[en] Onkels";
+    return `- *Die* ${links[0]} *Mutter und ein* ${links[1]} *Sohn gaben* ${links[2]} *Vater ein* ${links[3]} *Geschenk* ${links[4]} *Onkels*`
+}
 
 export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
     const cases: (keyof Declensions)[] = [Kasus.N, Kasus.D, Kasus.A, Kasus.G];

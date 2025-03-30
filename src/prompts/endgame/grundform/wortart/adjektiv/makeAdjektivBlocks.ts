@@ -4,9 +4,9 @@ import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
 import { adjektivOutputSchema } from "prompts/endgame/zod/schemas";
 import { getPathsToNotes } from "../../formatters/link";
-import { makeAllDeclensionsFromAdjektivstamm } from "./formatter";
-import { AllDeclensions, AllDeclensionsFromGrad, allDeclensionsFromGradKeys, AllDeclensionsFromGradSchema, allDeclensionsKeys, caseDeclensionKeys, declensionKeys, fromFromNomenDeklinationFromKasusFromCaseDeclension, PathFromWortFromGrad, PathFromWortFromGradSchema } from "./types-and-consts";
+import { makeAllDeclensionsFromAdjektivstamm, makeReprSentenceForRoot } from "./formatter";
 import { makeTagChain, Tag } from "prompts/endgame/zod/consts";
+import { allDeclensionsFromGradKeys, allDeclensionsKeys, declensionKeys, caseDeclensionKeys, AllDeclensionsFromGradSchema, AllDeclensionsFromGrad, PathFromWortFromGrad, PathFromWortFromGradSchema, AllDeclensions, PathFromWort } from "./types-and-consts";
 
 export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, word: string): Promise<Block | null> {
     const prompt = promtMakerFromKeyword[Wortart.Adjektiv]();
@@ -25,21 +25,21 @@ export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, wo
 
     const formSubblocks = await Promise.all(adjektivOutput.map((o) => makeBlocksForAdjektivOutputElement(plugin, file, o)));
     console.log("formSubblocks", formSubblocks);
-    // const sentences = adjektivOutput.map(o => Object.values(o.adjektivstaemme).map(a => getSentencesForAllDeclensions(makeAllDeclensionsFromAdjektivstamm(a))));
-    // const repr = sentences.map(i => i.map(ii => ii.map(iii => iii.join("\n")).join("\n\n")).join("\n\n---\n")).join("\n")
-    const repr = 'dsadas';
-    // const zusammengesetztAusBlock = await getZusammengesetztAusBlock(plugin, file, adjektivOutput);
-    const adjektivOutputBlock = {repr, backlinks: []};
+    const backlinks = formSubblocks.map(s => s.backlinks).flat();
+    const adjektivOutputBlock = {repr: formSubblocks.map(({repr}) => repr).join("\n\n"), backlinks: backlinks};
     
     return adjektivOutputBlock;
 };
 
+
 async function makeBlocksForAdjektivOutputElement(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]) {
-    const backlinksFromWord = await makebacklinksFromWord(plugin, file, adjektivOutputElement)
+    const backlinksFromWord = await makebacklinksFromWord(plugin, file, adjektivOutputElement);
+    const pathFromWord: PathFromWort = {};
 
     const backlinksMap = new Map();
-    Object.keys(backlinksFromWord).forEach(key => {
-        backlinksFromWord[key].forEach(({path, tags}) => {
+    Object.keys(backlinksFromWord).forEach(word => {
+        backlinksFromWord[word].forEach(({path, tags}) => {
+            pathFromWord[word] = path;
             if (!backlinksMap.has(path)) {
                 backlinksMap.set(path, new Set([]));
             }
@@ -48,10 +48,15 @@ async function makeBlocksForAdjektivOutputElement(plugin: TextEaterPlugin, file:
             });
         });
     });
+    console.log("backlinksMap", backlinksMap);
+    const backlinks = [...backlinksMap.entries()].map(([path, tagSet]) => ({ path, tags: [...tagSet] }))
 
-    const backlinks = [...backlinksMap.entries()].map(([path, tagSet]) => ({path, tags: [...tagSet]}))
-    
-    return {repr: "123", backlinks};
+    const repr = makeReprForAdjektivOutputElement(adjektivOutputElement, pathFromWord);
+    return { repr, backlinks };
+}
+
+const makeReprForAdjektivOutputElement = (adjektivOutputElement: AdjektivOutput[-1], pathFromWord: PathFromWort) => {
+    return Object.values(adjektivOutputElement.adjektivstaemme).map(staemme => staemme.map(word => makeReprSentenceForRoot(word, pathFromWord)).join("\n\n")).join("\n");
 }
 
 type BacklinksFromWord = Record<string, Backlink[]>
