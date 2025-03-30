@@ -13,9 +13,12 @@ type CaseDeclension = {
 };
 
 type Declensions = Record<Kasus, CaseDeclension>;
-type AllDeclensions = Record<NomenDeklination, Declensions>;
+export type AllDeclensions = Record<NomenDeklination, Declensions>;
 
-export function makeAllDeclensionsFromAdjektivstamm(adjektivstamm: string): AllDeclensions {
+export function makeAllDeclensionsFromAdjektivstamm(adjektivstamm: string | undefined): AllDeclensions | undefined {
+    if (!adjektivstamm) {
+        return undefined;
+    }
     return {
         [NomenDeklination.Stark]: {
             [Kasus.N]: {
@@ -101,13 +104,21 @@ export function makeAllDeclensionsFromAdjektivstamm(adjektivstamm: string): AllD
 };
 
 export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
-    // Fixed mappings for nouns per gender.
+    console.log("AllDeclensions", d)
+
     const nouns: Record<keyof CaseDeclension, string[]> = {
       [Genus.M]: ["Vater", "Sohn", "Ding", "Onkel"],
       [Genus.F]: ["Mutter", "Tochter", "Sache", "Tante"],
       [Genus.N]: ["Kind", "Baby", "Geschenk", "Mädchen"],
       [Numerus.Mehrzahl]: ["Väter", "Töchter", "Geschenke", "Mutter"]
     };
+
+    const pronomen: Record<keyof CaseDeclension, string[]> = {
+        [Genus.M]: ["er", "ihm", "ihn", "seines"],
+        [Genus.F]: ["sie", "ihr", "sie", "ihrer"],
+        [Genus.N]: ["es", "ihm", "es", "ihres"],
+        [Numerus.Mehrzahl]: ["sie", "ihnen", "sie", "ihrer"]
+      };
   
     // Verb forms for the subject (nominative) by gender.
     const verbForms: Record<keyof CaseDeclension, string> = {
@@ -122,7 +133,7 @@ export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
     const genders: (keyof CaseDeclension)[] = [Genus.M, Genus.F, Genus.N, Numerus.Mehrzahl];
   
     // Order of declension types.
-    const declensionTypes: (keyof AllDeclensions)[] = [NomenDeklination.Stark, NomenDeklination.Schwach, NomenDeklination.Gemischt];
+    const declensionTypes: (keyof AllDeclensions)[] = [NomenDeklination.Schwach, NomenDeklination.Gemischt, NomenDeklination.Stark];
   
     // Outer array: one array of sentences per declension type.
     const sentences: string[][] = [];
@@ -136,10 +147,9 @@ export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
         // 3. A noun (from the nouns mapping)
         const parts = cases.map((cas, idx) => {
           const adj = d[dt][cas][gender].agj;
-          const article = d[dt][cas][gender].agj
-          const noun = nouns[gender][idx];
-          const [firstLetter, ...rest] = adj;
-          return article ? `*${article}* ${adj} *${noun}*` : `*${firstLetter.toUpperCase()}${rest.join('')}* ${adj} *${noun}*` ;
+          const article = d[dt][cas][gender].artikel;
+          const noun = pronomen[gender][idx];
+          return article ? `*${article}* ${adj} *${noun}*` : `${adj} *${noun}*` ;
         });
   
         // The linking verb form is determined by the nominative gender.
@@ -147,7 +157,10 @@ export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
   
         // Combine the parts into a sentence following the pattern:
         // "<Nom> [verb] <Dat> <Akk> <Gen>"
-        return `${parts[0]} *${verb}* ${parts[1]} ${parts[2]} ${parts[3]}`;
+
+        console.log("parts", parts);
+        const [firstLetter, secondLetter, ...rest] = parts[0].split("");
+        return `${firstLetter === "*" ? firstLetter + secondLetter.toLocaleUpperCase() : firstLetter.toLocaleUpperCase() + secondLetter}${rest.join("")} *${verb}* ${parts[1]} ${parts[2]} ${parts[3]}`;
       });
   
       sentences.push(sentencesForDeclension);
@@ -155,8 +168,10 @@ export function getSentencesForAllDeclensions(d: AllDeclensions): string[][] {
   
     return sentences;
 };
+
+
   
-  // Example usage:
+// Example usage:
 //   const allDeclensions = makeAllDeclensionsFromAdjektivstamm("wild"); // using the function f from the earlier example
 //   const sentenceMatrix = getSentencesForAllDeclensions(allDeclensions);
 //   console.log(sentenceMatrix);

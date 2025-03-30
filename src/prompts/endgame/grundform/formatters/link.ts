@@ -1,3 +1,4 @@
+import { match } from "assert";
 import TextEaterPlugin from "main";
 import { TFile } from "obsidian";
 import { GrundformKerl, Match, MorphemKerl, Wortart } from "prompts/endgame/zod/types";
@@ -73,8 +74,22 @@ export async function getPathsToGrundformNotes(plugin: TextEaterPlugin, file: TF
     });
 
     return await Promise.all(pathsPromises);
+};
+
+export async function getPathsToNotes(plugin: TextEaterPlugin, file: TFile, matchedKerls: (GrundformKerl & {match: Match})[]) {
+    const pathsPromises = matchedKerls.map(async (g) => {
+        const maybeExisitingNotePath = await getMaybeExistingNotePath(plugin, file, g.grundform);
+        return await getPathToNote({
+            word: g.grundform, 
+            wortart: g.wortart, 
+            match: g.match,
+            maybeExisitingNotePath
+        });
+    });
+
+    return await Promise.all(pathsPromises);
 }
 
 export function getPathsToMorphemNotes(kerls: MorphemKerl[]) {
     return kerls.map(k => `Grammatik/Morphem/${k.morphem}/List/${k.grundform[0]}/${k.grundform} (${k.morphem})`)
-}
+};

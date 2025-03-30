@@ -23,39 +23,68 @@ Your task is to generate a valid JSON object for every given adjective, strictly
 The output format shall be as defined by the adjektivOutputSchema. For example:
   
 For the adjective "gut":
-{
-  "gut": [{
-    "adjektivstamm": {
-      "Positiv": "gut",
-      "Komparativ": "besser",
-      "Superlativ": "best"
-    },
-    "regelmaessig": false,
-    "steigerungsfaehig": true
-  }]
-}
+[{
+  "adjektivstamm": {
+    "Positiv": "gut",
+    "Komparativ": "besser",
+    "Superlativ": "best"
+  },
+  "regelmaessig": false,
+  "steigerungsfaehig": true
+}]
 
 For "klein", the gradation is:
-{
-  "klein": [{
-    "adjektivstamm": {
-      "Positiv": "klein",
-      "Komparativ": "kleiner",
-      "Superlativ": "kleinst"
-    },
-    "regelmaessig": true,
-    "steigerungsfaehig": true
-  }]
-}
+[{
+  "adjektivstamm": {
+    "Positiv": "klein",
+    "Komparativ": "kleiner",
+    "Superlativ": "kleinst"
+  },
+  "regelmaessig": true,
+  "steigerungsfaehig": true
+}]
 
 For unsteigerungsfaehig "aussehend", the gradation is:
-const aussehend = {
-  "aussehend": [{
+[{
+  "adjektivstamm": {
+    "Positiv": "aussehend",
+  },
+  "regelmaessig": true,
+  "steigerungsfaehig": false,
+}]
+
+For "fromm", that can be both regelmaessig and unregelmaessig gradation is:
+[
+  {
     "adjektivstamm": {
-      "Positiv": "aussehend",
+      "Positiv": "fromm",
+      "Komparativ": "frommer",
+      "Superlativ": "frommst",
     },
     "regelmaessig": true,
-    "steigerungsfaehig": false,
+    "steigerungsfaehig": true,
+  },
+  {
+    "adjektivstamm": {
+      "Positiv": "fromm",
+      "Komparativ": "frömmer",
+      "Superlativ": "frömmst",
+    },
+    "regelmaessig": false,
+    "steigerungsfaehig": true,
+  }
+]
+
+For "sauer", that's regelmaessig grand forms, can have miultiple valid writings: "sau(e)rer"/"sau(e)rste", the gradation is:
+const sauer = {
+  "sauer": [{
+    adjektivstamm: {
+      [Vergleichsgrad.Positiv]: ["sauer"],
+      [Vergleichsgrad.Komparativ]: ["saurer", "sauerer"],
+      [Vergleichsgrad.Superlativ]: ["saurste", "sauerste"],
+    },
+    regelmaessig: true,
+    steigerungsfaehig: true,
   }]
 };
 
@@ -67,9 +96,9 @@ const VergleichsgradSchema = z.enum(["Positiv", "Komparativ", "Superlativ"]);
 
 const adjektivOutputSchema = z.array(z.object({
   "adjektivstamm": z.object({
-    [VergleichsgradSchema.enum.Positiv]: z.string(),
-    [VergleichsgradSchema.enum.Komparativ]: z.string().optional(),
-    [VergleichsgradSchema.enum.Superlativ]: z.string().optional(),
+    [VergleichsgradSchema.enum.Positiv]: z.string().array(),
+    [VergleichsgradSchema.enum.Komparativ]: z.string().array().optional(),
+    [VergleichsgradSchema.enum.Superlativ]: z.string().array().optional(),
   }),
   "regelmaessig": RegelmaessigSchema,
   "steigerungsfaehig": SteigerungsfaehigSchema,
@@ -78,7 +107,7 @@ const adjektivOutputSchema = z.array(z.object({
 </schema>
 <outputformat>outputformat shall be formattes as adjektivOutputSchema</outputformat>`;
 
-  const testsSchema = z.record(adjektivOutputSchema);
+  const testsSchema = z.record(z.string(), adjektivOutputSchema);
   const validationResult = testsSchema.safeParse(tests);
 
   if (!validationResult.success) {
