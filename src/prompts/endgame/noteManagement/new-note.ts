@@ -11,10 +11,10 @@ import { cssClassNameFromBlockTitle, elementStringFromBlockTitle, reprFromBlockS
  * @param delim - The delimiter string (e.g. '---').
  * @returns a RegExp to capture the block and its content.
  */
-function getBlockRegex(blockTitle: BlockTitle, delim: string): RegExp {
+function getBlockRegex(blockTitle: BlockTitle): RegExp {
     const cssClass = cssClassNameFromBlockTitle[blockTitle];
     return new RegExp(
-      `(<span\\s+class=["']block_title\\s+${cssClass}["']>[^<]+</span>)([\\s\\S]*?)(?=(\\n${delim}|<|$))`,
+      `(<span\\s+class=["']block_title\\s+${cssClass}["']>[^<]+</span>)([\\s\\S]*?)(?=(${BLOCK_DELIMETER}|<|$))`,
       "g"
     );
   }
@@ -27,10 +27,10 @@ function getBlockRegex(blockTitle: BlockTitle, delim: string): RegExp {
    * @param delim - The delimiter string.
    * @returns The content (trimmed) found for the block, or null if not found.
    */
-  function extractBlockContent(content: string, blockTitle: BlockTitle, delim: string): string | null {
-    const regex = getBlockRegex(blockTitle, delim);
+  function extractBlockContent(content: string, blockTitle: BlockTitle): string {
+    const regex = getBlockRegex(blockTitle);
     const match = regex.exec(content);
-    return match ? match[2].trim() : null;
+    return match ? match[2].trim() : "";
   }
   
   /* ================= Transformation Helpers ================= */
@@ -51,16 +51,14 @@ function getBlockRegex(blockTitle: BlockTitle, delim: string): RegExp {
   function integrateExistingContentIntoBlocks(
     newRepr: Partial<Record<BlockTitle, string>>,
     fileContent: string,
-    delim: string
   ): Record<BlockTitle, string> {
     const enriched: Record<BlockTitle, string> = {} as Record<BlockTitle, string>;
     (Object.keys(newRepr) as BlockTitle[]).forEach((block) => {
-      const existing = extractBlockContent(fileContent, block, delim);
-      enriched[block] = block === BlockTitle.Kontexte && existing !== null ? existing : newRepr[block];
+      const existing = extractBlockContent(fileContent, block);
+      enriched[block] = existing + newRepr;
     });
     return enriched;
   }
-  
   /**
    * Converts a representation record into the final file content.
    *
@@ -76,7 +74,7 @@ function getBlockRegex(blockTitle: BlockTitle, delim: string): RegExp {
     (Object.keys(enrichedRepr) as BlockTitle[]).forEach((block) => {
       const titleElement = elementStringFromBlockTitle[block];
       const blockContent = enrichedRepr[block];
-      finalContent += `${titleElement}\n${blockContent}\n${BLOCK_DELIMETER}\n\n`;
+      finalContent += `${titleElement}\n${blockContent}\n\n${BLOCK_DELIMETER}\n`;
     });
     return finalContent.trim();
   }
@@ -97,12 +95,12 @@ function getBlockRegex(blockTitle: BlockTitle, delim: string): RegExp {
    * @param filePath - The path to the note file.
    * @param reprFromBlock - A record mapping BlockTitle to the new string.
    */
-  export async function addBlocksToNote(
+  export async function makeNewFileContent(
     fileContent: string,
     reprFromBlock: Partial<Record<BlockTitle, string>>
   ): Promise<string> {
     // Enrich the new representations by integrating existing content (if any).
-    const enrichedRepr = integrateExistingContentIntoBlocks(reprFromBlock, fileContent, BLOCK_DELIMETER);
+    const enrichedRepr = integrateExistingContentIntoBlocks(reprFromBlock, fileContent);
   
     // Build the final file content from the enriched representations.
     const finalContent = buildContentFromEnrichedBlocks(enrichedRepr);
