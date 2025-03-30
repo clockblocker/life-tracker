@@ -100,15 +100,17 @@ async function makebacklinksFromWord(plugin: TextEaterPlugin, file: TFile, adjek
                         
                         if (pathFromWort) {
                             const path = pathFromWort[agj];
-                            const tags = makeTagChain([
-                                Wortart.Adjektiv,
-                                adjektivOutputElement.regelmaessig ? Tag.Regelmaessig : Tag.Unregelmaessig,
-                                adjektivOutputElement.steigerungsfaehig ? Tag.Steigerungsfaehig : Tag.Unsteigerungsfaehig,
-                                Wortart.Adjektiv,
-                                grad,
-                                art,
-                            ]);
-                            backlinksFromWord[agj] = [...existingBacklinks, { path, tags: [tags]}]
+                            const tags = [
+                                makeTagChain([
+                                    Wortart.Adjektiv,
+                                    Match.Flexion,
+                                    adjektivOutputElement.steigerungsfaehig ? Tag.Steigerungsfaehig : Tag.Unsteigerungsfaehig,
+                                    adjektivOutputElement.regelmaessig ? Tag.Regelmaessig : Tag.Unregelmaessig,
+                                    grad,
+                                    art,
+                                ])
+                            ];
+                            backlinksFromWord[agj] = [...existingBacklinks, { path, tags: tags}]
                         }
                     })
                 }
