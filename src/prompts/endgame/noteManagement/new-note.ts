@@ -1,5 +1,4 @@
-import { TFile, Vault } from "obsidian";
-import { cssClassNameFromBlockId, blockHeaderElementFromBlockId, reprFromBlockSchema, BlockId, BLOCK_DELIMETER, ALL_BLOCK_IDS, weightFromBlockId, preDelimeterSpacingFromBlockId } from "./types-and-constants";
+import { cssClassNameFromBlockId, blockHeaderElementFromBlockId, BlockId, BLOCK_DELIMETER, ALL_BLOCK_IDS, weightFromBlockId, preDelimeterSpacingFromBlockId, SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS } from "./types-and-constants";
 
 /**
  * Build a regex that captures a block in the note.
@@ -27,14 +26,6 @@ function getBlockRegex(blockId: BlockId): RegExp {
   function extractBlockContent(content: string, blockId: BlockId): string {
     const regex = getBlockRegex(blockId);
     const match = regex.exec(content);
-    if (blockId === BlockId.Synonyme) {
-      console.log("\n\n!---")
-      console.log("regex", regex)
-      console.log("match", match)
-      console.log("content", content)
-      console.log("!---\n\n")
-
-    }
     return match ? match[2].trim() : "";
   }
   
@@ -91,10 +82,10 @@ function getSortedBlockIdsAndContents(
       const headerElement = blockHeaderElementFromBlockId[id].trim();
       const blockContent = enrichedReprFromBlockId[id].trim();
       const spacedOutDemimeter = preDelimeterSpacingFromBlockId[id] + BLOCK_DELIMETER;
+
       const parts = [headerElement, blockContent, spacedOutDemimeter].filter(s => s);
-      console.log("parts", parts)
       const content = parts.join("\n")
-      console.log("content", content)
+
       blockIdsAndContents.push({ id, content })
     });
 
@@ -115,16 +106,20 @@ function getSortedBlockIdsAndContents(
    * 4. Rebuild the note content from the enriched representation.
    * 5. Write the final content back to the file.
    *
-   * @param vault - The Obsidian Vault instance.
-   * @param filePath - The path to the note file.
-   * @param reprFromBlock - A record mapping BlockId to the new string.
+   * @param oldFileContent - The exsiting file content
+   * @param blockContentFromBlockId - A record mapping BlockId to the contents of the new block content.
+   * @param blockIdsToCreateIfEmpty - All the other empty blocks shall not me added
    */
-  export async function makeNewFileContent(
-    fileContent: string,
-    reprFromBlock: Partial<Record<BlockId, string>>
-  ): Promise<string> {
-    const enrichedReprFromBlockId = integrateExistingContentIntoBlocks(reprFromBlock, fileContent);
+  export async function makeNewFileContent({
+    oldFileContent,
+    blockContentFromBlockId,
+    blockIdsToCreateIfEmpty = SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS,
+  }: {
+    oldFileContent: string,
+    blockContentFromBlockId: Partial<Record<BlockId, string>>,
+    blockIdsToCreateIfEmpty?: Set<BlockId>,
+  }): Promise<string> {
+    const enrichedReprFromBlockId = integrateExistingContentIntoBlocks(blockContentFromBlockId, oldFileContent);
     const blockIdsAndContents = buildSortedBlockIdsAndContentsFromEnrichedBlocks(enrichedReprFromBlockId);
-    console.log("blockIdsAndContents", blockIdsAndContents)
     return blockIdsAndContents.map(({content}) => content).join("\n");
   }

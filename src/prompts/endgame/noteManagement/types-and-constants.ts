@@ -83,29 +83,35 @@ export const BLOCK_DELIMETER = "---";
 
 export const reprFromBlockSchema = z.record(BlockIdSchema, z.string());
 
-const MeningfullBlockTitlesForEveryone = [BlockId.Formen, BlockId.Kontexte];
-const TechnikalBlockTitlesForEveryone = [BlockId.Related, BlockId.Tags];
-const BlockTitlesForFlexers = [BlockId.Synonyme, BlockId.Morpheme, BlockId.Translations, BlockId.Flexion];
-export const BlockTitlesFromWortart = {
-    Nomen: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
-    Pronomen: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
-    Verb: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
-    Adjektiv: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
-    Numerale: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
-    
-    Artikel: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
-    Partikel: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
-    Praeposition: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
-    Konjunktion: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
-    
-    Adverb: [...MeningfullBlockTitlesForEveryone, ...TechnikalBlockTitlesForEveryone],
-    Redewendung: [...MeningfullBlockTitlesForEveryone, ...TechnikalBlockTitlesForEveryone],
-    Interjektion: [...MeningfullBlockTitlesForEveryone, ...TechnikalBlockTitlesForEveryone],
 
-    Unbekannt: [...TechnikalBlockTitlesForEveryone],
-    Morphem: [...TechnikalBlockTitlesForEveryone],
-    Praefix: [...TechnikalBlockTitlesForEveryone],
+// ---
+const meningfullBlockIdsSet = new Set([BlockId.Formen, BlockId.Kontexte]);
+const blockIdForFlexersSet = new Set([BlockId.Synonyme, BlockId.Morpheme, BlockId.Translations, BlockId.Flexion]);
+
+export const SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS = new Set([BlockId.Related, BlockId.Tags]);
+
+export const RequiredSetOfBlockIdsFromWortart = {
+    Nomen: new Set([...meningfullBlockIdsSet, ...blockIdForFlexersSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Pronomen: new Set([...meningfullBlockIdsSet, ...blockIdForFlexersSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Verb: new Set([...meningfullBlockIdsSet, ...blockIdForFlexersSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Adjektiv: new Set([...meningfullBlockIdsSet, ...blockIdForFlexersSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Numerale: new Set([...meningfullBlockIdsSet, ...blockIdForFlexersSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    
+    Artikel: new Set([...meningfullBlockIdsSet, BlockId.Grammatik, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Partikel: new Set([...meningfullBlockIdsSet, BlockId.Grammatik, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Praeposition: new Set([...meningfullBlockIdsSet, BlockId.Grammatik, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Konjunktion: new Set([...meningfullBlockIdsSet, BlockId.Grammatik, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    
+    Adverb: new Set([...meningfullBlockIdsSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Redewendung: new Set([...meningfullBlockIdsSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Interjektion: new Set([...meningfullBlockIdsSet, ...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+
+    Unbekannt: new Set([...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Morphem: new Set([...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
+    Praefix: new Set([...SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS]),
 };
+
+// ---
 
 export const noteExample = `
 <span class="block_title block_title_formen">Formen</span>

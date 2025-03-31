@@ -67,8 +67,12 @@ export async function makeAnEndgameNoteTest(plugin: TextEaterPlugin, file: TFile
     if (error) {
         return;
     }
-    const newContent = await makeNewFileContent(oldContent, {
-        [BlockId.Tags]: "#Tag1/subtag #Tag2/another_subtag"
+
+    const newContent = await makeNewFileContent({
+        oldFileContent: oldContent,
+        blockContentFromBlockId: {
+            [BlockId.Tags]: "#Tag1/subtag #Tag2/another_subtag"
+        },
     })
 
     await plugin.fileService.replaceFileContent(file.path, newContent);
@@ -93,9 +97,7 @@ export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, ou
     if (error) {
         return;
     }
-    const newContent = await makeNewFileContent(oldContent, {
-        [BlockId.Tags]: "#Tag1/subtag #Tag2/another_subtag"
-    })
 
-    await plugin.fileService.replaceFileContent(file.path, newContent);
+
+    await plugin.fileService.replaceFileContent(file.path, "asdsad");
 };
