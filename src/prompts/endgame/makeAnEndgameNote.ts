@@ -98,6 +98,5 @@ export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, ou
         return;
     }
 
-
     await plugin.fileService.replaceFileContent(file.path, "asdsad");
 };
