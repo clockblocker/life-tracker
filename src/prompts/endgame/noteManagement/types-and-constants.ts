@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const titles = [
+const blockIds = [
   "Formen",
   "Kontexte",
   "Synonyme",
@@ -12,44 +12,80 @@ const titles = [
   "Tags",
 ] as const;
 // Assume these constants are defined elsewhere in your code:
-const BlockTitleSchema = z.enum(titles);
+const BlockIdSchema = z.enum(blockIds);
 
-export type BlockTitle = z.infer<typeof BlockTitleSchema>;
-export const BlockTitle = BlockTitleSchema.Enum;
-export const allBlockTitles = [...titles] as BlockTitle[];
+export type BlockId = z.infer<typeof BlockIdSchema>;
+export const BlockId = BlockIdSchema.Enum;
+export const ALL_BLOCK_IDS = [...blockIds] as BlockId[];
 
 
-export const cssClassNameFromBlockTitle: Record<BlockTitle, string> = {
-  [BlockTitle.Formen]: "block_title_formen",
-  [BlockTitle.Kontexte]: "block_title_kontexte",
-  [BlockTitle.Synonyme]: "block_title_synonyme",
-  [BlockTitle.Morpheme]: "block_title_morpheme",
-  [BlockTitle.Translations]: "block_title_translations",
-  [BlockTitle.Related]: "block_title_related",
-  [BlockTitle.Flexion]: "block_title_flexion",
-  [BlockTitle.Grammatik]: "block_title_grammatik",
-  [BlockTitle.Tags]: "block_title_tags",
+export const cssClassNameFromBlockId: Record<BlockId, string> = {
+  [BlockId.Formen]: "block_title_formen",
+  [BlockId.Kontexte]: "block_title_kontexte",
+  [BlockId.Synonyme]: "block_title_synonyme",
+  [BlockId.Morpheme]: "block_title_morpheme",
+  [BlockId.Translations]: "block_title_translations",
+  [BlockId.Related]: "block_title_related",
+  [BlockId.Flexion]: "block_title_flexion",
+  [BlockId.Grammatik]: "block_title_grammatik",
+  [BlockId.Tags]: "block_title_tags",
 };
 
-export const elementStringFromBlockTitle: Record<BlockTitle, string> = {
-  [BlockTitle.Formen]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Formen]}">${BlockTitle.Formen}</span>`,
-  [BlockTitle.Kontexte]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Kontexte]}">${BlockTitle.Kontexte}</span>`,
-  [BlockTitle.Synonyme]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Synonyme]}">${BlockTitle.Synonyme}</span>`,
-  [BlockTitle.Morpheme]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Morpheme]}">${BlockTitle.Morpheme}</span>`,
-  [BlockTitle.Translations]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Translations]}">${BlockTitle.Translations}</span>`,
-  [BlockTitle.Related]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Related]}">${BlockTitle.Related}</span>`,
-  [BlockTitle.Flexion]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Flexion]}">${BlockTitle.Flexion}</span>`,
-  [BlockTitle.Grammatik]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Grammatik]}">${BlockTitle.Grammatik}</span>`,
-  [BlockTitle.Tags]: `<span class="block_title ${cssClassNameFromBlockTitle[BlockTitle.Tags]}">${BlockTitle.Tags}</span>`,
+export const deBlockTitleFromBlockId: Record<BlockId, string> = {
+  [BlockId.Formen]: "Formen",
+  [BlockId.Kontexte]: "Kontexte",
+  [BlockId.Synonyme]: "Beziehungen",
+  [BlockId.Morpheme]: "Morpheme",
+  [BlockId.Translations]: "Übersetzung",
+  [BlockId.Related]: "Verweise",
+  [BlockId.Flexion]: "Flexion",
+  [BlockId.Grammatik]: "Grammatik",
+  [BlockId.Tags]: "Tags",
+};
+
+export const preDelimeterSpacingFromBlockId: Record<BlockId, string> = {
+  [BlockId.Formen]: "\n",
+  [BlockId.Kontexte]: "\n\n",
+  [BlockId.Synonyme]: "\n",
+  [BlockId.Morpheme]: "\n",
+  [BlockId.Translations]: "\n",
+  [BlockId.Related]: "\n",
+  [BlockId.Flexion]: "\n",
+  [BlockId.Grammatik]: "\n",
+  [BlockId.Tags]: "\n",
+};
+
+export const weightFromBlockId: Record<BlockId, number> = {
+  [BlockId.Formen]: 0,
+  [BlockId.Kontexte]: 1,
+  [BlockId.Synonyme]: 10,
+  [BlockId.Morpheme]: 20,
+  [BlockId.Translations]: 30,
+  [BlockId.Related]: 40,
+  [BlockId.Flexion]: 50,
+  [BlockId.Grammatik]: 60,
+  [BlockId.Tags]: 100,
+};
+
+export const blockHeaderElementFromBlockId: Record<BlockId, string> = {
+  [BlockId.Formen]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Formen]}">${deBlockTitleFromBlockId[BlockId.Formen]}</span>`,
+  [BlockId.Kontexte]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Kontexte]}">${deBlockTitleFromBlockId[BlockId.Kontexte]}</span>`,
+  [BlockId.Synonyme]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Synonyme]}">${deBlockTitleFromBlockId[BlockId.Synonyme]}</span>`,
+  [BlockId.Morpheme]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Morpheme]}">${deBlockTitleFromBlockId[BlockId.Morpheme]}</span>`,
+  [BlockId.Translations]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Translations]}">${deBlockTitleFromBlockId[BlockId.Translations]}</span>`,
+  [BlockId.Related]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Related]}">${deBlockTitleFromBlockId[BlockId.Related]}</span>`,
+  [BlockId.Flexion]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Flexion]}">${deBlockTitleFromBlockId[BlockId.Flexion]}</span>`,
+  [BlockId.Grammatik]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Grammatik]}">${deBlockTitleFromBlockId[BlockId.Grammatik]}</span>`,
+  [BlockId.Tags]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Tags]}">${deBlockTitleFromBlockId[BlockId.Tags]}</span>`,
 };
 
 export const BLOCK_DELIMETER = "---";
 
-export const reprFromBlockSchema = z.record(BlockTitleSchema, z.string());
+export const reprFromBlockSchema = z.record(BlockIdSchema, z.string());
 
-const MeningfullBlockTitlesForEveryone = [BlockTitle.Formen, BlockTitle.Kontexte];
-const TechnikalBlockTitlesForEveryone = [BlockTitle.Related, BlockTitle.Tags];
-const BlockTitlesForFlexers = [BlockTitle.Synonyme, BlockTitle.Morpheme, BlockTitle.Translations, BlockTitle.Flexion];
+const MeningfullBlockTitlesForEveryone = [BlockId.Formen, BlockId.Kontexte];
+const TechnikalBlockTitlesForEveryone = [BlockId.Related, BlockId.Tags];
+const BlockTitlesForFlexers = [BlockId.Synonyme, BlockId.Morpheme, BlockId.Translations, BlockId.Flexion];
 export const BlockTitlesFromWortart = {
     Nomen: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
     Pronomen: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
@@ -57,10 +93,10 @@ export const BlockTitlesFromWortart = {
     Adjektiv: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
     Numerale: [...MeningfullBlockTitlesForEveryone, ...BlockTitlesForFlexers, ...TechnikalBlockTitlesForEveryone],
     
-    Artikel: [...MeningfullBlockTitlesForEveryone, BlockTitle.Grammatik, ...TechnikalBlockTitlesForEveryone],
-    Partikel: [...MeningfullBlockTitlesForEveryone, BlockTitle.Grammatik, ...TechnikalBlockTitlesForEveryone],
-    Praeposition: [...MeningfullBlockTitlesForEveryone, BlockTitle.Grammatik, ...TechnikalBlockTitlesForEveryone],
-    Konjunktion: [...MeningfullBlockTitlesForEveryone, BlockTitle.Grammatik, ...TechnikalBlockTitlesForEveryone],
+    Artikel: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
+    Partikel: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
+    Praeposition: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
+    Konjunktion: [...MeningfullBlockTitlesForEveryone, BlockId.Grammatik, ...TechnikalBlockTitlesForEveryone],
     
     Adverb: [...MeningfullBlockTitlesForEveryone, ...TechnikalBlockTitlesForEveryone],
     Redewendung: [...MeningfullBlockTitlesForEveryone, ...TechnikalBlockTitlesForEveryone],

@@ -1,18 +1,16 @@
 import { TFile, Vault } from "obsidian";
-import { cssClassNameFromBlockTitle, elementStringFromBlockTitle, reprFromBlockSchema, BlockTitle, BLOCK_DELIMETER, allBlockTitles } from "./types-and-constants";
+import { cssClassNameFromBlockId, blockHeaderElementFromBlockId, reprFromBlockSchema, BlockId, BLOCK_DELIMETER, ALL_BLOCK_IDS, weightFromBlockId, preDelimeterSpacingFromBlockId } from "./types-and-constants";
 
 /**
  * Build a regex that captures a block in the note.
  * It captures:
- *   - group 1: the block title element (e.g. the <span>...</span>)
- *   - group 2: all text content until the next delimiter (a newline + delim), or the next tag, or the end of file.
+ *   - group 1: the block id element (e.g. the <span>...</span>)
  *
- * @param blockTitle - The block title value.
- * @param delim - The delimiter string (e.g. '---').
+ * @param blockId - The block id value.
  * @returns a RegExp to capture the block and its content.
  */
-function getBlockRegex(blockTitle: BlockTitle): RegExp {
-    const cssClass = cssClassNameFromBlockTitle[blockTitle];
+function getBlockRegex(blockId: BlockId): RegExp {
+    const cssClass = cssClassNameFromBlockId[blockId];
     return new RegExp(
       `(<span\\s+class=["']block_title\\s+${cssClass}["']>[^<]+</span>)([\\s\\S]*?)(?=(${BLOCK_DELIMETER}|<|$))`,
       "g"
@@ -23,12 +21,11 @@ function getBlockRegex(blockTitle: BlockTitle): RegExp {
    * Extracts the content of a block from the note.
    *
    * @param content - The full note content.
-   * @param blockTitle - The block title.
-   * @param delim - The delimiter string.
+   * @param blockId - The block id.
    * @returns The content (trimmed) found for the block, or null if not found.
    */
-  function extractBlockContent(content: string, blockTitle: BlockTitle): string {
-    const regex = getBlockRegex(blockTitle);
+  function extractBlockContent(content: string, blockId: BlockId): string {
+    const regex = getBlockRegex(blockId);
     const match = regex.exec(content);
     return match ? match[2].trim() : "";
   }
@@ -39,44 +36,63 @@ function getBlockRegex(blockTitle: BlockTitle): RegExp {
    * Integrates the existing file content into the new block representations.
    *
    * For each block:
-   *   - If the block exists in the file and its title is "Kontexte", its existing content is preserved.
+   *   - If the block exists in the file and its id is "Kontexte", its existing content is preserved.
    *   - For all other blocks, the new representation replaces any existing content.
    *   - If a block does not exist, the new representation is used.
    *
-   * @param newRepr - The new representations (Record of BlockTitle to string).
+   * @param newRepr - The new representations (Record of BlockId to string).
    * @param fileContent - The current note content.
-   * @param delim - The delimiter string.
    * @returns An enriched representation record.
    */
   function integrateExistingContentIntoBlocks(
-    newRepr: Partial<Record<BlockTitle, string>>,
+    newReprFromBlockId: Partial<Record<BlockId, string>>,
     fileContent: string,
-  ): Record<BlockTitle, string> {
-    const enriched: Record<BlockTitle, string> = {} as Record<BlockTitle, string>;
-    (Object.keys(newRepr) as BlockTitle[]).forEach((block) => {
-      const existing = extractBlockContent(fileContent, block);
-      enriched[block] = existing + newRepr;
+  ): Record<BlockId, string> {
+    const enriched: Record<BlockId, string> = {} as Record<BlockId, string>;
+    (ALL_BLOCK_IDS).forEach((blockId) => {
+      const existing = extractBlockContent(fileContent, blockId);
+      const newRepr = newReprFromBlockId?.[blockId] || "";
+      enriched[blockId] = existing + newRepr;
     });
     return enriched;
   }
+
+type BlockIdAndContent = {id: BlockId, content: string};
+
+function getSortedBlockIdsAndContents(
+  blockIdsAndContents: BlockIdAndContent[]
+): BlockIdAndContent[] {
+  return [...blockIdsAndContents].sort(
+    (a, b) => weightFromBlockId[a.id] - weightFromBlockId[b.id]
+  );
+}
+
   /**
    * Converts a representation record into the final file content.
    *
-   * It reassembles each block using its title element, the provided content, and appends the delimiter.
    *
-   * @param enrichedRepr - The enriched representation record.
+   * @param enrichedReprFromBlockId - The enriched representation record.
    * @returns The complete note content as a string.
    */
-  function buildContentFromEnrichedBlocks(
-    enrichedRepr: Record<BlockTitle, string>,
-  ): string {
-    let finalContent = "";
-    (Object.keys(enrichedRepr) as BlockTitle[]).forEach((block) => {
-      const titleElement = elementStringFromBlockTitle[block];
-      const blockContent = enrichedRepr[block];
-      finalContent += `${titleElement}\n${blockContent}\n\n${BLOCK_DELIMETER}\n`;
+  function buildSortedBlockIdsAndContentsFromEnrichedBlocks(
+    enrichedReprFromBlockId: Record<BlockId, string>,
+  ): BlockIdAndContent[] {
+    const blockIdsAndContents: BlockIdAndContent[] = [];
+
+    (ALL_BLOCK_IDS).forEach((id) => {
+      const headerElement = blockHeaderElementFromBlockId[id].trim();
+      const blockContent = enrichedReprFromBlockId[id].trim();
+      const spacedOutDemimeter = preDelimeterSpacingFromBlockId[id] + BLOCK_DELIMETER;
+      const parts = [headerElement, blockContent, spacedOutDemimeter].filter(s => s);
+      console.log("parts", parts)
+      const content = parts.join("\n")
+      console.log("content", content)
+      blockIdsAndContents.push({ id, content })
     });
-    return finalContent.trim();
+
+    blockIdsAndContents.sort((a, b) => weightFromBlockId[a.id] - weightFromBlockId[b.id]);
+
+    return getSortedBlockIdsAndContents(blockIdsAndContents);
   }
   
   /* ================= Main Function ================= */
@@ -93,17 +109,14 @@ function getBlockRegex(blockTitle: BlockTitle): RegExp {
    *
    * @param vault - The Obsidian Vault instance.
    * @param filePath - The path to the note file.
-   * @param reprFromBlock - A record mapping BlockTitle to the new string.
+   * @param reprFromBlock - A record mapping BlockId to the new string.
    */
   export async function makeNewFileContent(
     fileContent: string,
-    reprFromBlock: Partial<Record<BlockTitle, string>>
+    reprFromBlock: Partial<Record<BlockId, string>>
   ): Promise<string> {
-    // Enrich the new representations by integrating existing content (if any).
-    const enrichedRepr = integrateExistingContentIntoBlocks(reprFromBlock, fileContent);
-  
-    // Build the final file content from the enriched representations.
-    const finalContent = buildContentFromEnrichedBlocks(enrichedRepr);
-  
-    return finalContent;
+    const enrichedReprFromBlockId = integrateExistingContentIntoBlocks(reprFromBlock, fileContent);
+    const blockIdsAndContents = buildSortedBlockIdsAndContentsFromEnrichedBlocks(enrichedReprFromBlockId);
+    console.log("blockIdsAndContents", blockIdsAndContents)
+    return blockIdsAndContents.map(({content}) => content).join("\n");
   }
