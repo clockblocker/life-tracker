@@ -1,14 +1,17 @@
-import { Wortart } from "prompts/endgame/zod/types";
-import { makeEndgameAdjektivPrompt } from "./adjektiv/adjektivPrompt";
-import { makeEndgameMorhpemsPrompt } from "./morphems/morphemsPrompt";
-import { makeGrundformsPrompt } from "./grundforms/grundformsPrompt";
+import { Wortart } from 'prompts/endgame/zod/types';
+import { makeEndgameAdjektivPrompt } from './adjektiv/adjektivPrompt';
+import { makeEndgameMorhpemsPrompt } from './morphems/morphemsPrompt';
+import { makeGrundformsPrompt } from './grundforms/grundformsPrompt';
 
-const a = Wortart.Adjektiv
+const a = Wortart.Adjektiv;
 // type PromtMakerFromWortart = Record<Wortart | "Morphems" | "Grundform", string>;
-type PromtMakerFromWortart = Record<typeof a | "Morphems" | "Grundform", () => string>;
+type PromtMakerFromWortart = Record<
+	typeof a | 'Morphems' | 'Grundform',
+	() => string
+>;
 
 export const promtMakerFromKeyword: PromtMakerFromWortart = {
-    [Wortart.Adjektiv]: makeEndgameAdjektivPrompt,
-    "Morphems": makeEndgameMorhpemsPrompt,
-    "Grundform": makeGrundformsPrompt,
-} 
+	[Wortart.Adjektiv]: makeEndgameAdjektivPrompt,
+	Morphems: makeEndgameMorhpemsPrompt,
+	Grundform: makeGrundformsPrompt,
+};

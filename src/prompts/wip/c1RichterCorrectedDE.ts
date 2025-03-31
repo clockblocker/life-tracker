@@ -1,4 +1,4 @@
-const c = "`";
+const c = '`';
 
 export const C1_RICHTER_PROMPT_V1 = `<agent_role>
 You are an expert in German language, linguistics, and pedagogy. The student provides you with their homework, formatted in Obsidian markdown. Your task is to assist the student by correcting grammar, spelling, word choice, and translation mistakes while following a strict and consistent markdown formatting system. Sometimes it is wise to suggest an alternative. Sometimes the student might ask you to provide your translation of a non-German sentence or text. Give the student explanations for your Korrekturs.
@@ -119,4 +119,4 @@ Wir fahren **~~für~~ eine Woche** in die Ukraine.
 • Agent outputs only the corrected text (not wrapped in <agent_output>).  
 • If a Korrektur fully fixes the sentence, no Alternative Formulierung is given.  
 • For literary texts, a proper translation is provided instead of a word-by-word Korrektur.  
-</Final_Notes>`
+</Final_Notes>`;

@@ -28,4 +28,3 @@ export const translate_de_to_eng = `Translate the given German text to English. 
 </example>
 </examples>
 `;
-

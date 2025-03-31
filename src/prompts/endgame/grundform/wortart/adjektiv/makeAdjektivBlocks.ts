@@ -1,200 +1,330 @@
-import { AdjektivOutput, Backlink, Block, GrundformKerl, Match, Wortart } from "prompts/endgame/zod/types";
-import { promtMakerFromKeyword } from "../endgamePromptMakers";
-import TextEaterPlugin from "main";
-import { TFile } from "obsidian";
-import { adjektivOutputSchema } from "prompts/endgame/zod/schemas";
-import { getPathsToNotes } from "../../formatters/link";
-import { makeAllDeclensionsFromAdjektivstamm, makeReprSentenceForRoot } from "./formatter";
-import { makeTagChain, Tag } from "prompts/endgame/zod/consts";
-import { allDeclensionsFromGradKeys, allDeclensionsKeys, declensionKeys, caseDeclensionKeys, AllDeclensionsFromGradSchema, AllDeclensionsFromGrad, PathFromWortFromGrad, PathFromWortFromGradSchema, AllDeclensions, PathFromWort } from "./types-and-consts";
+import {
+	AdjektivOutput,
+	Backlink,
+	Block,
+	GrundformKerl,
+	Match,
+	Wortart,
+} from 'prompts/endgame/zod/types';
+import { promtMakerFromKeyword } from '../endgamePromptMakers';
+import TextEaterPlugin from 'main';
+import { TFile } from 'obsidian';
+import { adjektivOutputSchema } from 'prompts/endgame/zod/schemas';
+import { getPathsToNotes } from '../../formatters/link';
+import {
+	makeAllDeclensionsFromAdjektivstamm,
+	makeReprSentenceForRoot,
+} from './formatter';
+import { makeTagChain, Tag } from 'prompts/endgame/zod/consts';
+import {
+	allDeclensionsFromGradKeys,
+	allDeclensionsKeys,
+	declensionKeys,
+	caseDeclensionKeys,
+	AllDeclensionsFromGradSchema,
+	AllDeclensionsFromGrad,
+	PathFromWortFromGrad,
+	PathFromWortFromGradSchema,
+	AllDeclensions,
+	PathFromWort,
+} from './types-and-consts';
 
-export async function makeAdjektivBlock(plugin: TextEaterPlugin, file: TFile, word: string): Promise<Block | null> {
-    const prompt = promtMakerFromKeyword[Wortart.Adjektiv]();
-    const generatedAdjektivOutput = await plugin.apiService.generateContent(prompt, word, true)
-    const parsedAdjektivOutput = adjektivOutputSchema.safeParse(JSON.parse(generatedAdjektivOutput));
-        
-    if (parsedAdjektivOutput.error) {
-        console.error({zodError: parsedAdjektivOutput.error, output: generatedAdjektivOutput});
-        await plugin.fileService.appendToFile(file.path, "Contact t.me/@clockblocker");
-        return null;
-    }
+export async function makeAdjektivBlock(
+	plugin: TextEaterPlugin,
+	file: TFile,
+	word: string
+): Promise<Block | null> {
+	const prompt = promtMakerFromKeyword[Wortart.Adjektiv]();
+	const generatedAdjektivOutput = await plugin.apiService.generateContent(
+		prompt,
+		word,
+		true
+	);
+	const parsedAdjektivOutput = adjektivOutputSchema.safeParse(
+		JSON.parse(generatedAdjektivOutput)
+	);
 
-    const adjektivOutput = parsedAdjektivOutput.data;
+	if (parsedAdjektivOutput.error) {
+		console.error({
+			zodError: parsedAdjektivOutput.error,
+			output: generatedAdjektivOutput,
+		});
+		await plugin.fileService.appendToFile(
+			file.path,
+			'Contact t.me/@clockblocker'
+		);
+		return null;
+	}
 
-    console.log("adjektivOutput", adjektivOutput);
+	const adjektivOutput = parsedAdjektivOutput.data;
 
-    const formSubblocks = await Promise.all(adjektivOutput.map((o) => makeBlocksForAdjektivOutputElement(plugin, file, o)));
-    console.log("formSubblocks", formSubblocks);
-    const backlinks = formSubblocks.map(s => s.backlinks).flat();
-    const adjektivOutputBlock = {repr: formSubblocks.map(({repr}) => repr).join("\n\n"), backlinks: backlinks};
-    
-    return adjektivOutputBlock;
+	console.log('adjektivOutput', adjektivOutput);
+
+	const formSubblocks = await Promise.all(
+		adjektivOutput.map((o) =>
+			makeBlocksForAdjektivOutputElement(plugin, file, o)
+		)
+	);
+	console.log('formSubblocks', formSubblocks);
+	const backlinks = formSubblocks.map((s) => s.backlinks).flat();
+	const adjektivOutputBlock = {
+		repr: formSubblocks.map(({ repr }) => repr).join('\n\n'),
+		backlinks: backlinks,
+	};
+
+	return adjektivOutputBlock;
+}
+
+async function makeBlocksForAdjektivOutputElement(
+	plugin: TextEaterPlugin,
+	file: TFile,
+	adjektivOutputElement: AdjektivOutput[-1]
+) {
+	const backlinksFromWord = await makebacklinksFromWord(
+		plugin,
+		file,
+		adjektivOutputElement
+	);
+	const pathFromWord: PathFromWort = {};
+
+	const backlinksMap = new Map();
+	Object.keys(backlinksFromWord).forEach((word) => {
+		backlinksFromWord[word].forEach(({ path, tags }) => {
+			pathFromWord[word] = path;
+			if (!backlinksMap.has(path)) {
+				backlinksMap.set(path, new Set([]));
+			}
+			tags?.forEach((tag) => {
+				backlinksMap.get(path).add(tag);
+			});
+		});
+	});
+	console.log('backlinksMap', backlinksMap);
+	const backlinks = [...backlinksMap.entries()].map(([path, tagSet]) => ({
+		path,
+		tags: [...tagSet],
+	}));
+
+	const repr = makeReprForAdjektivOutputElement(
+		adjektivOutputElement,
+		pathFromWord
+	);
+	return { repr, backlinks };
+}
+
+const makeReprForAdjektivOutputElement = (
+	adjektivOutputElement: AdjektivOutput[-1],
+	pathFromWord: PathFromWort
+) => {
+	return Object.values(adjektivOutputElement.adjektivstaemme)
+		.map((staemme) =>
+			staemme
+				.map((word) => makeReprSentenceForRoot(word, pathFromWord))
+				.join('\n\n')
+		)
+		.join('\n');
 };
 
+type BacklinksFromWord = Record<string, Backlink[]>;
 
-async function makeBlocksForAdjektivOutputElement(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]) {
-    const backlinksFromWord = await makebacklinksFromWord(plugin, file, adjektivOutputElement);
-    const pathFromWord: PathFromWort = {};
+async function makebacklinksFromWord(
+	plugin: TextEaterPlugin,
+	file: TFile,
+	adjektivOutputElement: AdjektivOutput[-1]
+) {
+	const { allDeclensionsFromGrad, pathFromWortFromGrad, error } =
+		await makeDeclensionsMaps(plugin, file, adjektivOutputElement);
 
-    const backlinksMap = new Map();
-    Object.keys(backlinksFromWord).forEach(word => {
-        backlinksFromWord[word].forEach(({path, tags}) => {
-            pathFromWord[word] = path;
-            if (!backlinksMap.has(path)) {
-                backlinksMap.set(path, new Set([]));
-            }
-            tags?.forEach(tag => {
-                backlinksMap.get(path).add(tag);
-            });
-        });
-    });
-    console.log("backlinksMap", backlinksMap);
-    const backlinks = [...backlinksMap.entries()].map(([path, tagSet]) => ({ path, tags: [...tagSet] }))
+	if (error) {
+		return {} as BacklinksFromWord;
+	}
 
-    const repr = makeReprForAdjektivOutputElement(adjektivOutputElement, pathFromWord);
-    return { repr, backlinks };
-}
+	const backlinksFromWord: BacklinksFromWord = {};
 
-const makeReprForAdjektivOutputElement = (adjektivOutputElement: AdjektivOutput[-1], pathFromWord: PathFromWort) => {
-    return Object.values(adjektivOutputElement.adjektivstaemme).map(staemme => staemme.map(word => makeReprSentenceForRoot(word, pathFromWord)).join("\n\n")).join("\n");
-}
+	for (const grad of allDeclensionsFromGradKeys) {
+		const allDeclensions = allDeclensionsFromGrad?.[grad];
+		if (!allDeclensions) {
+			continue;
+		}
 
-type BacklinksFromWord = Record<string, Backlink[]>
+		const pathFromWort = pathFromWortFromGrad?.[grad];
+		if (!pathFromWort) {
+			continue;
+		}
 
-async function makebacklinksFromWord(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]) {
-    const { allDeclensionsFromGrad, pathFromWortFromGrad, error } = await makeDeclensionsMaps(
-        plugin,
-        file,
-        adjektivOutputElement
-    );
+		for (const art of allDeclensionsKeys) {
+			const i = allDeclensions[art];
+			if (i === undefined) {
+				continue;
+			}
 
-    if (error) {
-        return {} as BacklinksFromWord;
-    }
+			for (const kasus of declensionKeys) {
+				const ii = i[kasus];
+				if (ii === undefined) {
+					continue;
+				}
 
-    const backlinksFromWord: BacklinksFromWord = {};
+				for (const caseDec of caseDeclensionKeys) {
+					const roots = ii[caseDec];
+					roots.forEach(({ agj }) => {
+						const existingBacklinks = backlinksFromWord[agj] || [];
 
-    for (let grad of allDeclensionsFromGradKeys) {
-        const allDeclensions = allDeclensionsFromGrad?.[grad];
-        if (!allDeclensions) {
-            continue; 
-        }
-        
-        const pathFromWort = pathFromWortFromGrad?.[grad];
-        if (!pathFromWort) {
-            continue; 
-        }
-        
-        for (let art of allDeclensionsKeys) {
-            const i = allDeclensions[art];
-            if (i === undefined) { continue }
+						if (pathFromWort) {
+							const path = pathFromWort[agj];
+							const tags = [
+								makeTagChain([
+									Wortart.Adjektiv,
+									Match.Flexion,
+									adjektivOutputElement.steigerungsfaehig
+										? Tag.Steigerungsfaehig
+										: Tag.Unsteigerungsfaehig,
+									adjektivOutputElement.regelmaessig
+										? Tag.Regelmaessig
+										: Tag.Unregelmaessig,
+									grad,
+									art,
+								]),
+							];
+							backlinksFromWord[agj] = [
+								...existingBacklinks,
+								{ path, tags: tags },
+							];
+						}
+					});
+				}
+			}
+		}
+	}
 
-            for (let kasus of declensionKeys) {
-                const ii = i[kasus];
-                if (ii === undefined) { continue }
-
-                for (let caseDec of caseDeclensionKeys) {
-                    const roots = ii[caseDec];
-                    roots.forEach(({ agj }) => {
-                        const existingBacklinks = backlinksFromWord[agj] || [];
-                        
-                        if (pathFromWort) {
-                            const path = pathFromWort[agj];
-                            const tags = [
-                                makeTagChain([
-                                    Wortart.Adjektiv,
-                                    Match.Flexion,
-                                    adjektivOutputElement.steigerungsfaehig ? Tag.Steigerungsfaehig : Tag.Unsteigerungsfaehig,
-                                    adjektivOutputElement.regelmaessig ? Tag.Regelmaessig : Tag.Unregelmaessig,
-                                    grad,
-                                    art,
-                                ])
-                            ];
-                            backlinksFromWord[agj] = [...existingBacklinks, { path, tags: tags}]
-                        }
-                    })
-                }
-            }
-        }
-    }
-
-    return backlinksFromWord;
+	return backlinksFromWord;
 }
 
 function getAllDeclensionsFromGrad(adjektivOutputElement: AdjektivOutput[-1]) {
-    const adjektivstaemmeFromGrad = adjektivOutputElement.adjektivstaemme;
+	const adjektivstaemmeFromGrad = adjektivOutputElement.adjektivstaemme;
 
-    const unsafeAllDeclensionsFromGrad: any = {};
+	const unsafeAllDeclensionsFromGrad: any = {};
 
-    for (const grad of allDeclensionsFromGradKeys) {
-        const roots = adjektivstaemmeFromGrad[grad as keyof typeof adjektivstaemmeFromGrad];
-        if (roots) {
-            const declensions = makeAllDeclensionsFromAdjektivstamm(roots);
-            unsafeAllDeclensionsFromGrad[grad] = declensions;
-        } 
-    }
+	for (const grad of allDeclensionsFromGradKeys) {
+		const roots =
+			adjektivstaemmeFromGrad[grad as keyof typeof adjektivstaemmeFromGrad];
+		if (roots) {
+			const declensions = makeAllDeclensionsFromAdjektivstamm(roots);
+			unsafeAllDeclensionsFromGrad[grad] = declensions;
+		}
+	}
 
-    const parsedAllDeclensions = AllDeclensionsFromGradSchema.safeParse(unsafeAllDeclensionsFromGrad);
-    
-    if (parsedAllDeclensions.error) {
-        console.error(parsedAllDeclensions.error);
-        return undefined;
-    }
+	const parsedAllDeclensions = AllDeclensionsFromGradSchema.safeParse(
+		unsafeAllDeclensionsFromGrad
+	);
 
-    return parsedAllDeclensions.data;
+	if (parsedAllDeclensions.error) {
+		console.error(parsedAllDeclensions.error);
+		return undefined;
+	}
+
+	return parsedAllDeclensions.data;
 }
 
-async function makeDeclensionsMaps(plugin: TextEaterPlugin, file: TFile, adjektivOutputElement: AdjektivOutput[-1]): Promise<{ allDeclensionsFromGrad: undefined; pathFromWortFromGrad: undefined; error: true; } | { allDeclensionsFromGrad: AllDeclensionsFromGrad; pathFromWortFromGrad: PathFromWortFromGrad; error: false; }> {
-    const allDeclensionsFromGrad = getAllDeclensionsFromGrad(adjektivOutputElement);
-    if (allDeclensionsFromGrad === undefined) {
-        return { allDeclensionsFromGrad: undefined, pathFromWortFromGrad: undefined, error: true };
-    }
+async function makeDeclensionsMaps(
+	plugin: TextEaterPlugin,
+	file: TFile,
+	adjektivOutputElement: AdjektivOutput[-1]
+): Promise<
+	| {
+			allDeclensionsFromGrad: undefined;
+			pathFromWortFromGrad: undefined;
+			error: true;
+	  }
+	| {
+			allDeclensionsFromGrad: AllDeclensionsFromGrad;
+			pathFromWortFromGrad: PathFromWortFromGrad;
+			error: false;
+	  }
+> {
+	const allDeclensionsFromGrad = getAllDeclensionsFromGrad(
+		adjektivOutputElement
+	);
+	if (allDeclensionsFromGrad === undefined) {
+		return {
+			allDeclensionsFromGrad: undefined,
+			pathFromWortFromGrad: undefined,
+			error: true,
+		};
+	}
 
-    const promiseArray = allDeclensionsFromGradKeys.map(async (grad) => {
-        const declensions = allDeclensionsFromGrad[grad];
-        if (!declensions) {
-            return [grad, undefined] as const;
-        }
+	const promiseArray = allDeclensionsFromGradKeys.map(async (grad) => {
+		const declensions = allDeclensionsFromGrad[grad];
+		if (!declensions) {
+			return [grad, undefined] as const;
+		}
 
-        const path = await makePathFromWordFromAllDeclensions(plugin, file, declensions);
-        return [grad, path] as const;
-    });
-    
-    const results = await Promise.all(promiseArray);
-    
-    const unsafePathFromWortFromGrad: any = {};
-    for (const [grad, path] of results) {
-        unsafePathFromWortFromGrad[grad] = path;
-    }
+		const path = await makePathFromWordFromAllDeclensions(
+			plugin,
+			file,
+			declensions
+		);
+		return [grad, path] as const;
+	});
 
-    const parsedPathFromWortFromGrad = PathFromWortFromGradSchema.safeParse(unsafePathFromWortFromGrad);
-    
-    if (parsedPathFromWortFromGrad.error) {
-        console.error(parsedPathFromWortFromGrad.error);
-        return { allDeclensionsFromGrad: undefined, pathFromWortFromGrad: undefined, error: true };
-    }
+	const results = await Promise.all(promiseArray);
 
-    return { allDeclensionsFromGrad, pathFromWortFromGrad: parsedPathFromWortFromGrad.data, error: false };
-};
+	const unsafePathFromWortFromGrad: any = {};
+	for (const [grad, path] of results) {
+		unsafePathFromWortFromGrad[grad] = path;
+	}
 
-async function makePathFromWordFromAllDeclensions(plugin: TextEaterPlugin, file: TFile, declensions: AllDeclensions) {
-    const agjSet = new Set<string>();
+	const parsedPathFromWortFromGrad = PathFromWortFromGradSchema.safeParse(
+		unsafePathFromWortFromGrad
+	);
 
-    Object.values(declensions).forEach((declension) => {
-      Object.values(declension).forEach((caseDeclension) => {
-        Object.values(caseDeclension).forEach((root) => {
-            root.forEach(({ agj }) => { agjSet.add(agj) })
-        });
-      });
-    });
-    
-    const kerls = [...agjSet].map(grundform => ({ grundform, wortart: Wortart.Adjektiv, match: Match.Flexion }))
+	if (parsedPathFromWortFromGrad.error) {
+		console.error(parsedPathFromWortFromGrad.error);
+		return {
+			allDeclensionsFromGrad: undefined,
+			pathFromWortFromGrad: undefined,
+			error: true,
+		};
+	}
 
-    const paths = await getPathsToNotes(plugin, file, kerls as (GrundformKerl & {match: Match})[]);
+	return {
+		allDeclensionsFromGrad,
+		pathFromWortFromGrad: parsedPathFromWortFromGrad.data,
+		error: false,
+	};
+}
 
-    const pathFromWort = Object.fromEntries(
-        kerls.map((k, i) => [k.grundform, paths[i]])
-    ) as Record<string, string>;
+async function makePathFromWordFromAllDeclensions(
+	plugin: TextEaterPlugin,
+	file: TFile,
+	declensions: AllDeclensions
+) {
+	const agjSet = new Set<string>();
 
-    return pathFromWort;
-};
+	Object.values(declensions).forEach((declension) => {
+		Object.values(declension).forEach((caseDeclension) => {
+			Object.values(caseDeclension).forEach((root) => {
+				root.forEach(({ agj }) => {
+					agjSet.add(agj);
+				});
+			});
+		});
+	});
+
+	const kerls = [...agjSet].map((grundform) => ({
+		grundform,
+		wortart: Wortart.Adjektiv,
+		match: Match.Flexion,
+	}));
+
+	const paths = await getPathsToNotes(
+		plugin,
+		file,
+		kerls as (GrundformKerl & { match: Match })[]
+	);
+
+	const pathFromWort = Object.fromEntries(
+		kerls.map((k, i) => [k.grundform, paths[i]])
+	) as Record<string, string>;
+
+	return pathFromWort;
+}

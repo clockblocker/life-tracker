@@ -1,13 +1,32 @@
-import { z } from "zod";
-import { GrundformSchema, WortartSchema, NomenGrundformSchema, GenusSchema, RegelmaessigSchema, TrennbarkeitSchema, NomenDeklinationSchema, KasusSchema, PartikelTypeSchema, AdverbCategorySchema, NumerusSchema, PronomenTypeSchema, MorphemSchema, morphemAnalysisOutputSchema, SteigerungsfaehigSchema, VergleichsgradSchema, MatchSchema, grundformsOutputSchema, adjektivOutputSchema } from "./schemas";
+import { z } from 'zod';
+import {
+	GrundformSchema,
+	WortartSchema,
+	NomenGrundformSchema,
+	GenusSchema,
+	RegelmaessigSchema,
+	TrennbarkeitSchema,
+	NomenDeklinationSchema,
+	KasusSchema,
+	PartikelTypeSchema,
+	AdverbCategorySchema,
+	NumerusSchema,
+	PronomenTypeSchema,
+	MorphemSchema,
+	morphemAnalysisOutputSchema,
+	SteigerungsfaehigSchema,
+	VergleichsgradSchema,
+	MatchSchema,
+	grundformsOutputSchema,
+	adjektivOutputSchema,
+} from './schemas';
 
 export type Grundform = z.infer<typeof GrundformSchema>;
 export type Nomen = z.infer<typeof NomenGrundformSchema>;
 export type Wortart = z.infer<typeof WortartSchema>;
 export const Wortart = WortartSchema.Enum;
 
-
-// Genus, Kasus, NomenDeklination, Numerus 
+// Genus, Kasus, NomenDeklination, Numerus
 export type Genus = z.infer<typeof GenusSchema>;
 export const Genus = GenusSchema.Enum;
 
@@ -52,19 +71,16 @@ export type Match = z.infer<typeof MatchSchema>;
 
 export type GrundformWithMatch = Grundform & { match: Match };
 
-export type GrundformKerl = Pick<Grundform, "grundform" | "wortart">;
+export type GrundformKerl = Pick<Grundform, 'grundform' | 'wortart'>;
 
-export type MorphemKerl = {grundform: string, morphem: Morphem};
+export type MorphemKerl = { grundform: string; morphem: Morphem };
 
 export type MorphemAnalysisOutput = z.infer<typeof morphemAnalysisOutputSchema>;
 
 // ---
 
-export type Backlink = {path: string, tags?: string[]};
-export type Block = {repr: string, backlinks: Backlink[]};
-
+export type Backlink = { path: string; tags?: string[] };
+export type Block = { repr: string; backlinks: Backlink[] };
 
 // ---
 export type AdjektivOutput = z.infer<typeof adjektivOutputSchema>;
-
-

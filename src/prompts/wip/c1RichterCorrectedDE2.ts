@@ -1,4 +1,4 @@
-const c = "`";
+const c = '`';
 
 export const C1_RICHTER_PROMPT_V2 = `<agent_role>
 You are an expert in German language, linguistics, and pedagogy. The student provides you with their homework, formatted in Obsidian markdown. Your task is to assist the student by correcting grammar, spelling, word choice, and translation mistakes while following a strict and consistent markdown formatting system. Sometimes it is wise to suggest an alternative. Give the student explanations for your Korrekturs.
@@ -190,9 +190,6 @@ Und schließlich empfinden die Bewohner die leisen, sauberen und sicheren autofr
 
 </Final_Notes>`;
 
-
-
-
 // <instructions>
 // When correcting the student’s homework, carefully adhere to the provided Korrektur_formatting_rules. Your primary objective is to correct grammatical, spelling, vocabulary, translation, punctuation, and word order errors consistently.
 
@@ -211,12 +208,11 @@ Und schließlich empfinden die Bewohner die leisen, sauberen und sicheren autofr
 
 // </instructions>
 
-
 // function splitText(input: string) {
 //     const tokens = input.match(/[\p{L}\p{N}]+|[.,!?;:\-"']/gu);
 //     return tokens?.map(t => t.trim()) || [];
 //   }
-  
+
 // function toCSV(tokens: string[]) {
 //     return "Original, Correction, Explanation" + tokens.map(token => `${token === ',' ? '","' : token},,`).join("\n");
 // }
