@@ -200,5 +200,5 @@ export async function makeNewFileContent({
   const sortedBlockStructures = BUILD_sortedBlockStructures_FROM_mergedContentFromBlockId(mergedContentFromBlockId);
   const sortedBlockReprs = BUILD_sortedBlockReprs_FROM_sortedBlockStructures(sortedBlockStructures);
   const fileContent = BUILD_fileContent_FROM_sortedBlockReprs(sortedBlockReprs);
-  return sortedBlockReprs.join(NEW_LINE);
+  return fileContent;
 }
