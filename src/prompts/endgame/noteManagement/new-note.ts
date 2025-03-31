@@ -77,10 +77,8 @@ function integrateExistingContentIntoBlocks({
     const newBlockContent = newContentFromBlockId?.[blockId] || "";
 
     const mergedBlockContent = oldBlockContent + newBlockContent;
-    if (mergedBlockContent) {
-      if (setOfBlockIdsToCreateIfEmpty.has(blockId)) {
+    if (mergedBlockContent || setOfBlockIdsToCreateIfEmpty.has(blockId)) {
         mergedBlockContentFromBlockId[blockId] = mergedBlockContent;
-      }
     }
   });
 
@@ -122,12 +120,12 @@ function BUILD_sortedBlockStructures_FROM_mergedContentFromBlockId(
 
     const trimmedHeaderElement = blockHeaderElementFromBlockId[id].trim();
     const trimmedContent = blockContent.trim();
-    const spacedOutDelimiter = preDelimeterSpacingFromBlockId[id] + BLOCK_DELIMETER;
+    const preDelimeterSpacing = preDelimeterSpacingFromBlockId[id];
 
     const structure = {
       headerElement: trimmedHeaderElement,
       content: trimmedContent,
-      preDelimeterSpacing: spacedOutDelimiter,
+      preDelimeterSpacing,
       delimeter: BLOCK_DELIMETER,
     };
 
@@ -151,8 +149,10 @@ function BUILD_sortedBlockReprs_FROM_sortedBlockStructures(
   sortedBlockStructures: BlockStructure[]
 ): BlockRepr[] {
   const blockReprs = sortedBlockStructures.map(({headerElement, content, preDelimeterSpacing, delimeter}) => {
-    const nonEmptyParts = [headerElement, content, preDelimeterSpacing, delimeter].filter(s => s);
+    const spacedOutDelimiter = preDelimeterSpacing + delimeter;
+    const nonEmptyParts = [headerElement, content, spacedOutDelimiter].filter(s => s);
     const blockRepr = nonEmptyParts.join(NEW_LINE);
+    
     return blockRepr;
   });
 
