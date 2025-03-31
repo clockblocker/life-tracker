@@ -1,7 +1,7 @@
 import { Editor, MarkdownView, Notice, TFile } from 'obsidian';
 import TextEaterPlugin from '../main';
-import { prompts } from 'prompts';
-import { longDash } from 'utils';
+import { prompts } from '../prompts';
+import { longDash } from '../utils';
 
 function extractFirstBracketedWord(text: string) {
 	const match = text.match(/\[\[([^\]]+)\]\]/);
@@ -28,10 +28,16 @@ function incertYouglishLinkInIpa(baseBlock: string) {
 		return baseBlock;
 	}
 
+	const ipa1 = ipaI[1];
+
+	if (!ipa1) {
+		return baseBlock;
+	}
+
 	return (
-		baseBlock.slice(0, ipaI[1] + 1) +
+		baseBlock.slice(0, ipa1 + 1) +
 		`(https://youglish.com/pronounce/${word}/german)` +
-		baseBlock.slice(ipaI[1] + 1)
+		baseBlock.slice(ipa1 + 1)
 	);
 }
 
@@ -39,7 +45,10 @@ async function incertClipbordContentsInContextsBlock(
 	baseBlock: string
 ): Promise<string> {
 	try {
-		const clipboardContent = await navigator.clipboard.readText();
+		let clipboardContent = '';
+		if (typeof navigator !== 'undefined' && navigator.clipboard) {
+			clipboardContent = await navigator.clipboard.readText();
+		}
 		const [first, ...rest] = baseBlock.split('---');
 
 		if (rest.length >= 1) {

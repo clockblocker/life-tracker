@@ -42,7 +42,8 @@ export default async function addBacklinksToCurrentFile(
 				if (item.path) {
 					filePath = item.path;
 				} else {
-					const firstLetter = item.name[0].toUpperCase();
+					const name = item.name;
+					const firstLetter = name?.toUpperCase();
 					const folderPath = normalizePath(`Worter/${firstLetter}`);
 
 					const folder = vault.getFolderByPath(folderPath);
@@ -62,11 +63,11 @@ export default async function addBacklinksToCurrentFile(
 					await appendToFile(vault, filePath, `, ${backlinkText}`);
 				}
 			} catch (error) {
-				new Notice(`Error processing link ${item.name}: ${error.message}`);
+				new Notice(`Error processing link ${item.name}`);
 			}
 		}
 		editor.refresh();
 	} catch (error) {
-		new Notice(`Error processing backlinks: ${error.message}`);
+		new Notice(`Error processing backlinks`);
 	}
 }

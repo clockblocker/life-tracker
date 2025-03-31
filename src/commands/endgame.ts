@@ -1,13 +1,13 @@
 import { Editor, MarkdownView, Notice, TFile } from 'obsidian';
 import TextEaterPlugin from '../main';
-import { grundformsOutputSchema } from 'prompts/endgame/zod/schemas';
-import { Grundform, Wortart, Nomen, Genus } from 'prompts/endgame/zod/types';
+import { grundformsOutputSchema } from '../prompts/endgame/zod/schemas';
+import { Grundform, Wortart, Nomen, Genus } from '../prompts/endgame/zod/types';
 import { z } from 'zod';
-import { makeGrundformsPrompt } from 'prompts/endgame/grundform/wortart/grundforms/grundformsPrompt';
+import { makeGrundformsPrompt } from '../prompts/endgame/grundform/wortart/grundforms/grundformsPrompt';
 import {
 	makeAnEndgameNote,
 	makeAnEndgameNoteTest,
-} from 'prompts/endgame/makeAnEndgameNote';
+} from '../prompts/endgame/makeAnEndgameNote';
 
 export async function endgame(
 	plugin: TextEaterPlugin,
@@ -46,7 +46,7 @@ export async function endgame(
 		editor.setCursor({ line: 1, ch: 0 });
 		editor.focus();
 	} catch (error) {
-		new Notice(`Error: ${error.message}`);
+		new Notice(`Error: ${JSON.stringify(error)}`);
 	}
 }
 
@@ -62,6 +62,6 @@ export async function testEndgame(
 		editor.setCursor({ line: 1, ch: 0 });
 		editor.focus();
 	} catch (error) {
-		new Notice(`Error: ${error.message}`);
+		new Notice(`Error: ${JSON.stringify(error)}`);
 	}
 }
