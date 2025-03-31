@@ -27,6 +27,14 @@ function getBlockRegex(blockId: BlockId): RegExp {
   function extractBlockContent(content: string, blockId: BlockId): string {
     const regex = getBlockRegex(blockId);
     const match = regex.exec(content);
+    if (blockId === BlockId.Synonyme) {
+      console.log("\n\n!---")
+      console.log("regex", regex)
+      console.log("match", match)
+      console.log("content", content)
+      console.log("!---\n\n")
+
+    }
     return match ? match[2].trim() : "";
   }
   

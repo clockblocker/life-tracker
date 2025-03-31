@@ -11,7 +11,7 @@ import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import addBacklinksToCurrentFile from './commands/addBacklinksToCurrentFile';
 import insertReplyFromKeymaker from './commands/insertReplyFromC1Richter';
 import insertReplyFromC1Richter from './commands/insertReplyFromC1Richter';
-import endgame from 'commands/endgame';
+import { endgame, testEndgame } from 'commands/endgame';
 
 export default class TextEaterPlugin extends Plugin {
     settings: TextEaterSettings;
@@ -60,7 +60,7 @@ export default class TextEaterPlugin extends Plugin {
                 if (view.file) {
                     if (!checking) {
                         // fillTemplate(this, editor, view.file);
-                        endgame(this, editor, view.file)
+                        testEndgame(this, editor, view.file)
                     }
                     return true;
                 }

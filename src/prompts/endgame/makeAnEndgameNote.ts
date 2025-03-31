@@ -62,26 +62,32 @@ async function endgameNoteCase(plugin: TextEaterPlugin, file: TFile, exactMatche
     return blocks.map(({repr}) => repr).join('\n\n---\n');
 };
 
+export async function makeAnEndgameNoteTest(plugin: TextEaterPlugin, file: TFile, word: string): Promise<void> {
+    const { content: oldContent, error } = await plugin.fileService.readFileContentByPath(file.path);
+    if (error) {
+        return;
+    }
+    const newContent = await makeNewFileContent(oldContent, {
+        [BlockId.Tags]: "#Tag1/subtag #Tag2/another_subtag"
+    })
+
+    await plugin.fileService.replaceFileContent(file.path, newContent);
+}
+
+
 export async function makeAnEndgameNote(plugin: TextEaterPlugin, file: TFile, output: GrundformsOutput, word: string): Promise<void> {
     console.log('grundforms', output);
-    
-    // const sortedGrundformWithMatch: GrundformWithMatch[] = grundforms
-    //     .map((g) => ({...g, match: getMatch(g, word)}))
-    //     .sort((a, b) => {
-    //         return compareGrundforms(a, b, word);
-    //     }) as GrundformWithMatch[];
-
 
     console.log("output");
     console.log(output);
 
-    // const allParts = await Promise.all(Object.entries(output).map(([match, grundforms]) => {
-    //     if (match === Match.Grundform) {
-    //         return endgameNoteCase(plugin, file, grundforms);
-    //     } else {
-    //         return endgameLinkCase(plugin, file, grundforms.map(g => ({...g, match: match as Match})));
-    //     }
-    // }))
+    const allParts = await Promise.all(Object.entries(output).map(([match, grundforms]) => {
+        if (match === Match.Grundform) {
+            return endgameNoteCase(plugin, file, grundforms);
+        } else {
+            return endgameLinkCase(plugin, file, grundforms.map(g => ({...g, match: match as Match})));
+        }
+    }))
 
     const { content: oldContent, error } = await plugin.fileService.readFileContentByPath(file.path);
     if (error) {

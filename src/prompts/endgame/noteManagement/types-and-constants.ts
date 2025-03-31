@@ -120,7 +120,7 @@ export const noteExample = `
 
 
 ---
-<span class="block_title block_title_synonyme" Beziehungen>Semantische Beziehungen</span>
+<span class="block_title block_title_synonyme">Semantische Beziehungen</span>
 = [[Kraftwerk]], [[Stromerzeugungsanlage]], [[Stromerzeugungsanlage]]
 ≈ [[Industrieanlage]], [[Fabrik]]
 ≠ [[Windrad]], [[Solaranlage]]
