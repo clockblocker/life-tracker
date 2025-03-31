@@ -82,18 +82,19 @@ export const blockHeaderElementFromBlockId: Record<BlockId, string> = {
 };
 
 export const BLOCK_DELIMETER = "---" as const;
+export type BlockContent = string;
+export type BlockHeaderElement = string;
+export type BlockPreDelimeterSpacing = string;
 
 export type BlockStructure = {
-  headerElement: string;
-  content: string;
-  preDelimeterSpacing: string;
+  headerElement: BlockHeaderElement;
+  content: BlockContent;
+  preDelimeterSpacing: BlockPreDelimeterSpacing;
   delimeter: typeof BLOCK_DELIMETER;
 };
 
 export type BlockRepr = string;
-
 export type FileContent = string;
-
 export type ContentFromBlockId = Record<BlockId, BlockStructure["content"]>;
 
 export const reprFromBlockSchema = z.record(BlockIdSchema, z.string());
