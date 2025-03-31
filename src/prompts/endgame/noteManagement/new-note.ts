@@ -1,12 +1,17 @@
 import {
+  BlockId,
+  NEW_LINE,
+  ALL_BLOCK_IDS,
+  BlockStructure,
+  BLOCK_DELIMETER,
+  weightFromBlockId,
   cssClassNameFromBlockId,
   blockHeaderElementFromBlockId,
-  BlockId,
-  BLOCK_DELIMETER,
-  ALL_BLOCK_IDS,
-  weightFromBlockId,
   preDelimeterSpacingFromBlockId,
-  SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS
+  SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS,
+  ContentFromBlockId,
+  BlockRepr,
+  FileContent,
 } from "./types-and-constants";
 
 /**
@@ -52,41 +57,44 @@ function extractBlockContent({ content, blockId }: { content: string, blockId: B
  *   - If a block does not exist in the file, the new representation is used.
  *
  * @param params - An object with:
- *   - newReprFromBlockId: A partial record mapping BlockId to the new content.
+ *   - newContentFromBlockId: A partial record mapping BlockId to the new content.
  *   - fileContent: The current complete note content.
  * @returns An enriched record mapping each BlockId to its updated content.
  */
 function integrateExistingContentIntoBlocks({
-  newReprFromBlockId,
-  fileContent
+  newContentFromBlockId,
+  fileContent,
+  setOfBlockIdsToCreateIfEmpty,
 }: {
-  newReprFromBlockId: Partial<Record<BlockId, string>>,
-  fileContent: string
-}): Record<BlockId, string> {
-  const enriched: Record<BlockId, string> = {} as Record<BlockId, string>;
+  newContentFromBlockId: Partial<ContentFromBlockId>,
+  fileContent: string,
+  setOfBlockIdsToCreateIfEmpty: Set<BlockId>,
+}): ContentFromBlockId {
+  const mergedBlockContentFromBlockId: ContentFromBlockId = {} as ContentFromBlockId;
+  
   ALL_BLOCK_IDS.forEach((blockId) => {
-    const existing = extractBlockContent({ content: fileContent, blockId });
-    const newRepr = newReprFromBlockId?.[blockId] || "";
-    enriched[blockId] = existing + newRepr;
+    const oldBlockContent = extractBlockContent({ content: fileContent, blockId });
+    const newBlockContent = newContentFromBlockId?.[blockId] || "";
+
+    const mergedBlockContent = oldBlockContent + newBlockContent;
+    if (mergedBlockContent) {
+      if (setOfBlockIdsToCreateIfEmpty.has(blockId)) {
+        mergedBlockContentFromBlockId[blockId] = mergedBlockContent;
+      }
+    }
   });
-  return enriched;
+
+  return mergedBlockContentFromBlockId;
 }
 
-export type BlockIdAndContent = { id: BlockId, content: string };
-
 /**
- * Sort an array of BlockId and content objects by the defined weight for each BlockId.
+ * Sort an array of objects with id: BlockId and sorts them be weight.
  *
- * @param params - An object with:
- *   - blockIdsAndContents: An array of objects each containing a BlockId and its content.
+ * @param blockIdsAndSomething - An array of objects with id: BlockId
  * @returns A new array sorted by the block weight.
  */
-function getSortedBlockIdsAndContents({
-  blockIdsAndContents
-}: {
-  blockIdsAndContents: BlockIdAndContent[]
-}): BlockIdAndContent[] {
-  return [...blockIdsAndContents].sort(
+function getNewSortedListByBlockId<T extends {id: BlockId}>(blockIdsAndSomething: T[]): T[] {
+  return [...blockIdsAndSomething].sort(
     (a, b) => weightFromBlockId[a.id] - weightFromBlockId[b.id]
   );
 }
@@ -98,29 +106,63 @@ function getSortedBlockIdsAndContents({
  *   - The block id.
  *   - The final content built from the header, content, and spacing delimiter.
  *
- * @param params - An object with:
- *   - enrichedReprFromBlockId: A record mapping BlockId to its enriched content.
- * @returns An array of BlockIdAndContent objects sorted by block weight.
+ * @param mergedContentFromBlockId - A record mapping BlockId to its enriched content.
+ * @returns An array of BlockIdAndBlockRepr objects sorted by block weight.
  */
-function buildSortedBlockIdsAndContentsFromEnrichedBlocks({
-  enrichedReprFromBlockId
-}: {
-  enrichedReprFromBlockId: Record<BlockId, string>
-}): BlockIdAndContent[] {
-  const blockIdsAndContents: BlockIdAndContent[] = [];
+function BUILD_sortedBlockStructures_FROM_mergedContentFromBlockId(
+  mergedContentFromBlockId: Partial<ContentFromBlockId>
+): BlockStructure[] {
+  const blocksIdsAndStructures: { id: BlockId, structure: BlockStructure }[] = [];
 
   ALL_BLOCK_IDS.forEach((id) => {
-    const headerElement = blockHeaderElementFromBlockId[id].trim();
-    const blockContent = enrichedReprFromBlockId[id].trim();
+    const blockContent = mergedContentFromBlockId?.[id];
+    if (blockContent === undefined) {
+      return;
+    }
+
+    const trimmedHeaderElement = blockHeaderElementFromBlockId[id].trim();
+    const trimmedContent = blockContent.trim();
     const spacedOutDelimiter = preDelimeterSpacingFromBlockId[id] + BLOCK_DELIMETER;
 
-    const parts = [headerElement, blockContent, spacedOutDelimiter].filter(s => s);
-    const content = parts.join("\n");
+    const structure = {
+      headerElement: trimmedHeaderElement,
+      content: trimmedContent,
+      preDelimeterSpacing: spacedOutDelimiter,
+      delimeter: BLOCK_DELIMETER,
+    };
 
-    blockIdsAndContents.push({ id, content });
+    blocksIdsAndStructures.push({ id, structure });
   });
 
-  return getSortedBlockIdsAndContents({ blockIdsAndContents });
+  return getNewSortedListByBlockId(blocksIdsAndStructures).map(({ structure }) => structure);
+}
+
+/**
+ * Convert the enriched representation record into an array of sorted block content objects.
+ *
+ * Each object contains:
+ *   - The block id.
+ *   - The final content built from the header, content, and spacing delimiter.
+ *
+ * @param sortedBlockStructures
+ * @returns An array of BlockIdAndBlockRepr objects sorted by block weight.
+ */
+function BUILD_sortedBlockReprs_FROM_sortedBlockStructures(
+  sortedBlockStructures: BlockStructure[]
+): BlockRepr[] {
+  const blockReprs = sortedBlockStructures.map(({headerElement, content, preDelimeterSpacing, delimeter}) => {
+    const nonEmptyParts = [headerElement, content, preDelimeterSpacing, delimeter].filter(s => s);
+    const blockRepr = nonEmptyParts.join(NEW_LINE);
+    return blockRepr;
+  });
+
+  return blockReprs;
+}
+
+function BUILD_fileContent_FROM_sortedBlockReprs(
+  sortedBlockReprs: BlockRepr[]
+): string {
+  return sortedBlockReprs.join(NEW_LINE);
 }
 
 /* ================= Main Function ================= */
@@ -133,27 +175,30 @@ function buildSortedBlockIdsAndContentsFromEnrichedBlocks({
  *   2. Rebuild the complete note content from the enriched representation.
  *   3. Return the final note content as a string.
  *
- * @param params - An object with:
- *   - oldFileContent: The existing note content.
- *   - blockContentFromBlockId: A partial record mapping BlockId to new block content.
- *   - blockIdsToCreateIfEmpty: (Optional) A set of BlockIds that must be present even if empty.
- * @returns The updated complete note content.
+/**
+ * @param {Object} o
+ * @param {FileContent} o.oldFileContent - Existing note content
+ * @param {Partial<ContentFromBlockId>} o.blockContentFromBlockId - New content per block
+ * @param {Set<BlockId>} [o.setOfBlockIdsToCreateIfEmpty] - BlockIds to ensure are present
+ * @returns {Promise<FileContent>} Updated complete note content
  */
 export async function makeNewFileContent({
   oldFileContent,
   blockContentFromBlockId,
-  blockIdsToCreateIfEmpty = SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS,
+  setOfBlockIdsToCreateIfEmpty = SET_OF_REQUIRED_TECHNIKAL_BLOCK_IDS,
 }: {
-  oldFileContent: string,
-  blockContentFromBlockId: Partial<Record<BlockId, string>>,
-  blockIdsToCreateIfEmpty?: Set<BlockId>,
-}): Promise<string> {
-  const enrichedReprFromBlockId = integrateExistingContentIntoBlocks({
-    newReprFromBlockId: blockContentFromBlockId,
-    fileContent: oldFileContent
+  oldFileContent: FileContent,
+  blockContentFromBlockId: Partial<ContentFromBlockId>,
+  setOfBlockIdsToCreateIfEmpty?: Set<BlockId>,
+}): Promise<FileContent> {
+  const mergedContentFromBlockId = integrateExistingContentIntoBlocks({
+    newContentFromBlockId: blockContentFromBlockId,
+    fileContent: oldFileContent,
+    setOfBlockIdsToCreateIfEmpty,
   });
-  const blockIdsAndContents = buildSortedBlockIdsAndContentsFromEnrichedBlocks({
-    enrichedReprFromBlockId
-  });
-  return blockIdsAndContents.map(({ content }) => content).join("\n");
+
+  const sortedBlockStructures = BUILD_sortedBlockStructures_FROM_mergedContentFromBlockId(mergedContentFromBlockId);
+  const sortedBlockReprs = BUILD_sortedBlockReprs_FROM_sortedBlockStructures(sortedBlockStructures);
+  const fileContent = BUILD_fileContent_FROM_sortedBlockReprs(sortedBlockReprs);
+  return sortedBlockReprs.join(NEW_LINE);
 }

@@ -43,16 +43,18 @@ export const deBlockTitleFromBlockId: Record<BlockId, string> = {
   [BlockId.Tags]: "Tags",
 };
 
+export const NEW_LINE = "\n";
+
 export const preDelimeterSpacingFromBlockId: Record<BlockId, string> = {
-  [BlockId.Formen]: "\n",
-  [BlockId.Kontexte]: "\n\n",
-  [BlockId.Synonyme]: "\n",
-  [BlockId.Morpheme]: "\n",
-  [BlockId.Translations]: "\n",
-  [BlockId.Related]: "\n",
-  [BlockId.Flexion]: "\n",
-  [BlockId.Grammatik]: "\n",
-  [BlockId.Tags]: "\n",
+  [BlockId.Formen]: NEW_LINE,
+  [BlockId.Kontexte]: `${NEW_LINE + NEW_LINE}`,
+  [BlockId.Synonyme]: NEW_LINE,
+  [BlockId.Morpheme]: NEW_LINE,
+  [BlockId.Translations]: NEW_LINE,
+  [BlockId.Related]: NEW_LINE,
+  [BlockId.Flexion]: NEW_LINE,
+  [BlockId.Grammatik]: NEW_LINE,
+  [BlockId.Tags]: NEW_LINE,
 };
 
 export const weightFromBlockId: Record<BlockId, number> = {
@@ -79,7 +81,20 @@ export const blockHeaderElementFromBlockId: Record<BlockId, string> = {
   [BlockId.Tags]: `<span class="block_title ${cssClassNameFromBlockId[BlockId.Tags]}">${deBlockTitleFromBlockId[BlockId.Tags]}</span>`,
 };
 
-export const BLOCK_DELIMETER = "---";
+export const BLOCK_DELIMETER = "---" as const;
+
+export type BlockStructure = {
+  headerElement: string;
+  content: string;
+  preDelimeterSpacing: string;
+  delimeter: typeof BLOCK_DELIMETER;
+};
+
+export type BlockRepr = string;
+
+export type FileContent = string;
+
+export type ContentFromBlockId = Record<BlockId, BlockStructure["content"]>;
 
 export const reprFromBlockSchema = z.record(BlockIdSchema, z.string());
 
