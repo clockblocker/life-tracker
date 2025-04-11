@@ -14,7 +14,7 @@ export class SettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl).setName('API configuration').setHeading();
+		new Setting(containerEl).setName('API key').setHeading();
 
 		new Setting(containerEl)
 			.setName('Gemini API key')

@@ -20,30 +20,39 @@ export async function addLinksToRelatedToBlock(
 		return;
 	}
 
-	let content = await vault.read(file);
+	await vault.process(file, (currentContent) => {
+		const formattedTags = links.map((link) =>
+			link.startsWith('#') ? link : `#${link}`
+		);
 
-	const formattedTags = links.map((link) =>
-		link.startsWith('#') ? link : `#${link}`
-	);
+		let content = currentContent;
 
-	const tagBlockRegex = /^(\*Tags\*:\s*)(.*)$/m;
+		const tagBlockRegex = /^(\*Tags\*:\s*)(.*)$/m;
 
-	if (tagBlockRegex.test(content)) {
-		content = content.replace(tagBlockRegex, (match, prefix, existingTags) => {
-			const existingTagsArr = existingTags
-				.split(/\s+/)
-				.filter((t: string) => t.trim() !== '');
-			const combinedTagsSet = new Set([...existingTagsArr, ...formattedTags]);
-			const updatedTagsLine = prefix + Array.from(combinedTagsSet).join(' ');
+		if (tagBlockRegex.test(currentContent)) {
+			content = currentContent.replace(
+				tagBlockRegex,
+				(match, prefix, existingTags) => {
+					const existingTagsArr = existingTags
+						.split(/\s+/)
+						.filter((t: string) => t.trim() !== '');
+					const combinedTagsSet = new Set([
+						...existingTagsArr,
+						...formattedTags,
+					]);
+					const updatedTagsLine =
+						prefix + Array.from(combinedTagsSet).join(' ');
 
-			return updatedTagsLine;
-		});
-	} else {
-		const tagLine = `*Tags*: ${formattedTags.join(' ')}`;
-		content += `\n---\n\n${tagLine}`;
-	}
+					return updatedTagsLine;
+				}
+			);
+		} else {
+			const tagLine = `*Tags*: ${formattedTags.join(' ')}`;
+			content += `\n---\n\n${tagLine}`;
+		}
 
-	await vault.modify(file, content);
+		return content;
+	});
 }
 
 export async function addTagsToTagBlock(
@@ -51,30 +60,34 @@ export async function addTagsToTagBlock(
 	file: TFile,
 	tags: string[]
 ): Promise<void> {
-	let content = await vault.read(file);
+	await vault.process(file, (currentContent) => {
+		let content = currentContent;
 
-	const formattedTags = tags.map((tag) =>
-		tag.startsWith('#') ? tag : `#${tag}`
-	);
+		const formattedTags = tags.map((tag) =>
+			tag.startsWith('#') ? tag : `#${tag}`
+		);
 
-	const tagBlockRegex = /^(\*Tags\*:\s*)(.*)$/m;
+		const tagBlockRegex = /^(\*Tags\*:\s*)(.*)$/m;
 
-	if (tagBlockRegex.test(content)) {
-		content = content.replace(tagBlockRegex, (match, prefix, existingTags) => {
-			const existingTagsArr = existingTags
-				.split(/\s+/)
-				.filter((t: string) => t.trim() !== '');
-			const combinedTagsSet = new Set([...existingTagsArr, ...formattedTags]);
-			const updatedTagsLine = prefix + Array.from(combinedTagsSet).join(' ');
+		if (tagBlockRegex.test(currentContent)) {
+			content = currentContent.replace(tagBlockRegex, (match, prefix, existingTags) => {
+				const existingTagsArr = existingTags
+					.split(/\s+/)
+					.filter((t: string) => t.trim() !== '');
+				const combinedTagsSet = new Set([...existingTagsArr, ...formattedTags]);
+				const updatedTagsLine = prefix + Array.from(combinedTagsSet).join(' ');
 
-			return updatedTagsLine;
-		});
-	} else {
-		const tagLine = `*Tags*: ${formattedTags.join(' ')}`;
-		content += `\n---\n\n${tagLine}`;
-	}
+				return updatedTagsLine;
+			});
+		} else {
+			const tagLine = `*Tags*: ${formattedTags.join(' ')}`;
+			content += `\n---\n\n${tagLine}`;
+		}
+		
+		return content;
+	});
 
-	await vault.modify(file, content);
+
 }
 
 export default async function populateBacklinks(

@@ -40,10 +40,6 @@ export async function appendToFile(
 				return;
 			}
 		}
-
-		await vault.process(abstractFile, (currentContent) => {
-			return currentContent + text;
-		});
 	} catch (error) {
 		console.error(`Failed to append to file ${filePath}: ${error}`);
 		throw error;
