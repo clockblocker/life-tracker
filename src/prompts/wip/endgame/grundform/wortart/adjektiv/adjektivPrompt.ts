@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { tests } from './tests';
-import { adjektivOutputSchema } from 'prompts/endgame/zod/schemas';
+import { adjektivOutputSchema } from 'prompts/wip/endgame/zod/schemas';
 
 export const makeEndgameAdjektivPrompt = () => {
 	const instructions = `<agent_background>

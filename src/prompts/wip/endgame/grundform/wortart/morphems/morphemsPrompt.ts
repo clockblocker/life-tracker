@@ -3,7 +3,7 @@ import { tests } from './tests';
 import {
 	grundformsOutputSchema,
 	morphemAnalysisOutputSchema,
-} from 'prompts/endgame/zod/schemas';
+} from 'prompts/wip/endgame/zod/schemas';
 
 export const makeEndgameMorhpemsPrompt = () => {
 	const instructions = `<agent_background>You are a language expert, highly knowledgeable in German linguistics, particularly in morphology and word formation. You are well-versed in traditional German linguistic terminology as well as modern analytical approaches.

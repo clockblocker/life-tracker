@@ -9,7 +9,7 @@ import {
 	AdverbCategory,
 	Numerus,
 	PronomenType,
-} from 'prompts/endgame/zod/types';
+} from 'prompts/wip/endgame/zod/types';
 
 const sitzen = {
 	sitzen: [

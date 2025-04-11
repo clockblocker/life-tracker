@@ -6,7 +6,7 @@ import {
 	Match,
 	MorphemKerl,
 	Wortart,
-} from 'prompts/endgame/zod/types';
+} from 'prompts/wip/endgame/zod/types';
 
 export async function getMaybeExistingNotePath(
 	plugin: TextEaterPlugin,

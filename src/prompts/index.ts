@@ -5,7 +5,7 @@ import { translate_de_to_eng } from 'prompts/translate-de-to-eng';
 import { generate_valence_block } from './valence';
 import { generate_forms } from './generate-forms';
 import { baseDict } from './baseDict';
-import { makeEndgameMorhpemsPrompt } from './endgame/grundform/wortart/morphems/morphemsPrompt';
+import { makeEndgameMorhpemsPrompt } from './wip/endgame/grundform/wortart/morphems/morphemsPrompt';
 import { morphems } from './morphems';
 
 export const prompts = {

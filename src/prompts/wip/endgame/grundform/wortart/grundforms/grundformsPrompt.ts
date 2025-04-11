@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { tests } from './tests';
-import { grundformsOutputSchema } from 'prompts/endgame/zod/schemas';
+import { grundformsOutputSchema } from 'prompts/wip/endgame/zod/schemas';
 
 // <agent_role>
 //   Your task is to help the student navigate the German language. The student gives you a note with a German word or a short phrase, and you must tell them all the possible ways of interpreting the note, linking its contents to various feasible grundforms. Your student is not yet the master on the language, so his notes might contain mistakes.

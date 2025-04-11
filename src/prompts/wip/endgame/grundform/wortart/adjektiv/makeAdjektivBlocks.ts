@@ -5,17 +5,17 @@ import {
 	GrundformKerl,
 	Match,
 	Wortart,
-} from 'prompts/endgame/zod/types';
+} from 'prompts/wip/endgame/zod/types';
 import { promtMakerFromKeyword } from '../endgamePromptMakers';
 import TextEaterPlugin from 'main';
 import { TFile } from 'obsidian';
-import { adjektivOutputSchema } from 'prompts/endgame/zod/schemas';
+import { adjektivOutputSchema } from 'prompts/wip/endgame/zod/schemas';
 import { getPathsToNotes } from '../../formatters/link';
 import {
 	makeAllDeclensionsFromAdjektivstamm,
 	makeReprSentenceForRoot,
 } from './formatter';
-import { makeTagChain, Tag } from 'prompts/endgame/zod/consts';
+import { makeTagChain, Tag } from 'prompts/wip/endgame/zod/consts';
 import {
 	allDeclensionsFromGradKeys,
 	allDeclensionsKeys,

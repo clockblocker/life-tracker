@@ -2,7 +2,7 @@ import {
 	Regelmaessigkeit,
 	Steigerungsfaehigkeit,
 	Vergleichsgrad,
-} from 'prompts/endgame/zod/types';
+} from 'prompts/wip/endgame/zod/types';
 
 const gut = {
 	gut: [

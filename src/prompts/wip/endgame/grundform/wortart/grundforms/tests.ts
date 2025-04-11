@@ -10,7 +10,7 @@ import {
 	Numerus,
 	PronomenType,
 	Match,
-} from 'prompts/endgame/zod/types';
+} from 'prompts/wip/endgame/zod/types';
 const sitzen = {
 	sitzen: {
 		[Match.Grundform]: [

@@ -1,4 +1,4 @@
-import { Wortart } from 'prompts/endgame/zod/types';
+import { Wortart } from 'prompts/wip/endgame/zod/types';
 import { makeEndgameAdjektivPrompt } from './adjektiv/adjektivPrompt';
 import { makeEndgameMorhpemsPrompt } from './morphems/morphemsPrompt';
 import { makeGrundformsPrompt } from './grundforms/grundformsPrompt';

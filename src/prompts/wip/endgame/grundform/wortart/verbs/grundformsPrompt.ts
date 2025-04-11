@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { tests } from './tests';
-import { grundformsOutputSchema } from 'prompts/endgame/zod/schemas';
+import { grundformsOutputSchema } from 'prompts/wip/endgame/zod/schemas';
 
 export const makeGrundformsPrompt = () => {
 	const instructions = `<agent_background>

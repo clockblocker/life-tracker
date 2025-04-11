@@ -4,7 +4,7 @@ import {
 	Grundform,
 	Wortart,
 	GrundformWithMatch,
-} from 'prompts/endgame/zod/types';
+} from 'prompts/wip/endgame/zod/types';
 import { getFormatLinkToGrundformNote } from './link';
 import { formatMatch } from './match';
 

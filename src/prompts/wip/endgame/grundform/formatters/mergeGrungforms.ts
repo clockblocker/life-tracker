@@ -1,4 +1,4 @@
-import { Grundform, Wortart } from 'prompts/endgame/zod/types';
+import { Grundform, Wortart } from 'prompts/wip/endgame/zod/types';
 
 function keyFromGrundform<G extends Grundform>(g: G) {
 	return `${g.wortart}-${(g as any)?.genus || ''}`;

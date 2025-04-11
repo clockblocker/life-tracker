@@ -3,7 +3,7 @@ import {
 	Kasus,
 	NomenDeklination,
 	Numerus,
-} from 'prompts/endgame/zod/types';
+} from 'prompts/wip/endgame/zod/types';
 import {
 	AllDeclensions,
 	fromFromNomenDeklinationFromKasusFromCaseDeclension,
