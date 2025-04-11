@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export const NEW_LINE = '\n';
+export const VERTIKAL_STICK = ' | ';
+export const LINE_BREAK = '\n';
+export const COMMA = ',';
+export const SPACE = ' ';
+export const HASHTAG = '#';
+
 const blockIds = [
 	'Formen',
 	'Kontexte',
@@ -41,8 +48,6 @@ export const deBlockTitleFromBlockId: Record<BlockId, string> = {
 	[BlockId.Grammatik]: 'Grammatik',
 	[BlockId.Tags]: 'Tags',
 };
-
-export const NEW_LINE = '\n';
 
 export const preDelimeterSpacingFromBlockId: Record<BlockId, string> = {
 	[BlockId.Formen]: NEW_LINE,

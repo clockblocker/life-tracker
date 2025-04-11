@@ -6,14 +6,14 @@ const VerbFormTagSchema = z.enum([
 	'Praeteritum',
 	'Perfekt',
 	'Imperativ',
-	'K1',
-	'K2',
-	'P1',
-	'P2',
+	'KI',
+	'KII',
+	'PI',
+	'PII',
 	'ZuInfinitiv',
 ]);
 
-const FormSchema = z.enum(['Grundform', 'Flektiert']);
+// VerbFormTagSchema = z.record(VerbFormTagSchema, z.array(z.string())); // [ich,du,er,wir,ihr,sie]
 
 const ConjugationSchema = z.enum(['Stark', 'Schwach', 'Gemischt']);
 const AdjektivDeklinationSchema = z.enum(['Stark', 'Schwach', 'Gemischt']);
@@ -303,7 +303,6 @@ export {
 	RedewendungGrundformSchema,
 	VergleichsformSchema,
 	VerbFormTagSchema,
-	FormSchema,
 	RegelmaessigSchema,
 	ConjugationSchema,
 	AdjektivDeklinationSchema,

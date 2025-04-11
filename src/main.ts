@@ -31,7 +31,7 @@ export default class TextEaterPlugin extends Plugin {
 	async loadPlugin() {
 		await this.loadSettings();
 		this.apiService = new ApiService(this.settings, this.app.vault);
-		this.fileService = new FileService(this.app.vault);
+		this.fileService = new FileService(this.app, this.app.vault);
 
 		this.addCommand({
 			id: 'backlink-all-to-current-file',
@@ -78,8 +78,8 @@ export default class TextEaterPlugin extends Plugin {
 			) => {
 				if (view.file) {
 					if (!checking) {
-						// fillTemplate(this, editor, view.file);
-						testEndgame(this, editor, view.file);
+						fillTemplate(this, editor, view.file);
+						// testEndgame(this, editor, view.file);
 					}
 					return true;
 				}

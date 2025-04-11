@@ -178,6 +178,10 @@ const kind = {
 	},
 };
 
+// veranschaulicht = ver + an + schaulicht
+// Waren = Ware | sein
+// Taten = Taten | tun
+// Gefahren = Gefahr | fahren
 const bundesverfassungsgericht = {
 	bundesverfassungsgericht: {
 		morphemischeZerlegung: [

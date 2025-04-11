@@ -15,6 +15,7 @@ import { makeMorphemBlock } from './common-blocks/morphems';
 import { makeAdjektivBlock } from './grundform/wortart/adjektiv/makeAdjektivBlocks';
 import { makeNewFileContent } from './block-management/new-note';
 import { BlockId } from './block-management/types-and-constants';
+import { setTimeout } from 'timers/promises';
 
 async function endgameLinkCase(
 	plugin: TextEaterPlugin,
@@ -95,6 +96,8 @@ export async function makeAnEndgameNoteTest(
 		return;
 	}
 
+	plugin.fileService.showLoadingOverlay();
+
 	const newContent = await makeNewFileContent({
 		oldFileContent: oldContent,
 		newBlockContentFromId: {
@@ -102,7 +105,14 @@ export async function makeAnEndgameNoteTest(
 		},
 	});
 
-	await plugin.fileService.replaceFileContent(file.path, newContent);
+	await plugin.fileService.replaceContentInCurrentlyOpenedFile(
+		file.path,
+		newContent
+	);
+
+	await sleep(2000);
+
+	plugin.fileService.hideLoadingOverlay();
 }
 
 export async function makeAnEndgameNote(
@@ -136,5 +146,8 @@ export async function makeAnEndgameNote(
 		return;
 	}
 
-	await plugin.fileService.replaceFileContent(file.path, 'asdsad');
+	await plugin.fileService.replaceContentInCurrentlyOpenedFile(
+		file.path,
+		'asdsad'
+	);
 }

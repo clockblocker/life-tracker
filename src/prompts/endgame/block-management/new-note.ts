@@ -28,15 +28,15 @@ function extractBlockContent({
 	content,
 	blockId,
 }: {
-	content: string;
+	content: FileContent;
 	blockId: BlockId;
-}): string {
+}): BlockContent {
 	const regex = getBlockRegex({ blockId });
 	const match = regex.exec(content);
 	return match ? match[2].trim() : '';
 }
 
-function BUILD_oldBlockContentFromId_FROM_fileContent(
+function BUILD_blockContentFromId_FROM_fileContent(
 	fileContent: string
 ): Record<BlockId, BlockContent> {
 	const oldBlockContentRecord: Record<BlockId, BlockContent> = {} as Record<
@@ -125,7 +125,8 @@ export async function makeNewFileContent({
 	setOfBlockIdsToCreateIfEmpty?: Set<BlockId>;
 }): Promise<FileContent> {
 	const oldBlockContentFromId =
-		BUILD_oldBlockContentFromId_FROM_fileContent(oldFileContent);
+		BUILD_blockContentFromId_FROM_fileContent(oldFileContent);
+
 	const blockContentsFromIds = [newBlockContentFromId, oldBlockContentFromId];
 	const mergedContentFromBlockId = mergeBlockContentsFromIds({
 		blockContentsFromIds,

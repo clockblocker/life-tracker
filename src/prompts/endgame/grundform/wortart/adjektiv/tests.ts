@@ -180,7 +180,7 @@ const arg = {
 				[Vergleichsgrad.Komparativ]: ['ärger'],
 				[Vergleichsgrad.Superlativ]: ['ärgst'],
 			},
-			regelmaessig: false,
+			regelmaessig: true,
 			steigerungsfaehig: true,
 		},
 	],

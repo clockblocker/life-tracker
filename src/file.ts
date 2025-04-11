@@ -1,8 +1,11 @@
-import { TFile, Vault } from 'obsidian';
+import { MarkdownView, TFile, App, Vault } from 'obsidian';
 import { appendToFile, doesFileContainContent } from './utils';
 
 export class FileService {
-	constructor(private vault: Vault) {}
+	constructor(
+		private app: App,
+		private vault: Vault
+	) {}
 
 	async readFileContentByPath(
 		filePath: string
@@ -21,31 +24,34 @@ export class FileService {
 		}
 	}
 
-	async replaceFileContent(
+	// await this.vault.process(abstractFile, () => {
+	// 	return newContent;
+	// });
+
+	async replaceContentInCurrentlyOpenedFile(
 		filePath: string,
 		newContent: string
 	): Promise<{ error: boolean }> {
 		try {
-			const abstractFile = this.vault.getAbstractFileByPath(filePath);
+			const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
-			if (!abstractFile || !(abstractFile instanceof TFile)) {
-				// await vault.create(normalizedPath, '');
-				// abstractFile = vault.getAbstractFileByPath(normalizedPath);
+			if (!activeView) {
+				console.warn('file not open or not active');
 				return { error: true };
-
-				// if (!abstractFile || !(abstractFile instanceof TFile)) {
-				//     console.error(`Failed to create file "${normalizedPath}".`);
-				//     return { error: true };
-				// }
 			}
 
-			await this.vault.process(abstractFile, () => {
-				return newContent;
-			});
+			const file = activeView.file;
+			if (!file || file.path !== filePath) {
+				console.warn('file not open or not active');
+				return { error: true };
+			}
+
+			activeView.editor.setValue(newContent);
+			await activeView.save();
 
 			return { error: false };
 		} catch (error) {
-			console.error(`Failed to append to file ${filePath}: ${error}`);
+			console.error(`Failed to replace content: ${error}`);
 			return { error: true };
 		}
 	}
@@ -59,5 +65,41 @@ export class FileService {
 		content: string
 	): Promise<boolean | null> {
 		return doesFileContainContent(this.vault, path, content);
+	}
+
+	public showLoadingOverlay(): void {
+		// Check if the overlay already exists
+		if (document.getElementById('fileService-loading-overlay')) {
+			return;
+		}
+		const overlay = document.createElement('div');
+		overlay.id = 'fileService-loading-overlay';
+		overlay.style.position = 'fixed';
+		overlay.style.top = '0';
+		overlay.style.left = '0';
+		overlay.style.width = '100%';
+		overlay.style.height = '100%';
+		overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
+		overlay.style.display = 'flex';
+		overlay.style.justifyContent = 'center';
+		overlay.style.alignItems = 'center';
+		overlay.style.zIndex = '1000'; // Ensure it's on top
+
+		// Optionally add a loading text or spinner
+		const loadingText = document.createElement('div');
+		loadingText.innerText = 'Loading...';
+		loadingText.style.fontSize = '2rem';
+		loadingText.style.color = '#fff';
+		overlay.appendChild(loadingText);
+
+		document.body.appendChild(overlay);
+	}
+
+	// Exposed method to hide and remove the loading overlay
+	public hideLoadingOverlay(): void {
+		const overlay = document.getElementById('fileService-loading-overlay');
+		if (overlay) {
+			overlay.remove();
+		}
 	}
 }
