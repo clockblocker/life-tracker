@@ -132,11 +132,7 @@ export class ApiService {
 		return this.generateContent(prompts.keymaker, text);
 	}
 
-	async consultC1Richter(text: string, v2?: boolean): Promise<string> {
-		return await '';
-		// 	return this.generateContent(
-		// 		v2 ? prompts.c1Richter2 : prompts.c1Richter,
-		// 		text
-		// 	);
+	async consultC1Richter(text: string): Promise<string> {
+		return this.generateContent(prompts.c1Richter, text);
 	}
 }

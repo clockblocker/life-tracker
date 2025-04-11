@@ -1,8 +1,8 @@
 {
 	"id": "cbcr-text-eater-de",
 	"name": "Textfresser",
-	"minAppVersion": "0.0.2",
-	"description": "Go trough the german texts, building your own dictionary from your personal contexts",
+	"minAppVersion": "1.8.0",
+	"description": "Go trough the german texts and build your own dictionary based on your own unique contexts",
 	"author": "clockblocker",
 	"authorUrl": "https://github.com/clockblocker/",
 	"fundingUrl": "https://buymeacoffee.com/fniqc5g0nr",

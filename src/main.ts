@@ -35,7 +35,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'backlink-all-to-current-file',
-			name: '[P] All referenced files with a backlink to the current file',
+			name: 'Populate all referenced files with a backlink to the current file',
 			editorCheckCallback: (
 				checking: boolean,
 				editor: Editor,
@@ -70,7 +70,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'fill-template',
-			name: '[G] Generate a dictionary entry for the word in the title of the file',
+			name: 'Generate a dictionary entry for the word in the title of the file',
 			editorCheckCallback: (
 				checking: boolean,
 				editor: Editor,
@@ -89,7 +89,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'get-infinitive-and-emoji',
-			name: '[I] [Redundant] Get infinitive/normal form and emoji for current word',
+			name: 'Get infinitive/normal form and emoji for current word',
 			editorCheckCallback: (
 				checking: boolean,
 				editor: Editor,
@@ -107,7 +107,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'duplicate-selection',
-			name: '[WIP] Add links to normal/inf forms to selected text',
+			name: 'Add links to normal/inf forms to selected text',
 			editorCheckCallback: (
 				checking: boolean,
 				editor: Editor,
@@ -126,7 +126,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'translate-selection',
-			name: '[D] Translate selecteD text',
+			name: 'Translate selected text',
 			editorCheckCallback: (checking: boolean, editor: Editor) => {
 				const selection = editor.getSelection();
 				if (selection) {
@@ -141,7 +141,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'format-selection-with-number',
-			name: '[S] Split selection into linked blocks',
+			name: 'Split selection into linked blocks',
 			editorCheckCallback: (
 				checking: boolean,
 				editor: Editor,
@@ -160,7 +160,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'check-ru-de-translation',
-			name: '[K] Keymaker',
+			name: 'Keymaker',
 			editorCheckCallback: (checking: boolean, editor: Editor) => {
 				const selection = editor.getSelection();
 				if (selection) {
@@ -175,51 +175,18 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'check-schriben',
-			name: '[E] schribEn chEck',
+			name: 'Schriben check',
 			editorCheckCallback: (checking: boolean, editor: Editor) => {
 				const selection = editor.getSelection();
 				if (selection) {
 					if (!checking) {
-						insertReplyFromC1Richter(this, editor, selection, true);
+						insertReplyFromC1Richter(this, editor, selection);
 					}
 					return true;
 				}
 				return false;
 			},
 		});
-
-		// this.addCommand({
-		//     id: 'fill-template-2',
-		//     name: '[WIP]: Generate and auto-populate dictionary entry',
-		//     editorCheckCallback: (checking: boolean, editor: Editor, view: MarkdownView) => {
-		//         const fileName = view.file?.name;
-		//         const backlink = view.file?.basename;
-
-		//         if (view.file && fileName && backlink) {
-		//             if (!checking) {
-		//                 const cb = () => addBacklinksToCurrentFile(view.file!, backlink, this.app.vault, this.app.metadataCache)
-		//                 fillTemplate(this, editor, view.file, cb)
-		//             }
-		//             return true;
-		//         }
-		//         return false;
-		//     }
-		// });
-
-		// this.addCommand({
-		//     id: 'c1-richter',
-		//     name: '[WIP] C1 Richter',
-		//     editorCheckCallback: (checking: boolean, editor: Editor) => {
-		//         const selection = editor.getSelection();
-		//         if (selection) {
-		//             if (!checking) {
-		//                 insertReplyFromC1Richter(this, editor, selection);
-		//             }
-		//             return true;
-		//         }
-		//         return false;
-		//     }
-		// });
 	}
 
 	async loadSettings() {
