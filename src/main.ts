@@ -11,7 +11,6 @@ import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import addBacklinksToCurrentFile from './commands/addBacklinksToCurrentFile';
 import insertReplyFromKeymaker from './commands/insertReplyFromC1Richter';
 import insertReplyFromC1Richter from './commands/insertReplyFromC1Richter';
-import { endgame, testEndgame } from 'commands/endgame';
 
 export default class TextEaterPlugin extends Plugin {
 	settings: TextEaterSettings;
