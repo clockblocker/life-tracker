@@ -40,13 +40,10 @@ export class ApiService {
 			// Remove leading tab characters from the system prompt
 			systemPrompt = systemPrompt.replace(/^\t+/gm, '');
 
-			// console.log("systemPrompt", systemPrompt)
-
 			if (this.settings.apiProvider !== 'google') {
 				if (!this.settings.googleApiKey) {
 					throw new Error('Google API key not configured.');
 				}
-				console.log('this.settings.apiProvider', this.settings.apiProvider);
 				throw new Error('API provider not configured correctly.');
 			}
 
@@ -83,16 +80,10 @@ export class ApiService {
 
 			const chatSession = this.chatSessions[chatKey];
 
-			// time it, log to console
 			const result = await chatSession.sendMessage(userInput);
 			response = result.response.text();
 
 			const logResponse = response === null ? '' : response;
-			const endTime = performance.now();
-			const duration = endTime - startTime;
-			console.log(
-				`Generated content for word "${userInput}" in ${duration.toFixed(2)}ms`
-			);
 			return logResponse;
 		} catch (error: any) {
 			const endTime = performance.now();

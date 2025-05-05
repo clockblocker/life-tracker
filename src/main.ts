@@ -44,13 +44,6 @@ export default class TextEaterPlugin extends Plugin {
 				const fileName = view.file?.name;
 				const backlink = view.file?.basename;
 
-				console.log(
-					'view.file, fileName, backlink',
-					view.file,
-					fileName,
-					backlink
-				);
-
 				if (view.file && fileName && backlink) {
 					if (!checking) {
 						addBacklinksToCurrentFile(

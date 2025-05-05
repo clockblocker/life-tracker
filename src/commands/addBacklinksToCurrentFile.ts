@@ -19,8 +19,6 @@ export default async function addBacklinksToCurrentFile(
 		const fileCache = metadataCache.getFileCache(file);
 		const links = fileCache?.links ?? [];
 
-		console.log('links', links);
-
 		const resolvedPaths: { name: string; path: string | null }[] = [];
 
 		for (const link of links) {

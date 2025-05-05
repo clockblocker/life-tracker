@@ -74,18 +74,17 @@ export class FileService {
 		}
 		const overlay = document.createElement('div');
 		overlay.id = 'fileService-loading-overlay';
-		overlay.style.position = 'fixed';
-		overlay.style.top = '0';
-		overlay.style.left = '0';
-		overlay.style.width = '100%';
-		overlay.style.height = '100%';
-		overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
-		overlay.style.display = 'flex';
-		overlay.style.justifyContent = 'center';
-		overlay.style.alignItems = 'center';
-		overlay.style.zIndex = '1000'; // Ensure it's on top
+		// overlay.style.position = 'fixed';
+		// overlay.style.top = '0';
+		// overlay.style.left = '0';
+		// overlay.style.width = '100%';
+		// overlay.style.height = '100%';
+		// overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
+		// overlay.style.display = 'flex';
+		// overlay.style.justifyContent = 'center';
+		// overlay.style.alignItems = 'center';
+		// overlay.style.zIndex = '1000'; // Ensure it's on top
 
-		// Optionally add a loading text or spinner
 		const loadingText = document.createElement('div');
 		loadingText.innerText = 'Loading...';
 		loadingText.style.fontSize = '2rem';

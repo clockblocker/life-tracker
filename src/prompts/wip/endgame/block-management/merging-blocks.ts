@@ -60,9 +60,6 @@ export const joinLinesWithVertikalStick: BlocksMerger = (contents) => {
 	const theMostLines = Math.max(...linesInContents.map((ls) => ls.length));
 	const lines: string[] = [];
 
-	console.log('theMostLines', theMostLines);
-	console.log('linesInContents', linesInContents);
-
 	for (let i = 0; i < theMostLines; i++) {
 		const lineParts: string[] = [];
 
@@ -73,19 +70,6 @@ export const joinLinesWithVertikalStick: BlocksMerger = (contents) => {
 				lineParts.push('');
 			}
 		});
-
-		console.log('lineParts', lineParts);
-		console.log(
-			'filtered lineParts',
-			lineParts.filter((l) => l).join(VERTIKAL_STICK)
-		);
-		console.log(
-			'filtered mapped lineParts',
-			lineParts
-				.filter((l) => l)
-				.map((l) => leaveOnlyOneLeadingSymbol(l))
-				.join(VERTIKAL_STICK)
-		);
 
 		lines.push(
 			lineParts
@@ -108,8 +92,6 @@ export const mergeWords: BlocksMerger = (contents) => {
 		trimmedAndFiltered(c.split(COMMA)).forEach((word) => words.push(word))
 	);
 
-	console.log('words', words);
-
 	return words.join(COMMA + SPACE);
 };
 
@@ -125,19 +107,12 @@ export const mergeTags: BlocksMerger = (contents) => {
 
 export const lastReplaces: BlocksMerger = (contents) => {
 	const trimmedAndFilteredContents = trimmedAndFiltered(contents);
-	console.log('trimmedAndFilteredContents', trimmedAndFilteredContents);
 	const lastIndex = trimmedAndFilteredContents.length - 1;
-	console.log('lastIndex', lastIndex);
-	console.log('lastIndex < 0', lastIndex < 0);
 
 	if (lastIndex < 0) {
 		return '';
 	}
 
-	console.log(
-		'trimmedAndFilteredContents[lastIndex]',
-		trimmedAndFilteredContents[lastIndex]
-	);
 	return trimmedAndFilteredContents[lastIndex];
 };
 

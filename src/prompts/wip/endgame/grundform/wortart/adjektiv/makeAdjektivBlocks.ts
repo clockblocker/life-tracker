@@ -58,14 +58,11 @@ export async function makeAdjektivBlock(
 
 	const adjektivOutput = parsedAdjektivOutput.data;
 
-	console.log('adjektivOutput', adjektivOutput);
-
 	const formSubblocks = await Promise.all(
 		adjektivOutput.map((o) =>
 			makeBlocksForAdjektivOutputElement(plugin, file, o)
 		)
 	);
-	console.log('formSubblocks', formSubblocks);
 	const backlinks = formSubblocks.map((s) => s.backlinks).flat();
 	const adjektivOutputBlock = {
 		repr: formSubblocks.map(({ repr }) => repr).join('\n\n'),
@@ -99,7 +96,7 @@ async function makeBlocksForAdjektivOutputElement(
 			});
 		});
 	});
-	console.log('backlinksMap', backlinksMap);
+
 	const backlinks = [...backlinksMap.entries()].map(([path, tagSet]) => ({
 		path,
 		tags: [...tagSet],

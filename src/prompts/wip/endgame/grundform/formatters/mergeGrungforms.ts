@@ -1,7 +1,10 @@
 import { Grundform, Wortart } from 'prompts/wip/endgame/zod/types';
 
 function keyFromGrundform<G extends Grundform>(g: G) {
-	return `${g.wortart}-${(g as any)?.genus || ''}`;
+	if (g.wortart === Wortart.Nomen) {
+		return `${g.wortart}-${g.genus}`;
+	}
+	return `${g.wortart}`;
 }
 
 export function mergeGrundforms<G extends Grundform>(grundforms: G[]): G[] {

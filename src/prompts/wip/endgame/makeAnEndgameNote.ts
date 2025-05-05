@@ -22,11 +22,6 @@ async function endgameLinkCase(
 	file: TFile,
 	grundforms: GrundformWithMatch[]
 ): Promise<string> {
-	console.log('\n\nendgameNoteCase');
-	console.log('grundforms');
-	console.log(grundforms);
-	console.log();
-
 	const mergedGrundforms = mergeGrundforms(grundforms);
 	mergedGrundforms.sort((a, b) => compareGrundforms(a, b));
 
@@ -36,8 +31,6 @@ async function endgameLinkCase(
 			return await formatGrundform(g, path);
 		})
 	);
-
-	console.log('formattedLinks', formattedLinks);
 
 	const groupedLinks = formattedLinks.reduce((acc, link, index) => {
 		const currentGrundform = mergedGrundforms[index];
@@ -62,11 +55,6 @@ async function endgameNoteCase(
 ): Promise<string> {
 	const blocks: Block[] = [];
 
-	console.log('\n\nendgameNoteCase');
-	console.log('exactMatches');
-	console.log(exactMatches);
-	console.log();
-
 	const morphemBlock = await makeMorphemBlock(
 		plugin,
 		file,
@@ -79,8 +67,6 @@ async function endgameNoteCase(
 	);
 	morphemBlock && blocks.push(morphemBlock);
 	adjektivBlock && blocks.push(adjektivBlock);
-
-	console.log('blocks', blocks);
 
 	return blocks.map(({ repr }) => repr).join('\n\n---\n');
 }
@@ -121,10 +107,6 @@ export async function makeAnEndgameNote(
 	output: GrundformsOutput,
 	word: string
 ): Promise<void> {
-	console.log('grundforms', output);
-
-	console.log('output');
-	console.log(output);
 
 	const allParts = await Promise.all(
 		Object.entries(output).map(([match, grundforms]) => {
