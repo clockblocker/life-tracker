@@ -88,10 +88,6 @@ export class ApiService {
 		} catch (error: any) {
 			const endTime = performance.now();
 			const duration = endTime - startTime;
-			console.error(
-				`Error generating content for word "${userInput}" after ${duration.toFixed(2)}ms:`,
-				error
-			);
 			throw new Error(error.message);
 		}
 	}

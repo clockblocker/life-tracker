@@ -9,12 +9,14 @@ function extractFirstBracketedWord(text: string) {
 }
 
 function getIPAIndexes(str: string) {
-	const regex = /(?<!\[)\[(?!\[)(.*?)(?<!\])\](?!\])/g;
+	const regex = /\[(?!\[)(.*?)(?<!\])\]/g;
 	const matches = [];
 	let match;
 
 	while ((match = regex.exec(str)) !== null) {
-		matches.push([match.index, regex.lastIndex - 1]);
+		if (match.index === 0 || str[match.index - 1] !== '[') {
+			matches.push([match.index, regex.lastIndex - 1]);
+		}
 	}
 
 	return matches.length ? matches[0] : null;
