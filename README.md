@@ -1,6 +1,8 @@
 # Textfresser (Obsidian Plugin)
 
-<img src="img/icon.png" alt="icon" width="200"/>
+<p align="center">
+   <img src="img/icon.png" alt="icon" width="300"/>
+</p>
 
 Open a German text.\
 Go to an unknown word.\
