@@ -4,12 +4,14 @@
    <img src="img/icon.png" alt="icon" width="300"/>
 </p>
 
-Open a German text.\
-Go to an unknown word.\
-Create a dictionary enrie for it.\
-Add your context.\
-Link all forms and simmalar words.\
-Repeat.
+<p align="center">
+   <p>Open a German text.</p>
+   <p>Go to an unknown word.</p>
+   <p>Create a dictionary enrie for it.</p>
+   <p>Add your context.</p>
+   <p>Link all forms and simmalar words.</p>
+   <p>Repeat.</p>
+</p>
 
 ![Text with linked words](img/new-text-and-links.png)
 
