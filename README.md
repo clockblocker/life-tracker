@@ -33,10 +33,10 @@ The "Populate" command will:
 **Trivialises the navigation from declined froms to the normal form**  
 ![Navigation Example](img/navigation.png)
 
-reise -> ✈️ reisen
-reisender -> ✈️ reisen
-gereist -> ✈️ reisen
-reistet -> ✈️ reisen
+reise → ✈️ reisen\
+reisender → ✈️ reisen\
+gereist → ✈️ reisen\
+reistet → ✈️ reisen
 
 **Enables the collection of semantically linked words**
 ![Semantic group Example](img/explain-example.png)
