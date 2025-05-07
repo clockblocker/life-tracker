@@ -1,7 +1,6 @@
 # Textfresser (Obsidian Plugin)
 
-![icon](img/icon.png)
-
+<img src="img/icon.png" alt="icon" width="200"/>
 
 Open a German text.\
 Go to an unknown word.\
@@ -9,7 +8,6 @@ Create a dictionary enrie for it.\
 Add your context.\
 Link all forms and simmalar words.\
 Repeat.
-
 
 ![Text with linked words](img/new-text-and-links.png)
 
