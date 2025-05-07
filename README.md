@@ -1,23 +1,43 @@
 # Textfresser (Obsidian Plugin)
 
-Open a file with German text.
-For every unknown word, generate a structured vocabulary entry with context from the text.
-Enjoy the web of your personal dictionary.
+![icon](img/icon.png)
 
-![Graph View Example](img/graph.png)
+Open a German text.
+Go to an unknown word.
+Create a dictionary enrie for it.
+Add your context.
+Link all forms and simmalar words.
+Repeat.
+
+![Text with linked words](img/new-text-and-links.png)
+
+![Graph View Example](img/new-graph.png)
 
 ## Overview
 
-This plugin helps you create and maintain a comprehensive German language learning system in Obsidian. It automatically generates structured entries for: Verbs, Nouns (with gender color-coding: 🔵 masculine, 🔴 feminine, 🟢 neuter), Adjectives, and other parts of speech.
+The "Generate" command will take the name of the opened file and:
 
-Once any form of a word appears in your text:
-![Example Text with "du hast"](img/du_hast.png)
+- if it's _not a normal form_ of a word, add a link to a file with a _normal from_
+- is it's a _normal form_, will generate the structured dictionary entrie
 
-It and all of its other forms will be linked to its infinitive form:
-![Past Participle Entry Example](img/gefragt.png)
+**Maked a dictionary enrie with all forms of the word**
+![A dictionary enrie](img/new-note.png)
 
-The infinitive form points to all forms of the word, its antonyms, and synonyms:
-![Infinitive Form Example](img/fragen.png)
+The "Populate" command will:
+
+- create the files for ALL the links in current file
+- add an explict backlink to the current file in every created file
+
+**Trivialises the navigation from declined froms to the normal form**  
+![Navigation Example](img/navigation.png)
+
+reise -> ✈️ reisen
+reisender -> ✈️ reisen
+gereist -> ✈️ reisen
+reistet -> ✈️ reisen
+
+**Enables the collection of semantically linked words**
+![Semantic group Example](img/explain-example.png)
 
 ## Key Features
 
@@ -30,7 +50,6 @@ Each word type has a specialized template that includes:
 - Synonyms and antonyms
 - Translation
 - Morphological breakdown
-- Part of speech tagging
 
 ### 2. Automatic Backlink Management
 
@@ -42,13 +61,14 @@ The plugin automatically maintains bidirectional links between related words, he
 
 ## Setup
 
+0. The plugin will drastically alter the default Obsidian behawior. It is highly recommended to use it in a splecial Vault. The easiest way is to copy [the Valt with onboarding Tutorial](https://github.com/clockblocker/Textfresser_vault)
+
 1. The plugin will be creating a LOT of files (every konjugation of every word will live in it's own file). So it is hightly recommendend to make a special folder ("Worter") for all the new files to go to by default.
    ![The example of the default folder](img/worter.png)
-   All of the automatically created files go to Worter/{the_fiest_letter_of_the_word}/{word} bt default
+   All of the automatically created files go to Worter/{the_first_letter_of_the_word}/{word} bt default
 
 2. Setup the hotkes for plugin's commands. The essential ones are:
 
-- Get infinitive form and emoji for current word (Inf command)
 - Generate an dictionary entrie for the word in the title of the file (Generate command)
 - Add backlinks to the current file in all referenced files (Populate command)
 
@@ -56,29 +76,28 @@ The plugin automatically maintains bidirectional links between related words, he
 
 1. Go to any German text
 2. Select any German word and enclose it in [[]]
-3. Go to the [[selected_word]]
-4. Invoke the Inf command
-5. Go to the generated infinitive / normal form of the word
-6. Invoke the Generate command
-7. Invoke the Populate command
-8. Add the context from your text to the emplty block at the start of the dictionary entrie
+3. Copy the contex with [[selected_word]]
+4. Go to the [[selected_word]]
+5. Invoke the Generate command
+6. Go to the generated infinitive / normal form of the word
+7. Paste (Ctrl / Command + V)
+8. Invoke the Populate command
 
 ## Network Use
 
 This plugin utilizes network requests to communicate with the following remote services:
 
 - **Google Gemini API:** Used for translation, dictionary entry generation, and other language processing tasks.
-- **DeepSeek API:** Used as an alternative API provider for translation and language processing tasks.
 
 These APIs require network access to function properly. The plugin sends text to these services for processing and receives the results back. Your API keys are stored securely within your Obsidian vault and are not shared with any third parties.
 
 ## API Keys
 
-This plugin requires you to provide your own API keys for the Google Gemini API and/or the DeepSeek API. You can obtain these keys by creating accounts on the respective platforms.
+This plugin requires you to provide your own API keys for the Google Gemini API and. You can obtain these keys by creating accounts on the respective platforms.
 
 ## Disclaimer
 
-This plugin is not affiliated with or endorsed by Google or DeepSeek. The use of the Google Gemini API and DeepSeek API is subject to their respective terms of service.
+This plugin is not affiliated with or endorsed by Google. The use of the Google Gemini API and DeepSeek API is subject to their respective terms of service.
 
 ## License
 
