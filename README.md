@@ -22,7 +22,7 @@ The "Generate" command will take the name of the opened file and:
 - if it's _not a normal form_ of a word, add a link to a file with a _normal from_
 - is it's a _normal form_, will generate the structured dictionary entrie
 
-**Maked a dictionary enrie with all forms of the word**
+### Maked a dictionary enrie with all forms of the word
 ![A dictionary enrie](img/new-note.png)
 
 The "Populate" command will:
@@ -30,7 +30,7 @@ The "Populate" command will:
 - create the files for ALL the links in current file
 - add an explict backlink to the current file in every created file
 
-**Trivialises the navigation from declined froms to the normal form**  
+### Trivialises the navigation from declined froms to the normal form
 ![Navigation Example](img/navigation.png)
 
 reise → ✈️ reisen\
@@ -38,7 +38,7 @@ reisender → ✈️ reisen\
 gereist → ✈️ reisen\
 reistet → ✈️ reisen
 
-**Enables the collection of semantically linked words**
+### Enables the collection of semantically linked words
 ![Semantic group Example](img/explain-example.png)
 
 ## Key Features
