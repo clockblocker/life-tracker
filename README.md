@@ -6,9 +6,9 @@
 
 Open a German text.\
 Go to an unknown word.\
-Create a dictionary enrie for it.\
+Create a dictionary entry for it.\
 Add your context.\
-Link all forms and simmalar words.\
+Link all forms and similar words.\
 Repeat.
 
 ![Text with linked words](img/new-text-and-links.png)
@@ -19,18 +19,18 @@ Repeat.
 
 The "Generate" command will take the name of the opened file and:
 
-- if it's _not a normal form_ of a word, add a link to a file with a _normal from_
-- is it's a _normal form_, will generate the structured dictionary entrie
+- if it's _not a normal form_ of a word, add a link to a file with a _normal form_
+- if it's a _normal form_, will generate the structured dictionary entry
 
-### Maked a dictionary enrie with all forms of the word
-![A dictionary enrie](img/new-note.png)
+### Makes a dictionary entry with all forms of the word
+![A dictionary entry](img/new-note.png)
 
 The "Populate" command will:
 
 - create the files for ALL the links in current file
-- add an explict backlink to the current file in every created file
+- add an explicit backlink to the current file in every created file
 
-### Trivialises the navigation from declined froms to the normal form
+### Trivializes the navigation from declined forms to the normal form
 ![Navigation Example](img/navigation.png)
 
 reise → ✈️ reisen\
@@ -63,22 +63,22 @@ The plugin automatically maintains bidirectional links between related words, he
 
 ## Setup
 
-0. The plugin will drastically alter the default Obsidian behawior. It is highly recommended to use it in a splecial Vault. The easiest way is to copy [the Valt with onboarding Tutorial](https://github.com/clockblocker/Textfresser_vault)
+0. The plugin will drastically alter the default Obsidian behavior. It is highly recommended to use it in a special Vault. The easiest way is to copy [the Vault with onboarding Tutorial](https://github.com/clockblocker/Textfresser_vault)
 
-1. The plugin will be creating a LOT of files (every konjugation of every word will live in it's own file). So it is hightly recommendend to make a special folder ("Worter") for all the new files to go to by default.
+1. The plugin will be creating a LOT of files (every conjugation of every word will live in its own file). So it is highly recommended to make a special folder ("Worter") for all the new files to go to by default.
    ![The example of the default folder](img/worter.png)
-   All of the automatically created files go to Worter/{the_first_letter_of_the_word}/{word} bt default
+   All of the automatically created files go to Worter/{the_first_letter_of_the_word}/{word} by default
 
-2. Setup the hotkes for plugin's commands. The essential ones are:
+2. Setup the hotkeys for plugin's commands. The essential ones are:
 
-- Generate an dictionary entrie for the word in the title of the file (Generate command)
+- Generate a dictionary entry for the word in the title of the file (Generate command)
 - Add backlinks to the current file in all referenced files (Populate command)
 
 ## Usage
 
 1. Go to any German text
 2. Select any German word and enclose it in [[]]
-3. Copy the contex with [[selected_word]]
+3. Copy the context with [[selected_word]]
 4. Go to the [[selected_word]]
 5. Invoke the Generate command
 6. Go to the generated infinitive / normal form of the word
@@ -95,11 +95,11 @@ These APIs require network access to function properly. The plugin sends text to
 
 ## API Keys
 
-This plugin requires you to provide your own API keys for the Google Gemini API and. You can obtain these keys by creating accounts on the respective platforms.
+This plugin requires you to provide your own API keys for the Google Gemini API. You can obtain these keys by creating accounts on the respective platforms.
 
 ## Disclaimer
 
-This plugin is not affiliated with or endorsed by Google. The use of the Google Gemini API and DeepSeek API is subject to their respective terms of service.
+This plugin is not affiliated with or endorsed by Google. The use of the Google Gemini API is subject to their respective terms of service.
 
 ## License
 
