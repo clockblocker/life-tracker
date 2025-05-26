@@ -60,41 +60,42 @@ export async function getExisingOrCreatedFileInWorterDir(
 
 		if (item.path) {
 			filePath = item.path;
-		} else {
-			const safeName = item.name.replace(/[\\/:*?"<>|]/g, '');
+			const normalizedPath = normalizePath(filePath);
+			const existing = vault.getAbstractFileByPath(normalizedPath);
 
-			if (!safeName || safeName.length < 1) {
-				throw new Error('Word must be at least 1 character long');
+			if (existing instanceof TFile) {
+				return existing;
 			}
+			return null;
+		} else {
+			const originalName = item.name.trim();
 
-			const first = safeName[0].toLowerCase();
+			// used only for folder sharding
+			const shardKey = originalName
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '')
+				.replace(/[^a-zA-Z0-9]/g, '')
+				.toLowerCase()
+				.padEnd(4, '_'); // ensures at least 4 chars
 
-			const prefix = safeName
-				.slice(0, Math.min(3, safeName.length))
-				.toLowerCase();
+			const first = shardKey[0];
+			const prefix = shardKey.slice(0, 3);
+			const shard = shardKey[3];
 
 			const folderPath = normalizePath(
-				`Worter/${first}/${prefix}${safeName.length > 3 ? `/${safeName[3]}` : ''}`
+				`Worter/Ordered/${first}/${prefix}/${shard}`
 			);
 
+			console.log('folderPath before', folderPath);
 			const folder = await ensureFolderExists(vault, folderPath);
+			console.log('folderPath after', folder, folder?.path);
 
-			filePath = `${folder.path}/${safeName}.md`;
-		}
+			const cleanFileName = originalName.replace(/[\\/:*?"<>|]/g, '');
+			filePath = `${folder.path}/${cleanFileName}.md`;
 
-		const normalizedPath = normalizePath(filePath);
-		let abstractFile = vault.getAbstractFileByPath(normalizedPath);
-
-		if (!abstractFile || !(abstractFile instanceof TFile)) {
-			await vault.create(normalizedPath, '');
-			abstractFile = vault.getAbstractFileByPath(normalizedPath);
-
-			if (!abstractFile || !(abstractFile instanceof TFile)) {
-				console.error(`Failed to create file "${normalizedPath}".`);
-				return null;
-			} else {
-				return abstractFile;
-			}
+			const normalizedPath = normalizePath(filePath);
+			const file = await ensureFileExists(vault, normalizedPath);
+			return file;
 		}
 	} catch (error) {
 		new Notice(`Error creating file ${item.name}: ${error.message}`);
@@ -137,4 +138,35 @@ async function ensureFolderExists(
 	}
 
 	return currentFolder;
+}
+
+export async function ensureFileExists(
+	vault: Vault,
+	filePath: string,
+	defaultContent = ''
+): Promise<TFile> {
+	const normalizedPath = normalizePath(filePath);
+	let file = vault.getAbstractFileByPath(normalizedPath);
+
+	if (file instanceof TFile) return file;
+
+	const folderPath = normalizedPath.split('/').slice(0, -1).join('/');
+	await ensureFolderExists(vault, folderPath);
+
+	try {
+		await vault.create(normalizedPath, defaultContent);
+	} catch (err: any) {
+		if (!err.message.includes('already exists')) {
+			throw err;
+		}
+		// race condition: another process created it first
+	}
+
+	file = vault.getAbstractFileByPath(normalizedPath);
+
+	if (!(file instanceof TFile)) {
+		throw new Error(`Failed to create or resolve file: ${normalizedPath}`);
+	}
+
+	return file;
 }

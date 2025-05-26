@@ -15,11 +15,11 @@ export default async function addBacklinksToCurrentFile(
 	try {
 		const fileCache = metadataCache.getFileCache(file);
 		const links = fileCache?.links ?? [];
+		const rawLinks = new Set(links.map(({ link }) => link));
 
 		const resolvedPaths: { name: string; path: string | null }[] = [];
 
-		for (const link of links) {
-			const rawLink = link.link;
+		for (const rawLink of rawLinks) {
 			const linkedFile = metadataCache.getFirstLinkpathDest(rawLink, file.path);
 
 			if (linkedFile instanceof TFile) {
