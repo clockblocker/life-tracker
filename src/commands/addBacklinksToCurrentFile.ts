@@ -1,12 +1,9 @@
+import { TFile, Notice, Vault, MetadataCache, Editor } from 'obsidian';
 import {
-	TFile,
-	normalizePath,
-	Notice,
-	Vault,
-	MetadataCache,
-	Editor,
-} from 'obsidian';
-import { appendToFile, doesFileContainContent } from '../utils';
+	appendToExistingFile,
+	getExisingOrCreatedFileInWorterDir,
+	doesExistingFileContainContent,
+} from '../utils';
 
 export default async function addBacklinksToCurrentFile(
 	file: TFile,
@@ -34,34 +31,25 @@ export default async function addBacklinksToCurrentFile(
 
 		for (const item of resolvedPaths) {
 			try {
-				let filePath: string;
+				const file = await getExisingOrCreatedFileInWorterDir(vault, item);
+
+				if (!file) {
+					continue;
+				}
+
 				const backlinkText = `[[${backlink}]]`;
 
-				if (item.path) {
-					filePath = item.path;
-				} else {
-					const name = item.name;
-					const firstLetter = name?.toUpperCase();
-					const folderPath = normalizePath(`Worter/${firstLetter}`);
-
-					const folder = vault.getFolderByPath(folderPath);
-					if (!folder) {
-						await vault.createFolder(folderPath);
-					}
-
-					filePath = normalizePath(`${folderPath}/${item.name}.md`);
-				}
-
-				const backlinkTextInFile = await doesFileContainContent(
+				const backlinkTextInFile = await doesExistingFileContainContent(
 					vault,
-					filePath,
+					file,
 					backlinkText
 				);
+
 				if (!backlinkTextInFile) {
-					await appendToFile(vault, filePath, `, ${backlinkText}`);
+					await appendToExistingFile(vault, file, `, ${backlinkText}`);
 				}
 			} catch (error) {
-				new Notice(`Error processing link ${item.name}`);
+				new Notice(`Error processing link ${item.name}: ${error.message}`);
 			}
 		}
 		editor.refresh();
