@@ -7,6 +7,7 @@ import {
 	HarmBlockThreshold,
 	ResponseSchema,
 } from '@google/generative-ai';
+
 import { TextEaterSettings } from './types';
 import { TFile, Vault, Notice, TAbstractFile, requestUrl } from 'obsidian';
 import { prompts } from './prompts';

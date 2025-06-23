@@ -1,9 +1,9 @@
 {
-	"id": "cbcr-text-eater-de",
-	"name": "Textfresser",
+	"id": "cbcr-life-tracker",
+	"name": "Life Tracker",
 	"version": "0.0.2",
 	"minAppVersion": "1.8.0",
-	"description": "Go trough the german texts and build your own dictionary based on your own unique contexts",
+	"description": "Track budget, expendetures and kaliris in obsidian",
 	"author": "clockblocker",
 	"authorUrl": "https://github.com/clockblocker/",
 	"fundingUrl": "https://buymeacoffee.com/fniqc5g0nr",

@@ -61,77 +61,6 @@ export default class TextEaterPlugin extends Plugin {
 		});
 
 		this.addCommand({
-			id: 'fill-template',
-			name: 'Generate a dictionary entry for the word in the title of the file',
-			editorCheckCallback: (
-				checking: boolean,
-				editor: Editor,
-				view: MarkdownView
-			) => {
-				if (view.file) {
-					if (!checking) {
-						fillTemplate(this, editor, view.file);
-						// testEndgame(this, editor, view.file);
-					}
-					return true;
-				}
-				return false;
-			},
-		});
-
-		this.addCommand({
-			id: 'get-infinitive-and-emoji',
-			name: 'Get infinitive/normal form and emoji for current word',
-			editorCheckCallback: (
-				checking: boolean,
-				editor: Editor,
-				view: MarkdownView
-			) => {
-				if (view.file) {
-					if (!checking) {
-						getInfinitiveAndEmoji(this, editor, view.file);
-					}
-					return true;
-				}
-				return false;
-			},
-		});
-
-		this.addCommand({
-			id: 'duplicate-selection',
-			name: 'Add links to normal/inf forms to selected text',
-			editorCheckCallback: (
-				checking: boolean,
-				editor: Editor,
-				view: MarkdownView
-			) => {
-				const selection = editor.getSelection();
-				if (selection && view.file) {
-					if (!checking) {
-						normalizeSelection(this, editor, view.file, selection);
-					}
-					return true;
-				}
-				return false;
-			},
-		});
-
-		this.addCommand({
-			id: 'translate-selection',
-			name: 'Translate selected text',
-			editorCheckCallback: (checking: boolean, editor: Editor) => {
-				const selection = editor.getSelection();
-				if (selection) {
-					if (!checking) {
-						translateSelection(this, editor, selection);
-					}
-					return true;
-				}
-				return false;
-			},
-		});
-
-		this.addCommand({
 			id: 'format-selection-with-number',
 			name: 'Split selection into linked blocks',
 			editorCheckCallback: (
@@ -143,36 +72,6 @@ export default class TextEaterPlugin extends Plugin {
 				if (selection && view.file) {
 					if (!checking) {
 						formatSelectionWithNumber(this, editor, view.file, selection);
-					}
-					return true;
-				}
-				return false;
-			},
-		});
-
-		this.addCommand({
-			id: 'check-ru-de-translation',
-			name: 'Keymaker',
-			editorCheckCallback: (checking: boolean, editor: Editor) => {
-				const selection = editor.getSelection();
-				if (selection) {
-					if (!checking) {
-						insertReplyFromKeymaker(this, editor, selection);
-					}
-					return true;
-				}
-				return false;
-			},
-		});
-
-		this.addCommand({
-			id: 'check-schriben',
-			name: 'Schriben check',
-			editorCheckCallback: (checking: boolean, editor: Editor) => {
-				const selection = editor.getSelection();
-				if (selection) {
-					if (!checking) {
-						insertReplyFromC1Richter(this, editor, selection);
 					}
 					return true;
 				}
