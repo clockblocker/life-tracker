@@ -1,7 +1,7 @@
-const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
+export const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
 type Weekday = (typeof WEEKDAYS)[number];
 
-function getDays(
+export function getDays(
 	year: number,
 	month: number
 ): { day: string; weekday: Weekday }[] {
@@ -20,7 +20,7 @@ function getDays(
 	return result;
 }
 
-function getBudgetWindows(
+export function getBudgetWindows(
 	year: number,
 	month: number
 ): {
@@ -87,13 +87,11 @@ type CalendarCell = {
 	weekday: Weekday;
 };
 
-function makeCalendarObjects(
+export function makeCalendarObjects(
 	prevIntervalLabel: string,
 	nextIntervalLabel: string,
 	thisIntervalDays: CalendarCell[]
 ): CalendarCell[] {
-	const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
-
 	// 1. Map days to ISO for lookup
 	const dayMap = new Map<string, CalendarCell>();
 	for (const d of thisIntervalDays) {
@@ -152,7 +150,7 @@ function makeCalendarObjects(
 	return result;
 }
 
-function makeCalendar(year: number, month: number): string {
+export function makeCalendar(year: number, month: number): string {
 	const windows = getBudgetWindows(year, month);
 	const lines: string[] = [];
 
@@ -175,7 +173,7 @@ function makeCalendar(year: number, month: number): string {
 			const line = week
 				.map((cell) => `[[${cell.day}|${cell.day_repr}]]`)
 				.join(' ');
-			lines.push(line);
+			lines.push(` ${line} `);
 		}
 
 		lines.push(''); // blank line between windows
