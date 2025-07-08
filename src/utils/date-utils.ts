@@ -1,3 +1,53 @@
+import {
+	Year,
+	CutoffDay,
+	DayPeriod,
+	DatePeriod,
+	CutoffDaySchema,
+} from 'types/dates';
+
+export const makeDayPeriods = (cutoffs: CutoffDay[]): DayPeriod[] => {
+	if (cutoffs.length === 0) {
+		return [{ startIncl: 1, endExl: 1 }];
+	}
+
+	const sorted = [...new Set(cutoffs)].sort((a, b) => a - b); // dedupe and sort
+
+	const periods: DayPeriod[] = [];
+	for (let i = 0; i < sorted.length; i++) {
+		const startIncl = sorted[i];
+		const endExl = sorted[(i + 1) % sorted.length];
+		periods.push({ startIncl, endExl });
+	}
+
+	return periods;
+};
+
+// Note: monthIndex = 0-based (0 = Jan, 11 = Dec)
+export const makeDatePeriods = (
+	year: Year,
+	dayPeriods: DayPeriod[]
+): DatePeriod[] => {
+	return dayPeriods.map(({ startIncl, endExl }, i) => {
+		// anchor each period to its corresponding month
+		const baseMonth = i; // month index: Jan = 0
+
+		const start = new Date(Date.UTC(year, baseMonth, startIncl));
+
+		// if wraparound, end is in next month (possibly next year)
+		const endMonth = startIncl >= endExl ? baseMonth + 1 : baseMonth;
+		const endYear = endMonth > 11 ? year + 1 : year;
+		const endMonthNormalized = endMonth % 12;
+
+		const end = new Date(Date.UTC(endYear, endMonthNormalized, endExl));
+
+		return { startIncl: start, endExl: end };
+	});
+};
+
+
+
+
 export const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
 type Weekday = (typeof WEEKDAYS)[number];
 

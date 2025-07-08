@@ -1,0 +1,76 @@
+import { CutoffDay, DatePeriod, Year } from 'types/dates';
+
+const makeStructure = (year: Year, cuts: CutoffDay[]) => {
+	const periods = [];
+};
+
+
+
+// LifeTracker/
+//   Daily/
+//     Daily-Root.md
+//     yyyy/
+//       Daily-yyyy-Root.md
+//       mm/
+//         Daily-yyyy_mm-Root.md
+//         dd/
+//           yyyy_mm_dd-Root.md
+//           yyyy_mm_dd-Sport.md
+//           yyyy_mm_dd-Food.md
+//           yyyy_mm_dd-Money.md
+
+//   Money/
+//     Money-Root.md
+//     PlanList/
+//       Money-PlanList-Root.md
+//       yyyy/
+//         Money-PlanList-yyyy-Root.md
+//         Money-Plan-yyyy_mm_dd__to__yyyy_mm_dd.md
+//     StatsList/
+//       Money-StatsList-Root.md
+//       yyyy/
+//         Money-StatsList-yyyy-Root.md
+//         Money-Stats-yyyy_mm_dd__to__yyyy_mm_dd.md
+
+//   Sport/
+//     Sport-Root.md
+//     PlanList/
+//       Sport-PlanList-Root.md
+//       yyyy/
+//         Sport-PlanList-yyyy-Root.md
+//         Sport-Plan-yyyy_mm_dd__to__yyyy_mm_dd.md
+//     StatsList/
+//       Sport-StatsList-Root.md
+//       yyyy/
+//         Sport-StatsList-yyyy-Root.md
+//         Sport-Stats-yyyy_mm_dd__to__yyyy_mm_dd.md
+
+//   Food/
+//     Food-Root.md
+//     PlanList/
+//       Food-PlanList-Root.md
+//       yyyy/
+//         Food-PlanList-yyyy-Root.md
+//         Food-Plan-yyyy_mm_dd__to__yyyy_mm_dd.md
+//     StatsList/
+//       Food-StatsList-Root.md
+//       yyyy/
+//         Food-StatsList-yyyy-Root.md
+//         Food-Stats-yyyy_mm_dd__to__yyyy_mm_dd.md
+
+//   Library/
+//     Library-Root.md
+//     Sport/
+//       Library-Sport-Root.md
+//       [NAME].md
+//     Food/
+//       Library-Food-Root.md
+//       IngredientList/
+//         Library-Food-IngredientList-Root.md
+//         [NAME].md
+//       MealList/
+//         Library-Food-MealList-Root.md
+//         [NAME].md
+//     Money/
+//       Library-Money-Root.md
+//       [NAME].md
