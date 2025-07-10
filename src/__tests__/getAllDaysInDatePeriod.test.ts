@@ -1,5 +1,5 @@
 import { DatePeriod } from 'types/dates';
-import { getAllDaysInDatePeriod } from '../utils/date-utils';
+import { getAllDaysInDatePeriod } from '../utils/dates';
 import { describe, it, expect } from 'vitest';
 
 const utc = (y: number, m: number, d: number) => new Date(Date.UTC(y, m, d));

@@ -1,5 +1,5 @@
 import { DayPeriod } from 'types/dates';
-import { makeDatePeriods } from '../utils/date-utils';
+import { makeDatePeriods } from '../utils/dates';
 import { describe, it, expect } from 'vitest';
 
 const utcDate = (y: number, m: number, d: number) =>

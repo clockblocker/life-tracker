@@ -1,5 +1,5 @@
 import { DayPeriod } from 'types/dates';
-import { makeDatePeriodsForWholeYear } from '../utils/date-utils';
+import { makeDatePeriodsForWholeYear } from '../utils/dates';
 import { describe, it, expect } from 'vitest';
 
 const utc = (y: number, m: number, d: number) => new Date(Date.UTC(y, m, d));

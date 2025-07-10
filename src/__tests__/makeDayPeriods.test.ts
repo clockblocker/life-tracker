@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { makeDayPeriods, makeDatePeriods } from '../utils/date-utils';
+import { makeDayPeriods, makeDatePeriods } from '../utils/dates';
 
 describe('makeDayPeriods', () => {
 	it('handles empty cutoff list', () => {

@@ -18,7 +18,7 @@ import {
 	YYYYRepr,
 	PlanStatsSchema,
 } from '../types/file-structure';
-import { makeDatePeriodsForWholeYear, makeDayPeriods } from './date-utils';
+import { makeDatePeriodsForWholeYear, makeDayPeriods } from './dates';
 
 export const formatYYYY = (year: Year): string => {
 	return year.toString().padStart(4, '0');
@@ -82,7 +82,7 @@ export const reprFromDatePeriod = (
  * @param aspects - A list of enabled `Aspect`s (`Fitness`, `Food`, `Money`) to include as extra leaf files.
  * @returns An array of fully qualified relative file paths (POSIX-style) for that day.
  */
-export const leafDailyFilePathsForDate = (
+export const getLeafDailyFilePathsForDate = (
 	date: Date,
 	aspects: Aspect[]
 ): string[] => {
@@ -111,7 +111,7 @@ export const leafDailyFilePathsForDate = (
  * @param year - The target year (4-digit, e.g. 2024)
  * @returns Array of file paths including the year root and all month sub-roots
  */
-export const dailySubRootsFilePathsForYear = (year: Year): string[] => {
+export const getDailySubRootsFilePathsForYear = (year: Year): string[] => {
 	const yyyy = formatYYYY(year);
 	const daily = Section.Daily;
 
@@ -132,7 +132,7 @@ export const dailySubRootsFilePathsForYear = (year: Year): string[] => {
 /**
  * Generates all -Root.md paths that define the project structure.
  */
-export const makeProjectStructureRootsFileNames = (
+export const getProjectStructureRootsFileNames = (
 	aspects: Aspect[]
 ): string[] => {
 	const paths: string[] = [];
@@ -191,7 +191,7 @@ export const makeProjectStructureRootsFileNames = (
  * @param aspects - List of enabled `Aspect`s to include (e.g. ['Sport', 'Food'])
  * @returns An array of fully qualified root `.md` file paths for PlanList and StatsList structures
  */
-export const aspectsSubRootsFilePathsForYear = (
+export const getAspectsSubRootsFilePathsForYear = (
 	year: Year,
 	aspects: Aspect[]
 ): string[] => {
@@ -225,7 +225,7 @@ export const aspectsSubRootsFilePathsForYear = (
  * @param datePeriod - the range covered by the file
  * @returns one fully qualified .md file path
  */
-export const aspectLeafFilePathForDatePeriod = (
+const getAspectLeafFilePathForDatePeriod = (
 	aspect: Aspect,
 	ps: PlanStats,
 	datePeriod: DatePeriod
@@ -252,7 +252,7 @@ export const aspectLeafFilePathForDatePeriod = (
  * @param cutoffDays - Array of 1–26 cutoff days defining the intra-month partitioning
  * @returns Array of leaf file paths, one per aspect × plan/stat × date period
  */
-export const aspectLeafFilePathsForYear = (
+export const getAspectLeafFilePathsForYear = (
 	year: Year,
 	aspects: Aspect[],
 	cutoffDays: CutoffDay[]
@@ -264,7 +264,7 @@ export const aspectLeafFilePathsForYear = (
 	for (const aspect of aspects) {
 		for (const ps of PlanStatsSchema.options) {
 			for (const period of datePeriods) {
-				result.push(aspectLeafFilePathForDatePeriod(aspect, ps, period));
+				result.push(getAspectLeafFilePathForDatePeriod(aspect, ps, period));
 			}
 		}
 	}
@@ -272,3 +272,10 @@ export const aspectLeafFilePathsForYear = (
 	return result;
 };
 
+getProjectStructureRootsFileNames;
+
+getAspectsSubRootsFilePathsForYear;
+getDailySubRootsFilePathsForYear;
+
+getLeafDailyFilePathsForDate;
+getAspectLeafFilePathsForYear;

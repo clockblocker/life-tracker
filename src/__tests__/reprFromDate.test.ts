@@ -1,4 +1,4 @@
-import { reprFromDate } from '../utils/file-utils';
+import { reprFromDate } from '../utils/paths';
 import { describe, it, expect } from 'vitest';
 
 const utc = (y: number, m: number, d: number): Date => {

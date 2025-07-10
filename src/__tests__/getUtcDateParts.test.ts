@@ -1,4 +1,4 @@
-import { getUtcDateParts } from '../utils/file-utils';
+import { getUtcDateParts } from '../utils/paths';
 import { describe, it, expect } from 'vitest';
 
 describe('getUtcDateParts', () => {

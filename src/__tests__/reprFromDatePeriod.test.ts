@@ -1,5 +1,5 @@
 import { DatePeriod } from 'types/dates';
-import { reprFromDatePeriod } from '../utils/file-utils';
+import { reprFromDatePeriod } from '../utils/paths';
 import { describe, it, expect } from 'vitest';
 
 const utc = (y: number, m: number, d: number): Date => {

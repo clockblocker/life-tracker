@@ -1,14 +1,14 @@
-import { aspectsSubRootsFilePathsForYear } from '../utils/file-utils';
+import { getAspectsSubRootsFilePathsForYear } from '../utils/paths';
 import { describe, it, expect } from 'vitest';
 
-describe('aspectsSubRootsFilePathsForYear', () => {
+describe('getAspectsSubRootsFilePathsForYear', () => {
 	it('returns empty array if no aspects provided', () => {
-		const result = aspectsSubRootsFilePathsForYear(2024, []);
+		const result = getAspectsSubRootsFilePathsForYear(2024, []);
 		expect(result).toEqual([]);
 	});
 
 	it('generates correct paths for one aspect', () => {
-		const result = aspectsSubRootsFilePathsForYear(2024, ['Sport']);
+		const result = getAspectsSubRootsFilePathsForYear(2024, ['Sport']);
 		expect(result).toEqual([
 			'LifeTracker/Sport/PlanList/Sport-PlanList-Root.md',
 			'LifeTracker/Sport/PlanList/2024/Sport-PlanList-2024-Root.md',
@@ -18,7 +18,7 @@ describe('aspectsSubRootsFilePathsForYear', () => {
 	});
 
 	it('handles multiple aspects correctly', () => {
-		const result = aspectsSubRootsFilePathsForYear(2025, ['Sport', 'Food']);
+		const result = getAspectsSubRootsFilePathsForYear(2025, ['Sport', 'Food']);
 		expect(result).toEqual([
 			'LifeTracker/Sport/PlanList/Sport-PlanList-Root.md',
 			'LifeTracker/Sport/PlanList/2025/Sport-PlanList-2025-Root.md',
@@ -32,7 +32,7 @@ describe('aspectsSubRootsFilePathsForYear', () => {
 	});
 
 	it('one Aspect', () => {
-		const result = aspectsSubRootsFilePathsForYear(2042, ['Money']);
+		const result = getAspectsSubRootsFilePathsForYear(2042, ['Money']);
 		expect(result).toContain(
 			'LifeTracker/Money/PlanList/2042/Money-PlanList-2042-Root.md'
 		);
