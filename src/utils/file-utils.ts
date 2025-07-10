@@ -1,5 +1,16 @@
 import { CutoffDay, DatePeriod, Year } from 'types/dates';
-import { FullDatePeriodRepr, FullDateRepr } from 'types/file-structure';
+import {
+	Aspect,
+	FilePartsDelimiterSchema,
+	FoodItemSchema,
+	FullDatePeriodRepr,
+	FullDateRepr,
+	LifeTrackerSchema,
+	ListSchema,
+	MDSchema,
+	NotesSchema,
+	RootSchema,
+} from '../types/file-structure';
 
 /**
  * Converts a UTC Date into a `YYYY_MM_DD` representation.
@@ -32,6 +43,121 @@ export const reprFromDatePeriod = (
 	datePeriod: DatePeriod
 ): FullDatePeriodRepr => {
 	return `${reprFromDate(datePeriod.startIncl)}__to__${reprFromDate(datePeriod.endExl)}`;
+};
+
+/**
+ * Returns the list of expected leaf file paths for a given day in the Daily section.
+ *
+ * The returned paths follow the vault convention:
+ * `LifeTracker/Daily/yyyy/mm/dd/yyyy_mm_dd-{Suffix}.md`
+ *
+ * - Always includes:
+ *   - `...-Root.md`
+ *   - `...-Notes.md`
+ * - Optionally includes aspect-specific files:
+ *   - `...-Fitness.md`, `...-Food.md`, `...-Money.md`, depending on what is present in `aspects`.
+ *
+ * Uses zero-padded components for date formatting.
+ *
+ * @param date - The date to generate Daily paths for (interpreted as UTC).
+ * @param aspects - A list of enabled `Aspect`s (`Fitness`, `Food`, `Money`) to include as extra leaf files.
+ * @returns An array of fully qualified relative file paths (POSIX-style) for that day.
+ */
+export const leafDailyFilePathsForDate = (
+	date: Date,
+	aspects: Aspect[]
+): string[] => {
+	const yyyy = date.getUTCFullYear().toString().padStart(4, '0');
+	const mm = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+	const dd = date.getUTCDate().toString().padStart(2, '0');
+
+	const basePath = `${LifeTrackerSchema.value}/Daily/${yyyy}/${mm}/${dd}`;
+	const dateRepr: FullDateRepr = reprFromDate(date);
+
+	const suffixes: string[] = [RootSchema.value, NotesSchema.value, ...aspects];
+
+	return suffixes.map(
+		(suffix) =>
+			`${basePath}/${dateRepr}${FilePartsDelimiterSchema.value}${suffix}${MDSchema.value}`
+	);
+};
+
+/**
+ * Returns all sub-root file paths for a given year in the Daily section.
+ *
+ * These are the directory-level root files that organize the Daily structure:
+ *
+ * - Year-level root:
+ *   - `LifeTracker/Daily/yyyy/Daily-yyyy-Root.md`
+ *
+ * - Month-level roots (for all 12 months):
+ *   - `LifeTracker/Daily/yyyy/mm/Daily-yyyy_mm-Root.md`
+ *
+ * All components are zero-padded and returned as POSIX-style strings.
+ *
+ * @param year - The target year (4-digit, e.g. 2024)
+ * @returns Array of file paths including the year root and all month sub-roots
+ */
+export const dailySubRootsFilePathsForYear = (year: number): string[] => {
+	const yyyy = year.toString().padStart(4, '0');
+
+	const paths: string[] = [`LifeTracker/Daily/${yyyy}/Daily-${yyyy}-Root.md`];
+
+	for (let month = 1; month <= 12; month++) {
+		const mm = month.toString().padStart(2, '0');
+		paths.push(`LifeTracker/Daily/${yyyy}/${mm}/Daily-${yyyy}_${mm}-Root.md`);
+	}
+
+	return paths;
+};
+
+/**
+ * Generates all -Root.md paths that define the project structure.
+ */
+export const makeProjectStructureRootsFileNames = (
+	aspects: Aspect[]
+): string[] => {
+	const D = FilePartsDelimiterSchema.value;
+	const EXT = MDSchema.value;
+	const BASE = LifeTrackerSchema.value;
+	const ROOT = RootSchema.value;
+	const LIST = ListSchema.value;
+
+	const paths: string[] = [];
+
+	// Daily root
+	paths.push(`${BASE}/Daily/Daily${D}${ROOT}${EXT}`);
+
+	// Library root
+	paths.push(`${BASE}/Library/Library${D}${ROOT}${EXT}`);
+
+	for (const aspect of aspects) {
+		// Top-level aspect root
+		paths.push(`${BASE}/${aspect}/${aspect}${D}${ROOT}${EXT}`);
+
+		// PlanList / StatsList roots
+		for (const ps of ['Plan', 'Stats'] as const) {
+			paths.push(
+				`${BASE}/${aspect}/${ps}${LIST}/${aspect}${D}${ps}${LIST}${D}${ROOT}${EXT}`
+			);
+		}
+
+		// Library/<Aspect>/Library-<Aspect>-Root.md
+		paths.push(
+			`${BASE}/Library/${aspect}/Library${D}${aspect}${D}${ROOT}${EXT}`
+		);
+
+		// Food special case: IngredientList + MealList roots
+		if (aspect === Aspect.Food) {
+			for (const item of FoodItemSchema.options) {
+				paths.push(
+					`${BASE}/Library/Food/${item}${LIST}/Library${D}Food${D}${item}${LIST}${D}${ROOT}${EXT}`
+				);
+			}
+		}
+	}
+
+	return paths;
 };
 
 const makeStructure = (year: Year, cuts: CutoffDay[]) => {

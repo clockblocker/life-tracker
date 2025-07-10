@@ -31,6 +31,8 @@ export const PosixDelimiterSchema = z.literal('/');
 export const FilePartsDelimiterSchema = z.literal('-');
 export const ListSchema = z.literal('List');
 export const RootSchema = z.literal('Root');
+export const LifeTracker = z.literal('LifeTracker');
+export const NotesSchema = z.literal('Notes');
 export const MDSchema = z.literal('.md');
 export const LifeTrackerSchema = z.literal('LifeTracker');
 
@@ -48,7 +50,7 @@ export const Aspect = AspectSchema.enum;
 export const DailyLeaveSchema = z.templateLiteral([
 	FullDateReprSchema,
 	FilePartsDelimiterSchema,
-	AspectSchema.or(RootSchema),
+	AspectSchema.or(RootSchema).or(NotesSchema),
 ]);
 
 export const DailySectionTree = {
