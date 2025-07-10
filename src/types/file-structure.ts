@@ -1,30 +1,30 @@
 import * as z from 'zod/v4';
 
-export const YYYYSchema = z.string().regex(/^\d{4}$/);
-export const MMSchema = z.string().regex(/^\d{2}$/);
-export const DDSchema = z.string().regex(/^\d{2}$/);
+export const YYYYReprSchema = z.string().regex(/^\d{4}$/);
+export const MMReprSchema = z.string().regex(/^\d{2}$/);
+export const DDReprSchema = z.string().regex(/^\d{2}$/);
 
 export const DateSectionsDelimiterSchema = z.literal('_');
 export const RangePartsDelimiterSchema = z.literal('__to__');
 
-export const FullDateSchema = z.templateLiteral([
-	YYYYSchema,
+export const FullDateReprSchema = z.templateLiteral([
+	YYYYReprSchema,
 	DateSectionsDelimiterSchema,
-	MMSchema,
+	MMReprSchema,
 	DateSectionsDelimiterSchema,
-	DDSchema,
+	DDReprSchema,
 ]);
 
-export const PartialDateSchema = z.templateLiteral([
-	YYYYSchema,
+export const PartialDateReprSchema = z.templateLiteral([
+	YYYYReprSchema,
 	DateSectionsDelimiterSchema,
-	MMSchema,
+	MMReprSchema,
 ]);
 
-export const FullDateRangeSchema = z.templateLiteral([
-	FullDateSchema,
+export const FullDatePeriodReprSchema = z.templateLiteral([
+	FullDateReprSchema,
 	RangePartsDelimiterSchema,
-	FullDateSchema,
+	FullDateReprSchema,
 ]);
 
 export const PosixDelimiterSchema = z.literal('/');
@@ -46,7 +46,7 @@ export const AspectSchema = SectionSchema.exclude(['Daily', 'Library']);
 export const Aspect = AspectSchema.enum;
 
 export const DailyLeaveSchema = z.templateLiteral([
-	FullDateSchema,
+	FullDateReprSchema,
 	FilePartsDelimiterSchema,
 	AspectSchema.or(RootSchema),
 ]);
@@ -59,29 +59,29 @@ export const DailySectionTree = {
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
-		childDirSchema: YYYYSchema,
+		childDReprirSchema: YYYYReprSchema,
 	},
 	[1]: {
 		currentDepth: 1,
 		rootFileNameSchema: z.templateLiteral([
 			Section.Daily,
 			FilePartsDelimiterSchema,
-			YYYYSchema,
+			YYYYReprSchema,
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
-		childDirSchema: MMSchema,
+		childDReprirSchema: MMReprSchema,
 	},
 	[2]: {
 		currentDepth: 2,
 		rootFileNameSchema: z.templateLiteral([
 			Section.Daily,
 			FilePartsDelimiterSchema,
-			PartialDateSchema,
+			PartialDateReprSchema,
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
-		childDirSchema: DDSchema,
+		childDReprirSchema: DDReprSchema,
 	},
 	[3]: {
 		currentDepth: 3,
@@ -103,7 +103,7 @@ export const AspectSectionTree = {
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
-		childDirSchema: PlanStatsListSchema,
+		childDReprirSchema: PlanStatsListSchema,
 	},
 
 	[1]: {
@@ -116,18 +116,18 @@ export const AspectSectionTree = {
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
-		childDirSchema: YYYYSchema,
+		childDReprirSchema: YYYYReprSchema,
 	},
 
 	[2]: {
 		currentDepth: 2,
-		// PlanList-yyyy-Root or StatsList-yyyy-Root
+		// PlanList-yyyyRepr-Root or StatsList-yyyyRepr-Root
 		rootFileNameSchema: z.templateLiteral([
 			AspectSchema,
 			FilePartsDelimiterSchema,
 			PlanStatsListSchema,
 			FilePartsDelimiterSchema,
-			YYYYSchema,
+			YYYYReprSchema,
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
@@ -137,7 +137,7 @@ export const AspectSectionTree = {
 			FilePartsDelimiterSchema,
 			PlanStatsSchema,
 			FilePartsDelimiterSchema,
-			FullDateRangeSchema,
+			FullDatePeriodReprSchema,
 		]),
 	},
 };
@@ -156,7 +156,7 @@ export const LibrarySectionTree = {
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
-		childDirSchema: AspectSchema,
+		childDReprirSchema: AspectSchema,
 	},
 
 	[1]: {
@@ -168,7 +168,7 @@ export const LibrarySectionTree = {
 			FilePartsDelimiterSchema,
 			RootSchema,
 		]),
-		childDirSchema: LibrarySubCategorySchema,
+		childDReprirSchema: LibrarySubCategorySchema,
 		childFileNameSchema: z.string().regex(/^[^.\/\\]+\.md$/),
 	},
 
@@ -188,14 +188,14 @@ export const LibrarySectionTree = {
 	},
 };
 
-export type YYYY = z.infer<typeof YYYYSchema>;
-export type MM = z.infer<typeof MMSchema>;
-export type DD = z.infer<typeof DDSchema>;
+export type YYYYRepr = z.infer<typeof YYYYReprSchema>;
+export type MMRepr = z.infer<typeof MMReprSchema>;
+export type DDRepr = z.infer<typeof DDReprSchema>;
 export type DateSectionsDelimiter = z.infer<typeof DateSectionsDelimiterSchema>;
 export type RangePartsDelimiter = z.infer<typeof RangePartsDelimiterSchema>;
-export type FullDate = z.infer<typeof FullDateSchema>;
-export type PartialDate = z.infer<typeof PartialDateSchema>;
-export type FullDateRange = z.infer<typeof FullDateRangeSchema>;
+export type FullDateRepr = z.infer<typeof FullDateReprSchema>;
+export type PartialDateRepr = z.infer<typeof PartialDateReprSchema>;
+export type FullDatePeriodRepr = z.infer<typeof FullDatePeriodReprSchema>;
 export type PosixDelimiter = z.infer<typeof PosixDelimiterSchema>;
 export type FilePartsDelimiter = z.infer<typeof FilePartsDelimiterSchema>;
 export type List = z.infer<typeof ListSchema>;
