@@ -1,16 +1,34 @@
 import { CutoffDay, DatePeriod, Year } from 'types/dates';
 import {
 	Aspect,
-	FilePartsDelimiterSchema,
+	BASE,
+	D,
+	DDRepr,
+	LIST,
+	DS,
+	EXT,
 	FoodItemSchema,
 	FullDatePeriodRepr,
 	FullDateRepr,
-	LifeTrackerSchema,
-	ListSchema,
-	MDSchema,
+	MMRepr,
 	NotesSchema,
-	RootSchema,
+	ROOT,
+	Section,
+	YYYYRepr,
 } from '../types/file-structure';
+
+export const formatYYYY = (year: Year): string => {
+	return year.toString().padStart(4, '0');
+};
+
+export const getUtcDateParts = (
+	date: Date
+): { yyyy: YYYYRepr; mm: MMRepr; dd: DDRepr } => {
+	const yyyy = date.getUTCFullYear().toString().padStart(4, '0') as YYYYRepr;
+	const mm = (date.getUTCMonth() + 1).toString().padStart(2, '0') as MMRepr;
+	const dd = date.getUTCDate().toString().padStart(2, '0') as DDRepr;
+	return { yyyy, mm, dd };
+};
 
 /**
  * Converts a UTC Date into a `YYYY_MM_DD` representation.
@@ -24,10 +42,8 @@ import {
  * @returns A string in the format `YYYY_MM_DD` (e.g., "2024_07_10")
  */
 export const reprFromDate = (date: Date): FullDateRepr => {
-	const yyyy = date.getUTCFullYear().toString().padStart(4, '0');
-	const mm = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-	const dd = date.getUTCDate().toString().padStart(2, '0');
-	return `${yyyy}_${mm}_${dd}`;
+	const { yyyy, mm, dd } = getUtcDateParts(date);
+	return `${yyyy}${DS}${mm}${DS}${dd}`;
 };
 
 /**
@@ -67,19 +83,13 @@ export const leafDailyFilePathsForDate = (
 	date: Date,
 	aspects: Aspect[]
 ): string[] => {
-	const yyyy = date.getUTCFullYear().toString().padStart(4, '0');
-	const mm = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-	const dd = date.getUTCDate().toString().padStart(2, '0');
-
-	const basePath = `${LifeTrackerSchema.value}/Daily/${yyyy}/${mm}/${dd}`;
+	const { yyyy, mm, dd } = getUtcDateParts(date);
+	const basePath = `${BASE}/${Section.Daily}/${yyyy}/${mm}/${dd}`;
 	const dateRepr: FullDateRepr = reprFromDate(date);
 
-	const suffixes: string[] = [RootSchema.value, NotesSchema.value, ...aspects];
+	const suffixes: string[] = [ROOT, NotesSchema.value, ...aspects];
 
-	return suffixes.map(
-		(suffix) =>
-			`${basePath}/${dateRepr}${FilePartsDelimiterSchema.value}${suffix}${MDSchema.value}`
-	);
+	return suffixes.map((suffix) => `${basePath}/${dateRepr}${D}${suffix}${EXT}`);
 };
 
 /**
@@ -98,14 +108,19 @@ export const leafDailyFilePathsForDate = (
  * @param year - The target year (4-digit, e.g. 2024)
  * @returns Array of file paths including the year root and all month sub-roots
  */
-export const dailySubRootsFilePathsForYear = (year: number): string[] => {
-	const yyyy = year.toString().padStart(4, '0');
+export const dailySubRootsFilePathsForYear = (year: Year): string[] => {
+	const yyyy = formatYYYY(year);
+	const daily = Section.Daily;
 
-	const paths: string[] = [`LifeTracker/Daily/${yyyy}/Daily-${yyyy}-Root.md`];
+	const paths: string[] = [
+		`${BASE}/${daily}/${yyyy}/${daily}${D}${yyyy}${D}${ROOT}${EXT}`,
+	];
 
-	for (let month = 1; month <= 12; month++) {
-		const mm = month.toString().padStart(2, '0');
-		paths.push(`LifeTracker/Daily/${yyyy}/${mm}/Daily-${yyyy}_${mm}-Root.md`);
+	for (let m = 1; m <= 12; m++) {
+		const mm = m.toString().padStart(2, '0');
+		paths.push(
+			`${BASE}/${daily}/${yyyy}/${mm}/${daily}${D}${yyyy}${DS}${mm}${D}${ROOT}${EXT}`
+		);
 	}
 
 	return paths;
@@ -117,19 +132,13 @@ export const dailySubRootsFilePathsForYear = (year: number): string[] => {
 export const makeProjectStructureRootsFileNames = (
 	aspects: Aspect[]
 ): string[] => {
-	const D = FilePartsDelimiterSchema.value;
-	const EXT = MDSchema.value;
-	const BASE = LifeTrackerSchema.value;
-	const ROOT = RootSchema.value;
-	const LIST = ListSchema.value;
-
 	const paths: string[] = [];
 
 	// Daily root
-	paths.push(`${BASE}/Daily/Daily${D}${ROOT}${EXT}`);
+	paths.push(`${BASE}/${Section.Daily}/${Section.Daily}${D}${ROOT}${EXT}`);
 
 	// Library root
-	paths.push(`${BASE}/Library/Library${D}${ROOT}${EXT}`);
+	paths.push(`${BASE}/${Section.Library}/${Section.Library}${D}${ROOT}${EXT}`);
 
 	for (const aspect of aspects) {
 		// Top-level aspect root
@@ -144,14 +153,14 @@ export const makeProjectStructureRootsFileNames = (
 
 		// Library/<Aspect>/Library-<Aspect>-Root.md
 		paths.push(
-			`${BASE}/Library/${aspect}/Library${D}${aspect}${D}${ROOT}${EXT}`
+			`${BASE}/${Section.Library}/${aspect}/${Section.Library}${D}${aspect}${D}${ROOT}${EXT}`
 		);
 
-		// Food special case: IngredientList + MealList roots
+		// Food subcategory roots
 		if (aspect === Aspect.Food) {
 			for (const item of FoodItemSchema.options) {
 				paths.push(
-					`${BASE}/Library/Food/${item}${LIST}/Library${D}Food${D}${item}${LIST}${D}${ROOT}${EXT}`
+					`${BASE}/${Section.Library}/${Aspect.Food}/${item}${LIST}/${Section.Library}${D}${Aspect.Food}${D}${item}${LIST}${D}${ROOT}${EXT}`
 				);
 			}
 		}

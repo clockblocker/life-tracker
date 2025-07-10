@@ -18,6 +18,5 @@ export type CutoffDay = z.infer<typeof CutoffDaySchema>;
 export type Year = z.infer<typeof CutoffDaySchema>;
 export type Month = z.infer<typeof MonthSchema>;
 
-
 export type DayPeriod = z.infer<typeof DayPeriodSchema>;
 export type DatePeriod = z.infer<typeof DatePeriodSchema>;

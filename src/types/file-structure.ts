@@ -211,3 +211,12 @@ export type PlanStats = z.infer<typeof PlanStatsSchema>;
 export type PlanStatsList = z.infer<typeof PlanStatsListSchema>;
 export type FoodItem = z.infer<typeof FoodItemSchema>;
 export type LibrarySubCategory = z.infer<typeof LibrarySubCategorySchema>;
+
+export const D = FilePartsDelimiterSchema.value;
+export const DS = DateSectionsDelimiterSchema.value;
+export const EXT = MDSchema.value;
+export const ROOT = RootSchema.value;
+export const BASE = LifeTrackerSchema.value;
+export const SEP = RangePartsDelimiterSchema.value;
+
+export const LIST = ListSchema.value;
