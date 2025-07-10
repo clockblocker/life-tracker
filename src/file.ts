@@ -1,5 +1,8 @@
-import { MarkdownView, TFile, App, Vault } from 'obsidian';
+import { MarkdownView, TFile, App, Vault, Editor } from 'obsidian';
 import { appendToExistingFile, doesExistingFileContainContent } from './utils';
+import { flattenError, z } from 'zod/v4';
+
+type Maybe<T> = { error: true; errorText?: string } | { error: false; data: T };
 
 export class FileService {
 	constructor(
@@ -7,31 +10,20 @@ export class FileService {
 		private vault: Vault
 	) {}
 
-	async readFileContentByPath(
-		filePath: string
-	): Promise<
-		{ content: string; error: true } | { content: string; error: false }
-	> {
+	private async getMaybeFileByPath(filePath: string): Promise<Maybe<TFile>> {
 		try {
 			const file = this.vault.getAbstractFileByPath(filePath);
 			if (!file || !(file instanceof TFile)) {
-				return { content: '', error: true };
+				return { error: true };
 			}
-			const content = await this.vault.read(file);
-			return { content, error: false };
+			return { data: file, error: false };
 		} catch (error) {
-			return { content: '', error: true };
+			console.warn('error while getting file by path:', error);
+			return { error: true };
 		}
 	}
 
-	// await this.vault.process(abstractFile, () => {
-	// 	return newContent;
-	// });
-
-	async replaceContentInCurrentlyOpenedFile(
-		filePath: string,
-		newContent: string
-	): Promise<{ error: boolean }> {
+	private async getMaybeOpenedFile(): Promise<Maybe<TFile>> {
 		try {
 			const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
@@ -41,29 +33,67 @@ export class FileService {
 			}
 
 			const file = activeView.file;
-			if (!file || file.path !== filePath) {
+
+			if (!file) {
 				console.warn('file not open or not active');
 				return { error: true };
 			}
 
-			activeView.editor.setValue(newContent);
-			await activeView.save();
-
-			return { error: false };
+			return { error: false, data: file };
 		} catch (error) {
 			console.error(`Failed to replace content: ${error}`);
 			return { error: true };
 		}
 	}
 
-	async writeToOpenedFile(filePath: string, text: string): Promise<void> {
-		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-		if (view && view?.file && view?.file?.path === filePath) {
-			const editor = view?.editor;
-			if (editor) {
-				editor.replaceRange(text, { line: editor.lineCount(), ch: 0 });
+	private async getMaybeEditorAndFile(): Promise<
+		Maybe<{ editor: Editor; file: TFile }>
+	> {
+		try {
+			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+			if (view && view?.file) {
+				const editor = view?.editor;
+				if (editor) {
+					return { error: false, data: { editor, file: view.file } };
+				}
 			}
+			return { error: true, errorText: `Failed to get Editor` };
+		} catch (error) {
+			return { error: true, errorText: `Failed to get Editor: ${error}` };
 		}
+	}
+
+	async readFileContentByPath(filePath: string): Promise<Maybe<string>> {
+		const maybeFile = await this.getMaybeFileByPath(filePath);
+		if (maybeFile.error) {
+			return maybeFile;
+		}
+
+		const content = await this.vault.read(maybeFile.data);
+		return { data: content, error: false };
+	}
+
+	async replaceContentInCurrentlyOpenedFile(
+		newContent: string
+	): Promise<Maybe<string>> {
+		const maybeFile = await this.getMaybeOpenedFile();
+		if (maybeFile.error) {
+			return maybeFile;
+		}
+
+		return { error: false, data: newContent };
+	}
+
+	async writeToOpenedFile(text: string): Promise<Maybe<string>> {
+		const maybeFileAndEditor = await this.getMaybeEditorAndFile();
+		if (maybeFileAndEditor.error) {
+			return maybeFileAndEditor;
+		}
+
+		const { editor } = maybeFileAndEditor.data;
+		editor.replaceRange(text, { line: editor.lineCount(), ch: 0 });
+
+		return { error: false, data: text };
 	}
 
 	public showLoadingOverlay(): void {
