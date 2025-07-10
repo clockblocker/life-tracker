@@ -1,4 +1,4 @@
-import { MarkdownView, TFile, App, Vault, Editor } from 'obsidian';
+import { MarkdownView, TFile, App, Vault, Editor, TFolder } from 'obsidian';
 import { appendToExistingFile, doesExistingFileContainContent } from './utils';
 import { flattenError, z } from 'zod/v4';
 
@@ -46,21 +46,34 @@ export class FileService {
 		}
 	}
 
-	private async getMaybeEditorAndFile(): Promise<
-		Maybe<{ editor: Editor; file: TFile }>
-	> {
+	private async getMaybeEditor(): Promise<Maybe<Editor>> {
 		try {
 			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 			if (view && view?.file) {
-				const editor = view?.editor;
-				if (editor) {
-					return { error: false, data: { editor, file: view.file } };
-				}
+				return { error: false, data: view.editor };
 			}
 			return { error: true, errorText: `Failed to get Editor` };
 		} catch (error) {
 			return { error: true, errorText: `Failed to get Editor: ${error}` };
 		}
+	}
+
+	private async getSiblingsOfFile(file: TFile): Promise<Maybe<Array<TFile>>> {
+		const maybeFile = await this.getMaybeOpenedFile();
+		if (maybeFile.error) {
+			return maybeFile;
+		}
+
+		const parent = maybeFile.data.parent;
+
+		if (parent && parent instanceof TFolder) {
+			const siblings = parent.children
+				.filter((child): child is TFile => child instanceof TFile)
+				.filter((f) => f.path !== file.path);
+			return { error: false, data: siblings };
+		}
+
+		return { error: false, data: [] };
 	}
 
 	async readFileContentByPath(filePath: string): Promise<Maybe<string>> {
@@ -85,15 +98,40 @@ export class FileService {
 	}
 
 	async writeToOpenedFile(text: string): Promise<Maybe<string>> {
-		const maybeFileAndEditor = await this.getMaybeEditorAndFile();
-		if (maybeFileAndEditor.error) {
-			return maybeFileAndEditor;
+		const maybeEditor = await this.getMaybeEditor();
+		if (maybeEditor.error) {
+			return maybeEditor;
 		}
 
-		const { editor } = maybeFileAndEditor.data;
+		const editor = maybeEditor.data;
 		editor.replaceRange(text, { line: editor.lineCount(), ch: 0 });
 
 		return { error: false, data: text };
+	}
+
+	async getPathOfOpenedFile(): Promise<Maybe<string>> {
+		const maybeFile = await this.getMaybeOpenedFile();
+		if (maybeFile.error) {
+			return maybeFile;
+		}
+
+		return { error: false, data: maybeFile.data.path };
+	}
+
+	public async getSiblingsOfFileWithPath(
+		filePath: string
+	): Promise<Maybe<Array<TFile>>> {
+		const maybeFile = await this.getMaybeFileByPath(filePath);
+		if (maybeFile.error) return maybeFile;
+
+		return this.getSiblingsOfFile(maybeFile.data);
+	}
+
+	public async getSiblingsOfOpenedFile(): Promise<Maybe<Array<TFile>>> {
+		const maybeFile = await this.getMaybeOpenedFile();
+		if (maybeFile.error) return maybeFile;
+
+		return this.getSiblingsOfFile(maybeFile.data);
 	}
 
 	public showLoadingOverlay(): void {
