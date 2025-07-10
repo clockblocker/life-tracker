@@ -10,12 +10,15 @@ import {
 	FoodItemSchema,
 	FullDatePeriodRepr,
 	FullDateRepr,
+	PlanStats,
 	MMRepr,
 	NotesSchema,
 	ROOT,
 	Section,
 	YYYYRepr,
+	PlanStatsSchema,
 } from '../types/file-structure';
+import { makeDatePeriodsForWholeYear, makeDayPeriods } from './date-utils';
 
 export const formatYYYY = (year: Year): string => {
 	return year.toString().padStart(4, '0');
@@ -145,7 +148,7 @@ export const makeProjectStructureRootsFileNames = (
 		paths.push(`${BASE}/${aspect}/${aspect}${D}${ROOT}${EXT}`);
 
 		// PlanList / StatsList roots
-		for (const ps of ['Plan', 'Stats'] as const) {
+		for (const ps of [PlanStats.Plan, PlanStats.Stats]) {
 			paths.push(
 				`${BASE}/${aspect}/${ps}${LIST}/${aspect}${D}${ps}${LIST}${D}${ROOT}${EXT}`
 			);
@@ -169,75 +172,103 @@ export const makeProjectStructureRootsFileNames = (
 	return paths;
 };
 
-const makeStructure = (year: Year, cuts: CutoffDay[]) => {
-	const periods = [];
+/**
+ * Returns all sub-root file paths for the given year and aspects in the PlanList and StatsList trees.
+ *
+ * For each provided `Aspect` (e.g., 'Sport', 'Food', 'Money'), generates:
+ *
+ * - The PlanList and StatsList root files:
+ *   - `LifeTracker/<Aspect>/PlanList/<Aspect>-PlanList-Root.md`
+ *   - `LifeTracker/<Aspect>/StatsList/<Aspect>-StatsList-Root.md`
+ *
+ * - The year-specific sub-root files:
+ *   - `LifeTracker/<Aspect>/PlanList/yyyy/<Aspect>-PlanList-yyyy-Root.md`
+ *   - `LifeTracker/<Aspect>/StatsList/yyyy/<Aspect>-StatsList-yyyy-Root.md`
+ *
+ * File paths are fully qualified and use zero-padded year strings (`0042`, `2024`, etc).
+ *
+ * @param year - The calendar year (as a number) to generate root files for
+ * @param aspects - List of enabled `Aspect`s to include (e.g. ['Sport', 'Food'])
+ * @returns An array of fully qualified root `.md` file paths for PlanList and StatsList structures
+ */
+export const aspectsSubRootsFilePathsForYear = (
+	year: Year,
+	aspects: Aspect[]
+): string[] => {
+	const yyyy = formatYYYY(year);
+	const paths: string[] = [];
+
+	for (const aspect of aspects) {
+		for (const ps of PlanStatsSchema.options) {
+			// PlanList or StatsList root
+			paths.push(
+				`${BASE}/${aspect}/${ps}${LIST}/${aspect}${D}${ps}${LIST}${D}${ROOT}${EXT}`
+			);
+
+			// Year-level root
+			paths.push(
+				`${BASE}/${aspect}/${ps}${LIST}/${yyyy}/${aspect}${D}${ps}${LIST}${D}${yyyy}${D}${ROOT}${EXT}`
+			);
+		}
+	}
+
+	return paths;
 };
 
-// LifeTracker/
-//   Daily/
-//     Daily-Root.md
-//     yyyy/
-//       Daily-yyyy-Root.md
-//       mm/
-//         Daily-yyyy_mm-Root.md
-//         dd/
-//           yyyy_mm_dd-Root.md
-//           yyyy_mm_dd-Sport.md
-//           yyyy_mm_dd-Food.md
-//           yyyy_mm_dd-Money.md
+/**
+ * Returns the leaf file path for a single Plan/Stats file
+ * in the structure:
+ * LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd.md
+ *
+ * @param aspect - 'Food' | 'Money' | 'Sport'
+ * @param ps - 'Plan' | 'Stats'
+ * @param datePeriod - the range covered by the file
+ * @returns one fully qualified .md file path
+ */
+export const aspectLeafFilePathForDatePeriod = (
+	aspect: Aspect,
+	ps: PlanStats,
+	datePeriod: DatePeriod
+): string => {
+	const { yyyy } = getUtcDateParts(datePeriod.startIncl);
+	const rangeRepr = reprFromDatePeriod(datePeriod);
 
-//   Money/
-//     Money-Root.md
-//     PlanList/
-//       Money-PlanList-Root.md
-//       yyyy/
-//         Money-PlanList-yyyy-Root.md
-//         Money-Plan-yyyy_mm_dd__to__yyyy_mm_dd.md
-//     StatsList/
-//       Money-StatsList-Root.md
-//       yyyy/
-//         Money-StatsList-yyyy-Root.md
-//         Money-Stats-yyyy_mm_dd__to__yyyy_mm_dd.md
+	return `${BASE}/${aspect}/${ps}${LIST}/${yyyy}/${aspect}${D}${ps}${D}${rangeRepr}${EXT}`;
+};
 
-//   Sport/
-//     Sport-Root.md
-//     PlanList/
-//       Sport-PlanList-Root.md
-//       yyyy/
-//         Sport-PlanList-yyyy-Root.md
-//         Sport-Plan-yyyy_mm_dd__to__yyyy_mm_dd.md
-//     StatsList/
-//       Sport-StatsList-Root.md
-//       yyyy/
-//         Sport-StatsList-yyyy-Root.md
-//         Sport-Stats-yyyy_mm_dd__to__yyyy_mm_dd.md
+/**
+ * Generates all leaf file paths for the given year and aspects, based on cutoff days.
+ *
+ * For each aspect and each PlanStats type ('Plan' | 'Stats'), this function:
+ * - Converts the provided cutoffDays into cyclic DayPeriods
+ * - Applies them across all 12 months of the year
+ * - Converts each resulting DatePeriod into a file path using the vault convention
+ *
+ * Path format:
+ * `LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd.md`
+ *
+ * @param year - The target year (e.g. 2024)
+ * @param aspects - Array of aspects to include (e.g., ['Food', 'Sport'])
+ * @param cutoffDays - Array of 1–26 cutoff days defining the intra-month partitioning
+ * @returns Array of leaf file paths, one per aspect × plan/stat × date period
+ */
+export const aspectLeafFilePathsForYear = (
+	year: Year,
+	aspects: Aspect[],
+	cutoffDays: CutoffDay[]
+): string[] => {
+	const dayPeriods = makeDayPeriods(cutoffDays);
+	const datePeriods = makeDatePeriodsForWholeYear(year, dayPeriods);
+	const result: string[] = [];
 
-//   Food/
-//     Food-Root.md
-//     PlanList/
-//       Food-PlanList-Root.md
-//       yyyy/
-//         Food-PlanList-yyyy-Root.md
-//         Food-Plan-yyyy_mm_dd__to__yyyy_mm_dd.md
-//     StatsList/
-//       Food-StatsList-Root.md
-//       yyyy/
-//         Food-StatsList-yyyy-Root.md
-//         Food-Stats-yyyy_mm_dd__to__yyyy_mm_dd.md
+	for (const aspect of aspects) {
+		for (const ps of PlanStatsSchema.options) {
+			for (const period of datePeriods) {
+				result.push(aspectLeafFilePathForDatePeriod(aspect, ps, period));
+			}
+		}
+	}
 
-//   Library/
-//     Library-Root.md
-//     Sport/
-//       Library-Sport-Root.md
-//       [NAME].md
-//     Food/
-//       Library-Food-Root.md
-//       IngredientList/
-//         Library-Food-IngredientList-Root.md
-//         [NAME].md
-//       MealList/
-//         Library-Food-MealList-Root.md
-//         [NAME].md
-//     Money/
-//       Library-Money-Root.md
-//       [NAME].md
+	return result;
+};
+

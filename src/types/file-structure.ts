@@ -92,6 +92,7 @@ export const DailySectionTree = {
 };
 
 export const PlanStatsSchema = z.enum(['Plan', 'Stats']);
+export const PlanStats = PlanStatsSchema.enum;
 export const PlanStatsListSchema = z.templateLiteral([
 	PlanStatsSchema,
 	ListSchema,

@@ -1,9 +1,9 @@
 {
 	"id": "cbcr-life-tracker",
 	"name": "Life Tracker",
-	"version": "0.0.2",
+	"version": "0.0.1",
 	"minAppVersion": "1.8.0",
-	"description": "Track budget, expendetures and kaliris in obsidian",
+	"description": "Track money, sport and food in obsidian",
 	"author": "clockblocker",
 	"authorUrl": "https://github.com/clockblocker/",
 	"fundingUrl": "https://buymeacoffee.com/fniqc5g0nr",
