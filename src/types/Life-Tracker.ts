@@ -4,7 +4,7 @@
 //     yyyy/
 //       Daily-yyyy-Root.md
 //       mm/
-//         Daily-yyyy_mm-Root.md
+//         Daily-yyyy-mm-Root.md
 //         dd/
 //           yyyy_mm_dd-Root.md
 //           yyyy_mm_dd-Sport.md
@@ -57,12 +57,7 @@
 //       [NAME].md
 //     Food/
 //       Library-Food-Root.md
-//       IngredientList/
-//         Library-Food-IngredientList-Root.md
-//         [NAME].md
-//       MealList/
-//         Library-Food-MealList-Root.md
-//         [NAME].md
+//       [NAME].md
 //     Money/
 //       Library-Money-Root.md
 //       [NAME].md

@@ -2,7 +2,7 @@ import { CutoffDay, DatePeriod, Year } from 'types/dates';
 import {
 	Aspect,
 	BASE,
-	D,
+	FILE_PARTS_DELIMETER,
 	DDRepr,
 	LIST,
 	DS,
@@ -24,6 +24,17 @@ export const formatYYYY = (year: Year): string => {
 	return year.toString().padStart(4, '0');
 };
 
+/**
+ * Extracts the UTC year, month, and day from a `Date` object
+ * and returns them as zero-padded string parts conforming to the
+ * expected `YYYYRepr`, `MMRepr`, and `DDRepr` formats.
+ *
+ * - Year is padded to 4 digits (e.g. "0007", "2025")
+ * - Month and day are padded to 2 digits (e.g. "03", "09")
+ *
+ * @param date - The Date object to extract from (interpreted in UTC)
+ * @returns An object with `yyyy`, `mm`, and `dd` string parts
+ */
 export const getUtcDateParts = (
 	date: Date
 ): { yyyy: YYYYRepr; mm: MMRepr; dd: DDRepr } => {
@@ -92,7 +103,9 @@ export const getLeafDailyFilePathsForDate = (
 
 	const suffixes: string[] = [ROOT, NotesSchema.value, ...aspects];
 
-	return suffixes.map((suffix) => `${basePath}/${dateRepr}${D}${suffix}${EXT}`);
+	return suffixes.map(
+		(suffix) => `${basePath}/${dateRepr}${FILE_PARTS_DELIMETER}${suffix}${EXT}`
+	);
 };
 
 /**
@@ -116,13 +129,13 @@ export const getDailySubRootsFilePathsForYear = (year: Year): string[] => {
 	const daily = Section.Daily;
 
 	const paths: string[] = [
-		`${BASE}/${daily}/${yyyy}/${daily}${D}${yyyy}${D}${ROOT}${EXT}`,
+		`${BASE}/${daily}/${yyyy}/${daily}${FILE_PARTS_DELIMETER}${yyyy}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`,
 	];
 
 	for (let m = 1; m <= 12; m++) {
 		const mm = m.toString().padStart(2, '0');
 		paths.push(
-			`${BASE}/${daily}/${yyyy}/${mm}/${daily}${D}${yyyy}${DS}${mm}${D}${ROOT}${EXT}`
+			`${BASE}/${daily}/${yyyy}/${mm}/${daily}${FILE_PARTS_DELIMETER}${yyyy}${DS}${mm}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
 		);
 	}
 
@@ -138,32 +151,38 @@ export const getProjectStructureRootsFileNames = (
 	const paths: string[] = [];
 
 	// Daily root
-	paths.push(`${BASE}/${Section.Daily}/${Section.Daily}${D}${ROOT}${EXT}`);
+	paths.push(
+		`${BASE}/${Section.Daily}/${Section.Daily}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
+	);
 
 	// Library root
-	paths.push(`${BASE}/${Section.Library}/${Section.Library}${D}${ROOT}${EXT}`);
+	paths.push(
+		`${BASE}/${Section.Library}/${Section.Library}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
+	);
 
 	for (const aspect of aspects) {
 		// Top-level aspect root
-		paths.push(`${BASE}/${aspect}/${aspect}${D}${ROOT}${EXT}`);
+		paths.push(
+			`${BASE}/${aspect}/${aspect}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
+		);
 
 		// PlanList / StatsList roots
 		for (const ps of [PlanStats.Plan, PlanStats.Stats]) {
 			paths.push(
-				`${BASE}/${aspect}/${ps}${LIST}/${aspect}${D}${ps}${LIST}${D}${ROOT}${EXT}`
+				`${BASE}/${aspect}/${ps}${LIST}/${aspect}${FILE_PARTS_DELIMETER}${ps}${LIST}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
 			);
 		}
 
 		// Library/<Aspect>/Library-<Aspect>-Root.md
 		paths.push(
-			`${BASE}/${Section.Library}/${aspect}/${Section.Library}${D}${aspect}${D}${ROOT}${EXT}`
+			`${BASE}/${Section.Library}/${aspect}/${Section.Library}${FILE_PARTS_DELIMETER}${aspect}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
 		);
 
 		// Food subcategory roots
 		if (aspect === Aspect.Food) {
 			for (const item of FoodItemSchema.options) {
 				paths.push(
-					`${BASE}/${Section.Library}/${Aspect.Food}/${item}${LIST}/${Section.Library}${D}${Aspect.Food}${D}${item}${LIST}${D}${ROOT}${EXT}`
+					`${BASE}/${Section.Library}/${Aspect.Food}/${item}${LIST}/${Section.Library}${FILE_PARTS_DELIMETER}${Aspect.Food}${FILE_PARTS_DELIMETER}${item}${LIST}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
 				);
 			}
 		}
@@ -202,12 +221,12 @@ export const getAspectsSubRootsFilePathsForYear = (
 		for (const ps of PlanStatsSchema.options) {
 			// PlanList or StatsList root
 			paths.push(
-				`${BASE}/${aspect}/${ps}${LIST}/${aspect}${D}${ps}${LIST}${D}${ROOT}${EXT}`
+				`${BASE}/${aspect}/${ps}${LIST}/${aspect}${FILE_PARTS_DELIMETER}${ps}${LIST}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
 			);
 
 			// Year-level root
 			paths.push(
-				`${BASE}/${aspect}/${ps}${LIST}/${yyyy}/${aspect}${D}${ps}${LIST}${D}${yyyy}${D}${ROOT}${EXT}`
+				`${BASE}/${aspect}/${ps}${LIST}/${yyyy}/${aspect}${FILE_PARTS_DELIMETER}${ps}${LIST}${FILE_PARTS_DELIMETER}${yyyy}${FILE_PARTS_DELIMETER}${ROOT}${EXT}`
 			);
 		}
 	}
@@ -233,7 +252,7 @@ const getAspectLeafFilePathForDatePeriod = (
 	const { yyyy } = getUtcDateParts(datePeriod.startIncl);
 	const rangeRepr = reprFromDatePeriod(datePeriod);
 
-	return `${BASE}/${aspect}/${ps}${LIST}/${yyyy}/${aspect}${D}${ps}${D}${rangeRepr}${EXT}`;
+	return `${BASE}/${aspect}/${ps}${LIST}/${yyyy}/${aspect}${FILE_PARTS_DELIMETER}${ps}${FILE_PARTS_DELIMETER}${rangeRepr}${EXT}`;
 };
 
 /**
@@ -271,11 +290,3 @@ export const getAspectLeafFilePathsForYear = (
 
 	return result;
 };
-
-getProjectStructureRootsFileNames;
-
-getAspectsSubRootsFilePathsForYear;
-getDailySubRootsFilePathsForYear;
-
-getLeafDailyFilePathsForDate;
-getAspectLeafFilePathsForYear;

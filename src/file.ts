@@ -1,8 +1,8 @@
 import { MarkdownView, TFile, App, Vault, Editor, TFolder } from 'obsidian';
 import { appendToExistingFile, doesExistingFileContainContent } from './utils';
 import { flattenError, z } from 'zod/v4';
+import { Maybe } from 'types/general';
 
-type Maybe<T> = { error: true; errorText?: string } | { error: false; data: T };
 
 export class FileService {
 	constructor(
@@ -10,7 +10,7 @@ export class FileService {
 		private vault: Vault
 	) {}
 
-	private async getMaybeFileByPath(filePath: string): Promise<Maybe<TFile>> {
+	async getMaybeFileByPath(filePath: string): Promise<Maybe<TFile>> {
 		try {
 			const file = this.vault.getAbstractFileByPath(filePath);
 			if (!file || !(file instanceof TFile)) {
@@ -23,7 +23,7 @@ export class FileService {
 		}
 	}
 
-	private async getMaybeOpenedFile(): Promise<Maybe<TFile>> {
+	async getMaybeOpenedFile(): Promise<Maybe<TFile>> {
 		try {
 			const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
@@ -46,7 +46,7 @@ export class FileService {
 		}
 	}
 
-	private async getMaybeEditor(): Promise<Maybe<Editor>> {
+	async getMaybeEditor(): Promise<Maybe<Editor>> {
 		try {
 			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 			if (view && view?.file) {
@@ -58,7 +58,7 @@ export class FileService {
 		}
 	}
 
-	private async getSiblingsOfFile(file: TFile): Promise<Maybe<Array<TFile>>> {
+	async getSiblingsOfFile(file: TFile): Promise<Maybe<Array<TFile>>> {
 		const maybeFile = await this.getMaybeOpenedFile();
 		if (maybeFile.error) {
 			return maybeFile;
@@ -74,6 +74,50 @@ export class FileService {
 		}
 
 		return { error: false, data: [] };
+	}
+
+	async createFileInPath(
+		path: string,
+		content: string = ''
+	): Promise<Maybe<TFile>> {
+		try {
+			const file = await this.vault.create(`${path}`, content);
+			if (!(file instanceof TFile)) {
+				return { error: true, errorText: 'Created item is not a file' };
+			}
+			return { error: false, data: file };
+		} catch (error) {
+			return { error: true, errorText: `Failed to create file: ${error}` };
+		}
+	}
+
+	async createFolderInPath(path: string): Promise<Maybe<TFolder>> {
+		try {
+			const fullPath = `${path}`;
+			const folder = await this.vault.createFolder(fullPath);
+			return { error: false, data: folder };
+		} catch (error) {
+			return { error: true, errorText: `Failed to create folder: ${error}` };
+		}
+	}
+
+	async createFileInFolder(
+		folder: TFolder,
+		fileName: string,
+		content: string = ''
+	): Promise<Maybe<TFile>> {
+		const path = `${folder.path}/${fileName}`;
+		const maybeFile = await this.createFileInPath(path, content);
+		return maybeFile;
+	}
+
+	async createFolderInFolder(
+		folder: TFolder,
+		folderName: string
+	): Promise<Maybe<TFolder>> {
+		const path = `${folder.path}/${folderName}`;
+		const maybeFolder = await this.createFolderInPath(path);
+		return maybeFolder;
 	}
 
 	async readFileContentByPath(filePath: string): Promise<Maybe<string>> {
@@ -118,6 +162,32 @@ export class FileService {
 		return { error: false, data: maybeFile.data.path };
 	}
 
+	async getParentOfFileWithPath(filePath: string): Promise<Maybe<TFolder>> {
+		const maybeFile = await this.getMaybeFileByPath(filePath);
+		if (maybeFile.error) return maybeFile;
+
+		const parent = maybeFile.data.parent;
+
+		if (!parent) {
+			return { error: true, errorText: 'File does not have a parent' };
+		}
+
+		return { error: false, data: parent };
+	}
+
+	async getParentOfOpenedFile(): Promise<Maybe<TFolder>> {
+		const maybeFile = await this.getMaybeOpenedFile();
+		if (maybeFile.error) return maybeFile;
+
+		const parent = maybeFile.data.parent;
+
+		if (!parent) {
+			return { error: true, errorText: 'Opened file does not have a parent' };
+		}
+
+		return { error: false, data: parent };
+	}
+
 	public async getSiblingsOfFileWithPath(
 		filePath: string
 	): Promise<Maybe<Array<TFile>>> {
@@ -132,6 +202,24 @@ export class FileService {
 		if (maybeFile.error) return maybeFile;
 
 		return this.getSiblingsOfFile(maybeFile.data);
+	}
+
+	public async createSiblingFileOfOpenedFile(
+		fileName: string
+	): Promise<Maybe<TFile>> {
+		const maybeParent = await this.getParentOfOpenedFile();
+		if (maybeParent.error) return maybeParent;
+
+		return this.createFileInFolder(maybeParent.data, fileName);
+	}
+
+	public async createSiblingFolderOfOpenedFolder(
+		folderName: string
+	): Promise<Maybe<TFolder>> {
+		const maybeParent = await this.getParentOfOpenedFile();
+		if (maybeParent.error) return maybeParent;
+
+		return this.createFolderInFolder(maybeParent.data, folderName);
 	}
 
 	public showLoadingOverlay(): void {

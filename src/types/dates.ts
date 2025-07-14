@@ -20,3 +20,20 @@ export type Month = z.infer<typeof MonthSchema>;
 
 export type DayPeriod = z.infer<typeof DayPeriodSchema>;
 export type DatePeriod = z.infer<typeof DatePeriodSchema>;
+
+export const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
+export const WeekdaySchema = z.enum(WEEKDAYS);
+export type Weekday = z.infer<typeof WeekdaySchema>;
+export const Weekday = WeekdaySchema.enum;
+
+export const WeekSchema = z.object({
+	[Weekday.Mo]: z.date().nullable(),
+	[Weekday.Tu]: z.date().nullable(),
+	[Weekday.We]: z.date().nullable(),
+	[Weekday.Th]: z.date().nullable(),
+	[Weekday.Fr]: z.date().nullable(),
+	[Weekday.Sa]: z.date().nullable(),
+	[Weekday.Su]: z.date().nullable(),
+});
+
+export type Week = z.infer<typeof WeekSchema>;

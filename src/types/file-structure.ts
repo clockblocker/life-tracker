@@ -44,106 +44,11 @@ export const SectionSchema = z.enum([
 	'Library',
 ]);
 export const Section = SectionSchema.enum;
+export const SECTIONS: Section[] = SectionSchema.options;
+
 export const AspectSchema = SectionSchema.exclude(['Daily', 'Library']);
 export const Aspect = AspectSchema.enum;
-
-export const DailyLeaveSchema = z.templateLiteral([
-	FullDateReprSchema,
-	FilePartsDelimiterSchema,
-	AspectSchema.or(RootSchema).or(NotesSchema),
-]);
-
-export const DailySectionTree = {
-	[0]: {
-		currentDepth: 0,
-		rootFileNameSchema: z.templateLiteral([
-			Section.Daily,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childDReprirSchema: YYYYReprSchema,
-	},
-	[1]: {
-		currentDepth: 1,
-		rootFileNameSchema: z.templateLiteral([
-			Section.Daily,
-			FilePartsDelimiterSchema,
-			YYYYReprSchema,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childDReprirSchema: MMReprSchema,
-	},
-	[2]: {
-		currentDepth: 2,
-		rootFileNameSchema: z.templateLiteral([
-			Section.Daily,
-			FilePartsDelimiterSchema,
-			PartialDateReprSchema,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childDReprirSchema: DDReprSchema,
-	},
-	[3]: {
-		currentDepth: 3,
-		rootFileNameSchema: DailyLeaveSchema,
-	},
-};
-
-export const PlanStatsSchema = z.enum(['Plan', 'Stats']);
-export const PlanStats = PlanStatsSchema.enum;
-export const PlanStatsListSchema = z.templateLiteral([
-	PlanStatsSchema,
-	ListSchema,
-]);
-
-export const AspectSectionTree = {
-	[0]: {
-		currentDepth: 0,
-		rootFileNameSchema: z.templateLiteral([
-			AspectSchema,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childDReprirSchema: PlanStatsListSchema,
-	},
-
-	[1]: {
-		currentDepth: 1,
-		// PlanList or StatsList root
-		rootFileNameSchema: z.templateLiteral([
-			AspectSchema,
-			FilePartsDelimiterSchema,
-			PlanStatsListSchema,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childDReprirSchema: YYYYReprSchema,
-	},
-
-	[2]: {
-		currentDepth: 2,
-		// PlanList-yyyyRepr-Root or StatsList-yyyyRepr-Root
-		rootFileNameSchema: z.templateLiteral([
-			AspectSchema,
-			FilePartsDelimiterSchema,
-			PlanStatsListSchema,
-			FilePartsDelimiterSchema,
-			YYYYReprSchema,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		// final md file in this folder
-		childFileNameSchema: z.templateLiteral([
-			AspectSchema,
-			FilePartsDelimiterSchema,
-			PlanStatsSchema,
-			FilePartsDelimiterSchema,
-			FullDatePeriodReprSchema,
-		]),
-	},
-};
+export const ASPECTS = AspectSchema.options;
 
 export const FoodItemSchema = z.enum(['Ingredient', 'Meal']);
 export const LibrarySubCategorySchema = z.templateLiteral([
@@ -151,45 +56,18 @@ export const LibrarySubCategorySchema = z.templateLiteral([
 	ListSchema,
 ]);
 
-export const LibrarySectionTree = {
-	[0]: {
-		currentDepth: 0,
-		rootFileNameSchema: z.templateLiteral([
-			Section.Library,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childDReprirSchema: AspectSchema,
-	},
+export const DailyLeaveSchema = z.templateLiteral([
+	FullDateReprSchema,
+	FilePartsDelimiterSchema,
+	AspectSchema.or(RootSchema).or(NotesSchema),
+]);
 
-	[1]: {
-		currentDepth: 1,
-		rootFileNameSchema: z.templateLiteral([
-			Section.Library,
-			FilePartsDelimiterSchema,
-			AspectSchema,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childDReprirSchema: LibrarySubCategorySchema,
-		childFileNameSchema: z.string().regex(/^[^.\/\\]+\.md$/),
-	},
-
-	[2]: {
-		currentDepth: 2,
-		// only for Food/IngredientList or Food/MealList
-		rootFileNameSchema: z.templateLiteral([
-			Section.Library,
-			FilePartsDelimiterSchema,
-			Aspect.Food,
-			FilePartsDelimiterSchema,
-			LibrarySubCategorySchema,
-			FilePartsDelimiterSchema,
-			RootSchema,
-		]),
-		childFileNameSchema: z.string().regex(/^[^.\/\\]+\.md$/),
-	},
-};
+export const PlanStatsSchema = z.enum(['Plan', 'Stats']);
+export const PlanStats = PlanStatsSchema.enum;
+export const PlanStatsListSchema = z.templateLiteral([
+	PlanStatsSchema,
+	ListSchema,
+]);
 
 export type YYYYRepr = z.infer<typeof YYYYReprSchema>;
 export type MMRepr = z.infer<typeof MMReprSchema>;
@@ -213,7 +91,7 @@ export type PlanStatsList = z.infer<typeof PlanStatsListSchema>;
 export type FoodItem = z.infer<typeof FoodItemSchema>;
 export type LibrarySubCategory = z.infer<typeof LibrarySubCategorySchema>;
 
-export const D = FilePartsDelimiterSchema.value;
+export const FILE_PARTS_DELIMETER = FilePartsDelimiterSchema.value;
 export const DS = DateSectionsDelimiterSchema.value;
 export const EXT = MDSchema.value;
 export const ROOT = RootSchema.value;
@@ -221,3 +99,56 @@ export const BASE = LifeTrackerSchema.value;
 export const SEP = RangePartsDelimiterSchema.value;
 
 export const LIST = ListSchema.value;
+
+function makeLeaveSchemaForAspect<const A extends Aspect>(aspect: A) {
+	return z.templateLiteral([
+		z.literal(aspect),
+		FILE_PARTS_DELIMETER,
+		PlanStatsSchema,
+		FILE_PARTS_DELIMETER,
+		FullDatePeriodReprSchema,
+	]);
+}
+
+export const LeaveSchemaFromAspect = {
+	[Aspect.Sport]: makeLeaveSchemaForAspect(Aspect.Sport),
+	[Aspect.Food]: makeLeaveSchemaForAspect(Aspect.Food),
+	[Aspect.Money]: makeLeaveSchemaForAspect(Aspect.Money),
+} as const;
+
+export type StringLikeSchema =
+	| z.ZodString
+	| z.ZodTemplateLiteral
+	| z.ZodEnum
+	| z.ZodLiteral<string>;
+
+export type StructureFromSection = Record<
+	Section,
+	{
+		pathParts: StringLikeSchema[];
+		leaf: StringLikeSchema;
+	}
+>;
+
+export const structureFromSection: StructureFromSection = {
+	[Section.Daily]: {
+		pathParts: [YYYYReprSchema, MMReprSchema, DDReprSchema],
+		leaf: DailyLeaveSchema,
+	},
+	[Section.Sport]: {
+		pathParts: [PlanStatsListSchema, YYYYReprSchema],
+		leaf: LeaveSchemaFromAspect[Section.Sport],
+	},
+	[Section.Food]: {
+		pathParts: [PlanStatsListSchema, YYYYReprSchema],
+		leaf: LeaveSchemaFromAspect[Section.Food],
+	},
+	[Section.Money]: {
+		pathParts: [PlanStatsListSchema, YYYYReprSchema],
+		leaf: LeaveSchemaFromAspect[Section.Money],
+	},
+	[Section.Library]: {
+		pathParts: [AspectSchema],
+		leaf: z.string(),
+	},
+};

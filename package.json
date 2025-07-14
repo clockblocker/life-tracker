@@ -32,6 +32,7 @@
 	"dependencies": {
 		"@google/generative-ai": "latest",
 		"@types/sbd": "latest",
+		"date-fns": "^4.1.0",
 		"sbd": "latest",
 		"typescript-eslint": "latest",
 		"vitest": "^3.2.4",

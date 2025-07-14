@@ -1,4 +1,4 @@
-import { Aspect } from 'types/file-structure';
+import { Aspect } from '../types/file-structure';
 import { getAspectLeafFilePathsForYear } from '../utils/paths';
 import { describe, it, expect } from 'vitest';
 

@@ -11,6 +11,7 @@ import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
 import addBacklinksToCurrentFile from './commands/addBacklinksToCurrentFile';
 import insertReplyFromKeymaker from './commands/insertReplyFromC1Richter';
 import insertReplyFromC1Richter from './commands/insertReplyFromC1Richter';
+import initProjectStructure from 'commands/life-tracker/init-project-structure';
 
 export default class TextEaterPlugin extends Plugin {
 	settings: TextEaterSettings;
@@ -33,8 +34,8 @@ export default class TextEaterPlugin extends Plugin {
 		this.fileService = new FileService(this.app, this.app.vault);
 
 		this.addCommand({
-			id: 'backlink-all-to-current-file',
-			name: 'Populate all referenced files with a backlink to the current file',
+			id: 'init-project-structure',
+			name: 'Add daily nones, library, etc',
 			editorCheckCallback: (
 				checking: boolean,
 				editor: Editor,
@@ -45,12 +46,10 @@ export default class TextEaterPlugin extends Plugin {
 
 				if (view.file && fileName && backlink) {
 					if (!checking) {
-						addBacklinksToCurrentFile(
-							view.file,
-							backlink,
+						initProjectStructure(
 							this.app.vault,
 							this.app.metadataCache,
-							editor
+							this.fileService
 						);
 					}
 					return true;
