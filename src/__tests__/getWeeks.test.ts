@@ -1,6 +1,6 @@
 // getWeeks.spec.ts
+import { getWeeks } from '../commands/life-tracker/utils/calendar';
 import { Week, WEEKDAYS } from '../types/dates';
-import { getWeeks } from '../utils/calendar';
 import { describe, it, expect } from 'vitest';
 
 // sanity helper

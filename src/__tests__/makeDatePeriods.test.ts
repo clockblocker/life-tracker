@@ -1,5 +1,5 @@
-import { DayPeriod } from 'types/dates';
-import { makeDatePeriods } from '../utils/dates';
+import { makeDatePeriods } from '../commands/life-tracker/utils/dates/makeDatePartsPeriods';
+import { CutoffDayPeriod } from '../types/dates';
 import { describe, it, expect } from 'vitest';
 
 const utcDate = (y: number, m: number, d: number) =>
@@ -12,7 +12,7 @@ describe('makeDatePeriods', () => {
 	});
 
 	it('stays within the same month if startIncl < endExl', () => {
-		const input: DayPeriod[] = [{ startIncl: 3, endExl: 10 }];
+		const input: CutoffDayPeriod[] = [{ startIncl: 3, endExl: 10 }];
 		const result = makeDatePeriods(2024, 6, input);
 		expect(result).toEqual([
 			{
@@ -23,7 +23,7 @@ describe('makeDatePeriods', () => {
 	});
 
 	it('wraps to next month if startIncl >= endExl', () => {
-		const input: DayPeriod[] = [{ startIncl: 20, endExl: 5 }];
+		const input: CutoffDayPeriod[] = [{ startIncl: 20, endExl: 5 }];
 		const result = makeDatePeriods(2024, 6, input);
 		expect(result).toEqual([
 			{
@@ -34,7 +34,7 @@ describe('makeDatePeriods', () => {
 	});
 
 	it('wraps from December to January of next year', () => {
-		const input: DayPeriod[] = [{ startIncl: 25, endExl: 10 }];
+		const input: CutoffDayPeriod[] = [{ startIncl: 25, endExl: 10 }];
 		const result = makeDatePeriods(2024, 11, input);
 		expect(result).toEqual([
 			{

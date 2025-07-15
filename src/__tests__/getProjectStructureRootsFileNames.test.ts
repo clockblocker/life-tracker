@@ -1,4 +1,4 @@
-import { getProjectStructureRootsFileNames } from '../utils/paths';
+import { getProjectStructureRootsFileNames } from '../commands/life-tracker/utils/paths';
 import { describe, it, expect } from 'vitest';
 
 describe('getProjectStructureRootsFileNames', () => {

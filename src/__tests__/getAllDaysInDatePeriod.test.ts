@@ -1,5 +1,5 @@
-import { DatePeriod } from 'types/dates';
-import { getAllDaysInDatePeriod } from '../utils/dates';
+import { getAllDaysInDatePeriod } from '../commands/life-tracker/utils/dates/dates';
+import { DatePeriod } from '../types/dates';
 import { describe, it, expect } from 'vitest';
 
 const utc = (y: number, m: number, d: number) => new Date(Date.UTC(y, m, d));

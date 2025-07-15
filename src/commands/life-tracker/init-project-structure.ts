@@ -1,18 +1,11 @@
-import { TFile, Notice, Vault, MetadataCache, Editor } from 'obsidian';
-import {
-	appendToExistingFile,
-	getExisingOrCreatedFileInWorterDir,
-	doesExistingFileContainContent,
-} from '../../utils/obsidian-file-management';
-import { FileService } from 'file';
+import { Vault, MetadataCache } from 'obsidian';
+import { FileService } from '../../file';
+import { Aspect } from '../../types/file-structure-atoms';
 import {
 	getProjectStructureRootsFileNames,
 	getAspectsSubRootsFilePathsForYear,
 	getDailySubRootsFilePathsForYear,
-	getAspectLeafFilePathsForYear,
-} from 'utils/paths';
-import { Aspect } from 'types/file-structure';
-import { NAV_BUTTONS_MD } from 'utils/markdown';
+} from './utils/paths';
 
 export default async function initProjectStructure(
 	vault: Vault,
@@ -32,11 +25,5 @@ export default async function initProjectStructure(
 
 	const dailySubRootsFilePathsForYear = getDailySubRootsFilePathsForYear(year);
 
-	const aspectLeafFilePathsForYear = getAspectLeafFilePathsForYear(
-		year,
-		aspects,
-		cutoffDays
-	);
 
-	NAV_BUTTONS_MD;
 }

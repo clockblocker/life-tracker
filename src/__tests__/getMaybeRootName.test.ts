@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Section } from '../types/file-structure';
-import { getMaybeRootName } from '../utils/file';
+import { Section } from '../types/file-structure-atoms';
+import { getMaybeRootName } from '../commands/life-tracker/utils/paths';
 
 describe('getMaybeRootName', () => {
 	it('returns valid root name for Daily', () => {

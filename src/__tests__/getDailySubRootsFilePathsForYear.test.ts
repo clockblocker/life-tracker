@@ -1,4 +1,4 @@
-import { getDailySubRootsFilePathsForYear } from '../utils/paths';
+import { getDailySubRootsFilePathsForYear } from '../commands/life-tracker/utils/paths';
 import { describe, it, expect } from 'vitest';
 
 describe('getDailySubRootsFilePathsForYear', () => {

@@ -1,5 +1,5 @@
-import { getAspectsSubRootsFilePathsForYear } from '../utils/paths';
 import { describe, it, expect } from 'vitest';
+import { getAspectsSubRootsFilePathsForYear } from '../commands/life-tracker/utils/paths';
 
 describe('getAspectsSubRootsFilePathsForYear', () => {
 	it('returns empty array if no aspects provided', () => {

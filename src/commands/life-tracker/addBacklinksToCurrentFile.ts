@@ -1,9 +1,4 @@
 import { TFile, Notice, Vault, MetadataCache, Editor } from 'obsidian';
-import {
-	appendToExistingFile,
-	getExisingOrCreatedFileInWorterDir,
-	doesExistingFileContainContent,
-} from '../../utils/obsidian-file-management';
 
 export default async function addBacklinksToCurrentFile(
 	file: TFile,

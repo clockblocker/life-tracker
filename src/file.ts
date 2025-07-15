@@ -1,8 +1,7 @@
 import { MarkdownView, TFile, App, Vault, Editor, TFolder } from 'obsidian';
 import { appendToExistingFile, doesExistingFileContainContent } from './utils';
 import { flattenError, z } from 'zod/v4';
-import { Maybe } from 'types/general';
-
+import { Maybe } from './types/general';
 
 export class FileService {
 	constructor(

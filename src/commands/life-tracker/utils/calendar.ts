@@ -1,5 +1,4 @@
-import { Week, Weekday, WEEKDAYS } from '../types/dates';
-import { Aspect } from 'types/file-structure';
+import { WEEKDAYS, Week } from '../../../types/dates';
 
 // helper: map JS getDay() (0=Su..6=Sa) to 'Mo'..'Su'
 const jsDayToWeekday = (n: number): (typeof WEEKDAYS)[number] =>
