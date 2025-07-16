@@ -20,11 +20,11 @@ describe('getMaybeRootName', () => {
 		}
 	});
 
-	it('returns error for wrong number of parts', () => {
+	it('returns valid root for wrong 2/3 parts of Daily', () => {
 		const result = getMaybeRootName(Section.Daily, ['2024', '07']);
-		expect(result.error).toBe(true);
-		if (result.error) {
-			expect(result.errorText).toMatch(/Expected 3 path parts/);
+		expect(result.error).toBe(false);
+		if (!result.error) {
+			expect(result.data).toBe('Daily-2024-07-Root');
 		}
 	});
 

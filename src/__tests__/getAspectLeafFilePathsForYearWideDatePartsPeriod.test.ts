@@ -25,19 +25,20 @@ describe('getAspectLeafFilePathsForYearWideDatePartsPeriod', () => {
 				endExl: { yyyy: '2024', mm: '07', dd: '05' },
 			},
 		];
-		const aspects: Aspect[] = ['Food'];
+		const aspects = [Aspect.Food];
 
 		const result = getAspectLeafFilePathsForYearWideDatePartsPeriod(
 			periods,
 			aspects
 		);
+
 		expect(result).toHaveLength(2); // Plan and Stats
 
 		expect(result).toContain(
-			'LifeTracker/Food/PlanList/2024/Food-Plan-2024_07_01__to__2024_07_05.md'
+			'LifeTracker/Food/PlanList/2024/Food-Plan-2024_07_01__to__2024_07_05'
 		);
 		expect(result).toContain(
-			'LifeTracker/Food/StatsList/2024/Food-Stats-2024_07_01__to__2024_07_05.md'
+			'LifeTracker/Food/StatsList/2024/Food-Stats-2024_07_01__to__2024_07_05'
 		);
 	});
 
@@ -63,10 +64,10 @@ describe('getAspectLeafFilePathsForYearWideDatePartsPeriod', () => {
 		expect(result).toHaveLength(2 * 2 * 2); // 2 aspects × 2 plan/stats × 2 periods = 8 files
 
 		expect(result).toContain(
-			'LifeTracker/Money/PlanList/2024/Money-Plan-2024_07_10__to__2024_07_15.md'
+			'LifeTracker/Money/PlanList/2024/Money-Plan-2024_07_10__to__2024_07_15'
 		);
 		expect(result).toContain(
-			'LifeTracker/Food/StatsList/2024/Food-Stats-2024_07_01__to__2024_07_05.md'
+			'LifeTracker/Food/StatsList/2024/Food-Stats-2024_07_01__to__2024_07_05'
 		);
 	});
 });

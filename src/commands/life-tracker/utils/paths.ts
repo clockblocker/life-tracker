@@ -40,13 +40,6 @@ export function getMaybeRootName(
 ): Maybe<string> {
 	const shape = structureFromSection[section];
 
-	if (pathParts.length !== shape.pathParts.length) {
-		return {
-			error: true,
-			errorText: `Expected ${shape.pathParts.length} path parts for "${section}", got ${pathParts.length}`,
-		};
-	}
-
 	for (let i = 0; i < pathParts.length; i++) {
 		const schema = shape.pathParts[i];
 		const value = pathParts[i];
@@ -94,13 +87,13 @@ export const reprFromDatePartsPeriod = (
  * Generates the expected Daily leaf file paths for a given validated `DateParts` object.
  *
  * Each file path follows the convention:
- * `LifeTracker/Daily/yyyy/mm/dd/yyyy_mm_dd-{Suffix}.md`
+ * `LifeTracker/Daily/yyyy/mm/dd/yyyy_mm_dd-{Suffix}`
  *
  * - Always includes:
- *   - `...-Root.md`
- *   - `...-Notes.md`
+ *   - `...-Root`
+ *   - `...-Notes`
  * - Optionally includes one file per enabled aspect:
- *   - `...-Sport.md`, `...-Food.md`, `...-Money.md`
+ *   - `...-Sport`, `...-Food`, `...-Money`
  *
  * @param dateParts - Validated zero-padded date parts (yyyy, mm, dd)
  * @param aspects - List of enabled aspects to include as additional files
@@ -125,8 +118,8 @@ export const getPathsToDailyLeaves = (
  * Generates the expected sub-root file paths for the Daily section for a given year.
  *
  * For each of:
- * - the year itself (e.g. `Daily-2025-Root.md`)
- * - all 12 months (e.g. `Daily-2025_03-Root.md`)
+ * - the year itself (e.g. `Daily-2025-Root`)
+ * - all 12 months (e.g. `Daily-2025_03-Root`)
  *
  * The function:
  * - Constructs the file name using `getMaybeRootName`
@@ -213,7 +206,7 @@ export const getProjectStructureRootsFileNames = (
 			}
 		}
 
-		// Library/<Aspect>/Library-<Aspect>-Root.md
+		// Library/<Aspect>/Library-<Aspect>-Root
 		const libraryAspectRoot = getMaybeRootName(Section.Library, [aspect]);
 		if (!libraryAspectRoot.error) {
 			paths.push(
@@ -239,18 +232,18 @@ export const getProjectStructureRootsFileNames = (
  * For each provided `Aspect` (e.g., 'Sport', 'Food', 'Money'), generates:
  *
  * - The PlanList and StatsList root files:
- *   - `LifeTracker/<Aspect>/PlanList/<Aspect>-PlanList-Root.md`
- *   - `LifeTracker/<Aspect>/StatsList/<Aspect>-StatsList-Root.md`
+ *   - `LifeTracker/<Aspect>/PlanList/<Aspect>-PlanList-Root`
+ *   - `LifeTracker/<Aspect>/StatsList/<Aspect>-StatsList-Root`
  *
  * - The year-specific sub-root files:
- *   - `LifeTracker/<Aspect>/PlanList/yyyy/<Aspect>-PlanList-yyyy-Root.md`
- *   - `LifeTracker/<Aspect>/StatsList/yyyy/<Aspect>-StatsList-yyyy-Root.md`
+ *   - `LifeTracker/<Aspect>/PlanList/yyyy/<Aspect>-PlanList-yyyy-Root`
+ *   - `LifeTracker/<Aspect>/StatsList/yyyy/<Aspect>-StatsList-yyyy-Root`
  *
  * File paths are fully qualified and use zero-padded year strings (`0042`, `2024`, etc).
  *
  * @param year - The calendar year (as a number) to generate root files for
  * @param aspects - List of enabled `Aspect`s to include (e.g. ['Sport', 'Food'])
- * @returns An array of fully qualified root `.md` file paths for PlanList and StatsList structures
+ * @returns An array of fully qualified root `` file paths for PlanList and StatsList structures
  */
 export const getAspectsSubRootsFilePathsForYear = (
 	year: Year,
@@ -281,15 +274,15 @@ export const getAspectsSubRootsFilePathsForYear = (
 /**
  * Returns the leaf file path for a single Plan or Stats file in the vault structure:
  *
- * `LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd.md`
+ * `LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd`
  *
  * Example:
- * `LifeTracker/Food/PlanList/2024/Food-Plan-2024_01_01__to__2024_01_31.md`
+ * `LifeTracker/Food/PlanList/2024/Food-Plan-2024_01_01__to__2024_01_31`
  *
  * @param aspect - The aspect category ('Food' | 'Money' | 'Sport')
  * @param ps - Either 'Plan' or 'Stats'
  * @param datePartsPeriod - A validated date period with padded YYYY/MM/DD components
- * @returns A single fully qualified POSIX-style path to the .md file
+ * @returns A single fully qualified POSIX-style path to the  file
  */
 const getAspectLeafFilePathForDatePartsPeriod = (
 	aspect: Aspect,
@@ -318,7 +311,7 @@ const getAspectLeafFilePathForDatePartsPeriod = (
  * - date interval ∈ datePartsPeriods
  *
  * results in a file path of the form:
- * `LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd.md`
+ * `LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd`
  *
  * @param datePartsPeriods - Validated year-wide list of `DatePartsPeriod`s
  * @param aspects - Enabled aspects (e.g. 'Food', 'Sport', 'Money') to generate files for

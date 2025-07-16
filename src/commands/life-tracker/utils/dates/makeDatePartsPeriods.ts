@@ -4,9 +4,14 @@ import {
 	CutoffDayPeriod,
 	DatePeriod,
 	DatePartsPeriod,
+	CutoffDayPeriodSchema,
+	MonthSchema,
+	YearSchema,
 } from '../../../../types/dates';
 import { Maybe } from '../../../../types/general';
 import { makeMaybeDatePartsPeriodsFromDatePeriods } from './general';
+import z from 'zod';
+import { error } from 'node:console';
 
 /**
  * Generates a list of validated `DatePartsPeriod` objects from a given year, month,
@@ -28,6 +33,27 @@ export const makeMaybeDatePartsPeriods = (
 	month: Month,
 	cutoffDayPeriods: CutoffDayPeriod[]
 ): Maybe<DatePartsPeriod[]> => {
+	const yearResult = YearSchema.safeParse(year);
+	const monthResult = MonthSchema.safeParse(month);
+	const cutoffsResult =
+		CutoffDayPeriodSchema.array().safeParse(cutoffDayPeriods);
+
+	if (!yearResult.success)
+		return {
+			error: true,
+			errorText: `Invalid year: ${yearResult.error.message}`,
+		};
+	if (!monthResult.success)
+		return {
+			error: true,
+			errorText: `Invalid month: ${monthResult.error.message}`,
+		};
+	if (!cutoffsResult.success)
+		return {
+			error: true,
+			errorText: `Invalid cutoffDayPeriods: ${cutoffsResult.error.message}`,
+		};
+
 	const datePeriods = makeDatePeriods(year, month, cutoffDayPeriods);
 	return makeMaybeDatePartsPeriodsFromDatePeriods(datePeriods);
 };
