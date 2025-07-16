@@ -45,6 +45,18 @@ export const getMaybeDatePartsFromDate = (date: Date): Maybe<DateParts> => {
 	return { error: false, data: result.data };
 };
 
+export const getDatePartsOrEpochFromDate = (date: Date): DateParts => {
+	const maybe = getMaybeDatePartsFromDate(date);
+
+	if (!maybe.error) return maybe.data;
+
+	return {
+		yyyy: '1970',
+		mm: '01',
+		dd: '01',
+	};
+};
+
 /**
  * Converts an array of `DatePeriod` objects into validated `DatePartsPeriod` objects.
  *

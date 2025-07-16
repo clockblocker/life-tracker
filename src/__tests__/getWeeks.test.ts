@@ -1,6 +1,6 @@
 // getWeeks.spec.ts
 import { getWeeks } from '../commands/life-tracker/utils/calendar';
-import { Week, WEEKDAYS } from '../types/dates';
+import { DateParts, Week, Weekday, WEEKDAYS } from '../types/dates';
 import { describe, it, expect } from 'vitest';
 
 // sanity helper
@@ -96,5 +96,58 @@ describe('getWeeks', () => {
 		const week = result[0];
 		assertIsFullWeek(week);
 		expect(iso(week.Mo)).toBe(valid.toISOString());
+	});
+
+	it('groups multiple Date entries into correct week buckets', () => {
+		const input = [
+			new Date(Date.UTC(2024, 6, 8)), // Mon
+			new Date(Date.UTC(2024, 6, 10)), // Wed
+			new Date(Date.UTC(2024, 6, 12)), // Fri
+		];
+
+		const result = getWeeks(input);
+		expect(result).toHaveLength(1);
+
+		const week = result[0];
+		expect(week[Weekday.Mo]?.toISOString().startsWith('2024-07-08')).toBe(true);
+		expect(week[Weekday.We]?.toISOString().startsWith('2024-07-10')).toBe(true);
+		expect(week[Weekday.Fr]?.toISOString().startsWith('2024-07-12')).toBe(true);
+	});
+
+	it('handles multiple weeks of Date input', () => {
+		const input = [
+			new Date(Date.UTC(2024, 6, 8)), // Mon
+			new Date(Date.UTC(2024, 6, 15)), // next Mon
+		];
+
+		const result = getWeeks(input);
+		expect(result).toHaveLength(2);
+		expect(result[0][Weekday.Mo]?.toISOString()).toContain('2024-07-08');
+		expect(result[1][Weekday.Mo]?.toISOString()).toContain('2024-07-15');
+	});
+
+	it('groups DateParts into correct week buckets', () => {
+		const input: DateParts[] = [
+			{ yyyy: '2024', mm: '07', dd: '08' }, // Mon
+			{ yyyy: '2024', mm: '07', dd: '09' }, // Tue
+			{ yyyy: '2024', mm: '07', dd: '11' }, // Thu
+		];
+
+		const result = getWeeks(input);
+		expect(result).toHaveLength(1);
+		expect(result[0][Weekday.Mo]?.toISOString()).toContain('2024-07-08');
+		expect(result[0][Weekday.Tu]?.toISOString()).toContain('2024-07-09');
+		expect(result[0][Weekday.Th]?.toISOString()).toContain('2024-07-11');
+	});
+
+	it('skips invalid dates silently', () => {
+		const input = [
+			new Date('invalid'),
+			new Date(Date.UTC(2024, 6, 10)), // Wed
+		];
+
+		const result = getWeeks(input);
+		expect(result).toHaveLength(1);
+		expect(result[0][Weekday.We]?.toISOString()).toContain('2024-07-10');
 	});
 });
