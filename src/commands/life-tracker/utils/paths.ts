@@ -32,9 +32,28 @@ import {
 import { getMaybeDatePartsFromDate } from './dates/general';
 import { makeCutoffDayPeriods } from './dates/makeCutoffDayPeriods';
 
-export const joinPathParts = (pathParts: PathParts) => pathParts.join(SLASH);
+export const makePathFromPathParts = (pathParts: PathParts) =>
+	pathParts.join(SLASH);
 
-export function getMaybeRootName(
+const makeRootFileNameFromPathParts = (pathParts: PathParts) => {
+	return [...pathParts, ROOT].join(DASH);
+};
+
+const makeRootFileNameForSection = ({
+	section,
+	pathParts,
+}: {
+	section: Section;
+	pathParts: PathParts;
+}) => {
+	return makeRootFileNameFromPathParts([section, ...pathParts]);
+};
+
+const unsafeFullDateStyleJoin = (parts: string[]) => {
+	return parts.join(USCORE);
+};
+
+export function getMaybeRootNameForSection(
 	section: Section,
 	pathParts: PathParts
 ): Maybe<string> {
@@ -52,8 +71,20 @@ export function getMaybeRootName(
 		}
 	}
 
-	const joined = [section, ...pathParts, RootSchema.value].join(DASH);
-	return { error: false, data: joined };
+	if (
+		section !== Section.Daily ||
+		(section === Section.Daily && pathParts.length < 3)
+	) {
+		return {
+			error: false,
+			data: makeRootFileNameForSection({ section, pathParts }),
+		};
+	}
+
+	return {
+		error: false,
+		data: `${unsafeFullDateStyleJoin(pathParts)}${DASH}${ROOT}`,
+	};
 }
 
 export const formatYYYY = (year: Year): string => {
@@ -65,7 +96,7 @@ export const reprFromDateParts = ({
 	mm,
 	dd,
 }: DateParts): FullDateRepr => {
-	return `${yyyy}${USCORE}${mm}${USCORE}${dd}`;
+	return unsafeFullDateStyleJoin([yyyy, mm, dd]) as FullDateRepr;
 };
 
 /**
@@ -110,7 +141,7 @@ export const getPathsToDailyLeaves = (
 	const suffixes = [ROOT, NOTES, ...aspects];
 
 	return suffixes.map((suffix) =>
-		joinPathParts([...basePathParts, `${dateRepr}${DASH}${suffix}`])
+		makePathFromPathParts([...basePathParts, `${dateRepr}${DASH}${suffix}`])
 	);
 };
 
@@ -122,8 +153,8 @@ export const getPathsToDailyLeaves = (
  * - all 12 months (e.g. `Daily-2025_03-Root`)
  *
  * The function:
- * - Constructs the file name using `getMaybeRootName`
- * - Assembles the full path using `joinPathParts`
+ * - Constructs the file name using `getMaybeRootNameForSection`
+ * - Assembles the full path using `makePathFromPathParts`
  * - Logs any validation errors (e.g. schema mismatches or format issues)
  * - Returns only the successfully constructed paths
  *
@@ -138,9 +169,9 @@ export const getDailySubRootsFilePathsForYear = (year: Year): string[] => {
 	const errors: string[] = [];
 
 	// Year-level root
-	const yearRoot = getMaybeRootName(section, [yyyy]);
+	const yearRoot = getMaybeRootNameForSection(section, [yyyy]);
 	if (!yearRoot.error) {
-		results.push(joinPathParts([BASE, section, yyyy, yearRoot.data]));
+		results.push(makePathFromPathParts([BASE, section, yyyy, yearRoot.data]));
 	} else {
 		errors.push(`Year root: ${yearRoot.errorText ?? 'Unknown error'}`);
 	}
@@ -148,9 +179,11 @@ export const getDailySubRootsFilePathsForYear = (year: Year): string[] => {
 	// Month-level roots
 	for (let m = 1; m <= 12; m++) {
 		const mm = m.toString().padStart(2, '0');
-		const monthRoot = getMaybeRootName(section, [yyyy, mm]);
+		const monthRoot = getMaybeRootNameForSection(section, [yyyy, mm]);
 		if (!monthRoot.error) {
-			results.push(joinPathParts([BASE, section, yyyy, mm, monthRoot.data]));
+			results.push(
+				makePathFromPathParts([BASE, section, yyyy, mm, monthRoot.data])
+			);
 		} else {
 			errors.push(`Month ${mm}: ${monthRoot.errorText ?? 'Unknown error'}`);
 		}
@@ -172,45 +205,56 @@ export const getProjectStructureRootsFileNames = (
 	const errors: string[] = [];
 
 	// Daily root
-	const dailyRoot = getMaybeRootName(Section.Daily, []);
+	const dailyRoot = getMaybeRootNameForSection(Section.Daily, []);
 	if (!dailyRoot.error) {
-		paths.push(joinPathParts([BASE, Section.Daily, dailyRoot.data]));
+		paths.push(makePathFromPathParts([BASE, Section.Daily, dailyRoot.data]));
 	} else {
 		errors.push(`Daily: ${dailyRoot.errorText ?? 'Invalid root'}`);
 	}
 
 	// Library root
-	const libraryRoot = getMaybeRootName(Section.Library, []);
+	const libraryRoot = getMaybeRootNameForSection(Section.Library, []);
 	if (!libraryRoot.error) {
-		paths.push(joinPathParts([BASE, Section.Library, libraryRoot.data]));
+		paths.push(
+			makePathFromPathParts([BASE, Section.Library, libraryRoot.data])
+		);
 	} else {
 		errors.push(`Library: ${libraryRoot.errorText ?? 'Invalid root'}`);
 	}
 
 	for (const aspect of aspects) {
 		// Top-level aspect root
-		const aspectRoot = getMaybeRootName(aspect, []);
+		const aspectRoot = getMaybeRootNameForSection(aspect, []);
 		if (!aspectRoot.error) {
-			paths.push(joinPathParts([BASE, aspect, aspectRoot.data]));
+			paths.push(makePathFromPathParts([BASE, aspect, aspectRoot.data]));
 		} else {
 			errors.push(`${aspect}: root: ${aspectRoot.errorText}`);
 		}
 
 		// PlanList / StatsList root (no year)
 		for (const ps of [PlanStats.Plan, PlanStats.Stats]) {
-			const listRoot = getMaybeRootName(aspect, [`${ps}List`]);
+			const listRoot = getMaybeRootNameForSection(aspect, [`${ps}List`]);
 			if (!listRoot.error) {
-				paths.push(joinPathParts([BASE, aspect, `${ps}List`, listRoot.data]));
+				paths.push(
+					makePathFromPathParts([BASE, aspect, `${ps}List`, listRoot.data])
+				);
 			} else {
 				errors.push(`${aspect}: ${ps}List: ${listRoot.errorText}`);
 			}
 		}
 
 		// Library/<Aspect>/Library-<Aspect>-Root
-		const libraryAspectRoot = getMaybeRootName(Section.Library, [aspect]);
+		const libraryAspectRoot = getMaybeRootNameForSection(Section.Library, [
+			aspect,
+		]);
 		if (!libraryAspectRoot.error) {
 			paths.push(
-				joinPathParts([BASE, Section.Library, aspect, libraryAspectRoot.data])
+				makePathFromPathParts([
+					BASE,
+					Section.Library,
+					aspect,
+					libraryAspectRoot.data,
+				])
 			);
 		} else {
 			errors.push(`Library/${aspect}: ${libraryAspectRoot.errorText}`);
@@ -256,14 +300,16 @@ export const getAspectsSubRootsFilePathsForYear = (
 		for (const ps of PlanStatsSchema.options) {
 			const list = `${ps}List`;
 
-			const root = getMaybeRootName(aspect, [list]);
+			const root = getMaybeRootNameForSection(aspect, [list]);
 			if (!root.error) {
-				result.push(joinPathParts([BASE, aspect, list, root.data]));
+				result.push(makePathFromPathParts([BASE, aspect, list, root.data]));
 			}
 
-			const yearRoot = getMaybeRootName(aspect, [list, yyyy]);
+			const yearRoot = getMaybeRootNameForSection(aspect, [list, yyyy]);
 			if (!yearRoot.error) {
-				result.push(joinPathParts([BASE, aspect, list, yyyy, yearRoot.data]));
+				result.push(
+					makePathFromPathParts([BASE, aspect, list, yyyy, yearRoot.data])
+				);
 			}
 		}
 	}
@@ -298,7 +344,7 @@ const getAspectLeafFilePathForDatePartsPeriod = (
 		`${aspect}${DASH}${ps}${DASH}${rangeRepr}`,
 	];
 
-	return joinPathParts(pathParts);
+	return makePathFromPathParts(pathParts);
 };
 
 /**

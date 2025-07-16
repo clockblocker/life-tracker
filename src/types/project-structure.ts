@@ -11,6 +11,7 @@ import {
 	DailyLeaveSchema,
 	PlanStatsListSchema,
 	AspectSchema,
+	ROOT,
 } from './file-structure-atoms';
 
 function makeLeaveSchemaForAspect<const A extends Aspect>(aspect: A) {
