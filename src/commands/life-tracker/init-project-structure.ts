@@ -30,5 +30,5 @@ export default async function initProjectStructure(
 
 	console.log('folderPathParts', folderPathParts);
 
-	// fileService.createManyFolders(folderPathParts);
+	fileService.createManyFolders(folderPathParts);
 }

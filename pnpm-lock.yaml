@@ -15,7 +15,7 @@ importers:
         specifier: latest
         version: 1.0.5
       date-fns:
-        specifier: ^4.1.0
+        specifier: latest
         version: 4.1.0
       sbd:
         specifier: latest
@@ -24,7 +24,7 @@ importers:
         specifier: latest
         version: 8.36.0(eslint@9.30.1)(typescript@5.8.3)
       vitest:
-        specifier: ^3.2.4
+        specifier: latest
         version: 3.2.4(@types/node@24.0.10)
       zod:
         specifier: latest
@@ -1844,7 +1844,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.8
 
   esutils@2.0.3: {}
 
