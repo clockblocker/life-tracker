@@ -1,10 +1,4 @@
-import { DASH, SPACE, WIKI_CLOSE, WIKI_OPEN, PIPE } from 'constants/format';
-import {
-	Aspect,
-	DailyMenuItem,
-	FullDateRepr,
-	NOTES,
-} from 'types/file-structure-atoms';
+import { SPACE, WIKI_OPEN, WIKI_CLOSE, PIPE } from '../../../constants/format';
 
 export function cleanMarkdownFormatting(selection: string): string {
 	return selection

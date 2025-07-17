@@ -26,6 +26,8 @@ import {
 } from '../../../types/file-structure-atoms';
 import { Maybe } from '../../../types/general';
 import {
+	LightNode,
+	LightNodeType,
 	PathParts,
 	structureFromSection,
 } from '../../../types/project-structure';
@@ -53,10 +55,13 @@ const unsafeFullDateStyleJoin = (parts: string[]) => {
 	return parts.join(USCORE);
 };
 
-export function getMaybeRootNameForSection(
-	section: Section,
-	pathParts: PathParts
-): Maybe<string> {
+export function getMaybeRootName({
+	section,
+	pathParts,
+}: {
+	section: Section;
+	pathParts: PathParts;
+}): Maybe<string> {
 	const shape = structureFromSection[section];
 
 	for (let i = 0; i < pathParts.length; i++) {
@@ -114,207 +119,202 @@ export const reprFromDatePartsPeriod = (
 	return `${reprFromDateParts(datePeriod.startIncl)}__to__${reprFromDateParts(datePeriod.endExl)}`;
 };
 
-/**
- * Generates the expected Daily leaf file paths for a given validated `DateParts` object.
- *
- * Each file path follows the convention:
- * `LifeTracker/Daily/yyyy/mm/dd/yyyy_mm_dd-{Suffix}`
- *
- * - Always includes:
- *   - `...-Root`
- *   - `...-Notes`
- * - Optionally includes one file per enabled aspect:
- *   - `...-Sport`, `...-Food`, `...-Money`
- *
- * @param dateParts - Validated zero-padded date parts (yyyy, mm, dd)
- * @param aspects - List of enabled aspects to include as additional files
- * @returns An array of fully qualified Daily leaf file paths
- */
-export const getPathsToDailyLeaves = (
-	dateParts: DateParts,
-	aspects: Aspect[]
-): string[] => {
-	const { yyyy, mm, dd } = dateParts;
-
-	const basePathParts = [BASE, Section.Daily, yyyy, mm, dd];
+export const getDailyLeafFileNames = ({
+	dateParts,
+	aspects,
+}: {
+	dateParts: DateParts;
+	aspects: Aspect[];
+}): string[] => {
 	const dateRepr = reprFromDateParts(dateParts);
-	const suffixes = [ROOT, NOTES, ...aspects];
+	const suffixes = [NOTES, ...aspects];
 
-	return suffixes.map((suffix) =>
-		makePathFromPathParts([...basePathParts, `${dateRepr}${DASH}${suffix}`])
-	);
+	return suffixes.map((suffix) => `${dateRepr}${DASH}${suffix}`);
 };
 
 /**
- * Generates the expected sub-root file paths for the Daily section for a given year.
+ * Generates the full LightNode tree structure for the "Daily" section of a given year.
  *
- * For each of:
- * - the year itself (e.g. `Daily-2025-Root`)
- * - all 12 months (e.g. `Daily-2025_03-Root`)
+ * This includes:
+ * - A folder for the year (`YYYY`)
+ * - Subfolders for each month (`MM`)
+ * - Subfolders for each day (`DD`)
+ * - A RootFile for each valid root (year, month, day) if resolvable via `getMaybeRootName`
+ * - LeafFiles for all aspects (e.g. Sport, Food, Money) per day
  *
- * The function:
- * - Constructs the file name using `getMaybeRootNameForSection`
- * - Assembles the full path using `makePathFromPathParts`
- * - Logs any validation errors (e.g. schema mismatches or format issues)
- * - Returns only the successfully constructed paths
+ * All nodes are attached under a top-level Folder node, forming a fully navigable tree.
  *
- * @param year - The 4-digit year to generate root file paths for
- * @returns An array of full relative file paths under `LifeTracker/Daily/...`
+ * @param year - The full 4-digit year (e.g. 2025)
+ * @param aspects - A list of aspects to include in daily leaf generation
+ * @returns A LightNode representing the root of the yearly "Daily" section tree
  */
-export const getDailySubRootsFilePathsForYear = (year: Year): string[] => {
+export const getDailyLightNodeForYear = (
+	year: Year,
+	aspects: Aspect[]
+): LightNode => {
 	const yyyy = formatYYYY(year);
 	const section = Section.Daily;
 
-	const results: string[] = [];
 	const errors: string[] = [];
 
-	// Year-level root
-	const yearRoot = getMaybeRootNameForSection(section, [yyyy]);
-	if (!yearRoot.error) {
-		results.push(makePathFromPathParts([BASE, section, yyyy, yearRoot.data]));
+	const tree: LightNode = {
+		type: LightNodeType.Folder,
+		children: {
+			[yyyy]: {
+				type: LightNodeType.Folder,
+				children: {},
+			},
+		},
+	};
+
+	const yearFolder = tree.children[yyyy];
+
+	// year-level root file
+	const maybeYearRootName = getMaybeRootName({ section, pathParts: [yyyy] });
+	if (!maybeYearRootName.error) {
+		const rootName = maybeYearRootName.data;
+		yearFolder.children[rootName] = {
+			type: LightNodeType.RootFile,
+			children: {},
+		};
 	} else {
-		errors.push(`Year root: ${yearRoot.errorText ?? 'Unknown error'}`);
+		errors.push(`Year root: ${maybeYearRootName.errorText ?? 'Unknown error'}`);
 	}
 
-	// Month-level roots
+	// month-level
 	for (let m = 1; m <= 12; m++) {
 		const mm = m.toString().padStart(2, '0');
-		const monthRoot = getMaybeRootNameForSection(section, [yyyy, mm]);
-		if (!monthRoot.error) {
-			results.push(
-				makePathFromPathParts([BASE, section, yyyy, mm, monthRoot.data])
+		const daysInMonth = new Date(year, m, 0).getUTCDate();
+
+		const monthFolder: LightNode = {
+			type: LightNodeType.Folder,
+			children: {},
+		};
+		yearFolder.children[mm] = monthFolder;
+
+		const maybeMonthRoot = getMaybeRootName({ section, pathParts: [yyyy, mm] });
+		if (!maybeMonthRoot.error) {
+			const rootName = maybeMonthRoot.data;
+			monthFolder.children[rootName] = {
+				type: LightNodeType.RootFile,
+				children: {},
+			};
+		} else {
+			errors.push(
+				`Month ${mm}: ${maybeMonthRoot.errorText ?? 'Unknown error'}`
 			);
-		} else {
-			errors.push(`Month ${mm}: ${monthRoot.errorText ?? 'Unknown error'}`);
-		}
-	}
-
-	if (errors.length > 0) {
-		console.warn(
-			`[getDailySubRootsFilePathsForYear] ${errors.length} error(s):\n${errors.join('\n')}`
-		);
-	}
-
-	return results;
-};
-
-export const getProjectStructureRootsFileNames = (
-	aspects: Aspect[]
-): string[] => {
-	const paths: string[] = [];
-	const errors: string[] = [];
-
-	// Daily root
-	const dailyRoot = getMaybeRootNameForSection(Section.Daily, []);
-	if (!dailyRoot.error) {
-		paths.push(makePathFromPathParts([BASE, Section.Daily, dailyRoot.data]));
-	} else {
-		errors.push(`Daily: ${dailyRoot.errorText ?? 'Invalid root'}`);
-	}
-
-	// Library root
-	const libraryRoot = getMaybeRootNameForSection(Section.Library, []);
-	if (!libraryRoot.error) {
-		paths.push(
-			makePathFromPathParts([BASE, Section.Library, libraryRoot.data])
-		);
-	} else {
-		errors.push(`Library: ${libraryRoot.errorText ?? 'Invalid root'}`);
-	}
-
-	for (const aspect of aspects) {
-		// Top-level aspect root
-		const aspectRoot = getMaybeRootNameForSection(aspect, []);
-		if (!aspectRoot.error) {
-			paths.push(makePathFromPathParts([BASE, aspect, aspectRoot.data]));
-		} else {
-			errors.push(`${aspect}: root: ${aspectRoot.errorText}`);
 		}
 
-		// PlanList / StatsList root (no year)
-		for (const ps of [PlanStats.Plan, PlanStats.Stats]) {
-			const listRoot = getMaybeRootNameForSection(aspect, [`${ps}List`]);
-			if (!listRoot.error) {
-				paths.push(
-					makePathFromPathParts([BASE, aspect, `${ps}List`, listRoot.data])
-				);
-			} else {
-				errors.push(`${aspect}: ${ps}List: ${listRoot.errorText}`);
+		for (let d = 1; d <= daysInMonth; d++) {
+			const dd = d.toString().padStart(2, '0');
+
+			const dayFolder: LightNode = {
+				type: LightNodeType.Folder,
+				children: {},
+			};
+			monthFolder.children[dd] = dayFolder;
+
+			const maybeDayRoot = getMaybeRootName({
+				section,
+				pathParts: [yyyy, mm, dd],
+			});
+			if (!maybeDayRoot.error) {
+				const rootName = maybeDayRoot.data;
+				dayFolder.children[rootName] = {
+					type: LightNodeType.RootFile,
+					children: {},
+				};
 			}
-		}
 
-		// Library/<Aspect>/Library-<Aspect>-Root
-		const libraryAspectRoot = getMaybeRootNameForSection(Section.Library, [
-			aspect,
-		]);
-		if (!libraryAspectRoot.error) {
-			paths.push(
-				makePathFromPathParts([
-					BASE,
-					Section.Library,
-					aspect,
-					libraryAspectRoot.data,
-				])
+			getDailyLeafFileNames({ aspects, dateParts: { yyyy, mm, dd } }).forEach(
+				(leafName) => {
+					dayFolder.children[leafName] = {
+						type: LightNodeType.LeafFile,
+						children: {},
+					};
+				}
 			);
-		} else {
-			errors.push(`Library/${aspect}: ${libraryAspectRoot.errorText}`);
 		}
 	}
 
 	if (errors.length > 0) {
 		console.warn(
-			`[getProjectStructureRootsFileNames] ${errors.length} error(s):\n${errors.join('\n')}`
+			`[getDailyLightNodeForYear] ${errors.length} error(s):\n${errors.join('\n')}`
 		);
 	}
 
-	return paths;
+	return tree;
 };
 
 /**
- * Returns all sub-root file paths for the given year and aspects in the PlanList and StatsList trees.
+ * Generates a LightNode tree for all aspects' PlanList and StatsList subtrees for a given year.
  *
- * For each provided `Aspect` (e.g., 'Sport', 'Food', 'Money'), generates:
+ * The structure includes:
+ * - Root files for PlanList and StatsList at the top level (`[Aspect]/[Type]List/Root`)
+ * - Year subfolders under each list (`[Aspect]/[Type]List/YYYY`)
+ * - Root files for the year-level nodes (`.../YYYY/Root`)
  *
- * - The PlanList and StatsList root files:
- *   - `LifeTracker/<Aspect>/PlanList/<Aspect>-PlanList-Root`
- *   - `LifeTracker/<Aspect>/StatsList/<Aspect>-StatsList-Root`
+ * All nodes are embedded in a clean tree structure of LightNodes.
  *
- * - The year-specific sub-root files:
- *   - `LifeTracker/<Aspect>/PlanList/yyyy/<Aspect>-PlanList-yyyy-Root`
- *   - `LifeTracker/<Aspect>/StatsList/yyyy/<Aspect>-StatsList-yyyy-Root`
- *
- * File paths are fully qualified and use zero-padded year strings (`0042`, `2024`, etc).
- *
- * @param year - The calendar year (as a number) to generate root files for
- * @param aspects - List of enabled `Aspect`s to include (e.g. ['Sport', 'Food'])
- * @returns An array of fully qualified root `` file paths for PlanList and StatsList structures
+ * @param year - The target year (e.g. 2025)
+ * @param aspects - The list of aspects to include (e.g. Sport, Food, Money)
+ * @returns A LightNode containing all list/plan/stats structures per aspect
  */
-export const getAspectsSubRootsFilePathsForYear = (
+export const getAspectLightNodesForYear = (
 	year: Year,
 	aspects: Aspect[]
-): string[] => {
+): LightNode => {
 	const yyyy = formatYYYY(year);
-	const result: string[] = [];
+
+	const tree: LightNode = {
+		type: LightNodeType.Folder,
+		children: {},
+	};
 
 	for (const aspect of aspects) {
+		const aspectFolder: LightNode = {
+			type: LightNodeType.Folder,
+			children: {},
+		};
+		tree.children[aspect] = aspectFolder;
+
 		for (const ps of PlanStatsSchema.options) {
 			const list = `${ps}List`;
 
-			const root = getMaybeRootNameForSection(aspect, [list]);
+			const listFolder: LightNode = {
+				type: LightNodeType.Folder,
+				children: {},
+			};
+			aspectFolder.children[list] = listFolder;
+
+			const root = getMaybeRootName({ section: aspect, pathParts: [list] });
 			if (!root.error) {
-				result.push(makePathFromPathParts([BASE, aspect, list, root.data]));
+				listFolder.children[root.data] = {
+					type: LightNodeType.RootFile,
+					children: {},
+				};
 			}
 
-			const yearRoot = getMaybeRootNameForSection(aspect, [list, yyyy]);
+			const yyyyFolder: LightNode = {
+				type: LightNodeType.Folder,
+				children: {},
+			};
+			listFolder.children[yyyy] = yyyyFolder;
+
+			const yearRoot = getMaybeRootName({
+				section: aspect,
+				pathParts: [list, yyyy],
+			});
 			if (!yearRoot.error) {
-				result.push(
-					makePathFromPathParts([BASE, aspect, list, yyyy, yearRoot.data])
-				);
+				yyyyFolder.children[yearRoot.data] = {
+					type: LightNodeType.RootFile,
+					children: {},
+				};
 			}
 		}
 	}
 
-	return result;
+	return tree;
 };
 
 /**

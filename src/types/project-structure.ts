@@ -12,6 +12,7 @@ import {
 	PlanStatsListSchema,
 	AspectSchema,
 	ROOT,
+	SectionSchema,
 } from './file-structure-atoms';
 
 function makeLeaveSchemaForAspect<const A extends Aspect>(aspect: A) {
@@ -70,4 +71,13 @@ export const structureFromSection: StructureFromSection = {
 		pathParts: [AspectSchema],
 		leaf: z.string(),
 	},
+};
+
+export const LightNodeTypeSchema = z.enum(['Folder', 'RootFile', 'LeafFile']);
+export const LightNodeType = LightNodeTypeSchema.enum;
+export type LightNodeType = z.infer<typeof LightNodeTypeSchema>;
+
+export type LightNode = {
+	type: LightNodeType;
+	children: Record<string, LightNode>;
 };

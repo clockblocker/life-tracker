@@ -1,4 +1,4 @@
-import { Aspect, DailyMenuItem } from 'types/file-structure-atoms';
+import { DailyMenuItem, Aspect } from '../types/file-structure-atoms';
 
 export const emojiFromDailyMenuItem: Record<DailyMenuItem, string> = {
 	[Aspect.Sport]: '💪',
@@ -13,4 +13,3 @@ export const labelFromDailyMenuItem: Record<DailyMenuItem, string> = {
 	[Aspect.Food]: 'Food',
 	Notes: 'Notes',
 };
-

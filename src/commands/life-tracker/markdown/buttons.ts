@@ -1,4 +1,4 @@
-import { BTICK, SPACE2, PIPE } from 'constants/format';
+import { BTICK, SPACE2, PIPE } from '../../../constants/format';
 
 const ButtonId = {
 	Back: 'go-back',

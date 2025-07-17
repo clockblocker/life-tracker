@@ -1,6 +1,4 @@
 import { MarkdownView, TFile, App, Vault, Editor, TFolder } from 'obsidian';
-import { appendToExistingFile, doesExistingFileContainContent } from './utils';
-import { flattenError, z } from 'zod/v4';
 import { Maybe } from './types/general';
 
 export class FileService {
@@ -222,22 +220,11 @@ export class FileService {
 	}
 
 	public showLoadingOverlay(): void {
-		// Check if the overlay already exists
 		if (document.getElementById('fileService-loading-overlay')) {
 			return;
 		}
 		const overlay = document.createElement('div');
 		overlay.id = 'fileService-loading-overlay';
-		// overlay.style.position = 'fixed';
-		// overlay.style.top = '0';
-		// overlay.style.left = '0';
-		// overlay.style.width = '100%';
-		// overlay.style.height = '100%';
-		// overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
-		// overlay.style.display = 'flex';
-		// overlay.style.justifyContent = 'center';
-		// overlay.style.alignItems = 'center';
-		// overlay.style.zIndex = '1000'; // Ensure it's on top
 
 		const loadingText = document.createElement('div');
 		loadingText.innerText = 'Loading...';
@@ -246,6 +233,70 @@ export class FileService {
 		overlay.appendChild(loadingText);
 
 		document.body.appendChild(overlay);
+	}
+
+	public async createManyFilesInExistingFolders(
+		files: Array<{ path: string; content?: string }>
+	): Promise<Maybe<TFile[]>> {
+		const created: TFile[] = [];
+		const errors: string[] = [];
+
+		for (const { path, content = '' } of files) {
+			try {
+				const existing = this.vault.getAbstractFileByPath(path);
+				if (existing instanceof TFile) {
+					continue; // skip existing file
+				}
+
+				const file = await this.vault.create(path, content);
+				if (file instanceof TFile) {
+					created.push(file);
+				} else {
+					errors.push(`${path}: created item is not a TFile`);
+				}
+			} catch (e) {
+				errors.push(`${path}: ${e instanceof Error ? e.message : String(e)}`);
+			}
+		}
+
+		if (errors.length > 0) {
+			console.warn(
+				`[FileService.createManyFiles] ${errors.length} error(s):`,
+				errors
+			);
+		}
+
+		return { error: false, data: created };
+	}
+
+	public async createManyFolders(
+		folderPaths: string[]
+	): Promise<Maybe<TFolder[]>> {
+		const created: TFolder[] = [];
+		const errors: string[] = [];
+
+		for (const path of folderPaths) {
+			try {
+				const existing = this.vault.getAbstractFileByPath(path);
+				if (existing instanceof TFolder) {
+					continue; // skip if already exists
+				}
+
+				const folder = await this.vault.createFolder(path);
+				created.push(folder);
+			} catch (e) {
+				errors.push(`${path}: ${e instanceof Error ? e.message : String(e)}`);
+			}
+		}
+
+		if (errors.length > 0) {
+			console.warn(
+				`[FileService.createManyFolders] ${errors.length} error(s):`,
+				errors
+			);
+		}
+
+		return { error: false, data: created };
 	}
 
 	// Exposed method to hide and remove the loading overlay
