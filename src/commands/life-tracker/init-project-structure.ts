@@ -18,10 +18,10 @@ import z from 'zod/v4';
 import { makeCutoffDayPeriods } from './utils/dates/makeCutoffDayPeriods';
 import { LightNode, LightNodeType } from '../../types/project-structure';
 import {
-	getDailyLightNodeForYear,
-	getAspectLightNodeForLibrary,
-	getAspectLightNodeForYear,
-} from './utils/paths';
+	makeDailyLightNodeForYear,
+	makeLightNodeForLibrary,
+	makeAspectLightNodeForYear,
+} from './utils/fileTree/lightNodes';
 
 export default async function initProjectStructure(
 	vault: Vault,
@@ -103,13 +103,13 @@ function makeProjectLightNodeInner({
 		children: {},
 	};
 
-	tree.children[Section.Daily] = getDailyLightNodeForYear(year, aspects);
-	tree.children[Section.Library] = getAspectLightNodeForLibrary(aspects);
+	tree.children[Section.Daily] = makeDailyLightNodeForYear(year, aspects);
+	tree.children[Section.Library] = makeLightNodeForLibrary(aspects);
 
 	for (const aspect of aspects) {
-		tree.children[aspect] = getAspectLightNodeForYear(
+		tree.children[aspect] = makeAspectLightNodeForYear(
 			year,
-			[aspect],
+			aspect,
 			datePartsPeriods
 		);
 	}
