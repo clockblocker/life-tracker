@@ -92,7 +92,7 @@ export function getMaybeRootName({
 	};
 }
 
-export const formatYYYY = (year: Year): string => {
+export const formatYYYY = (year: Year): YYYYRepr => {
 	return year.toString().padStart(4, '0');
 };
 
@@ -247,22 +247,25 @@ export const getDailyLightNodeForYear = (
 };
 
 /**
- * Generates a LightNode tree for all aspects' PlanList and StatsList subtrees for a given year.
+ * Constructs a LightNode tree for a given year and set of aspects, including:
  *
- * The structure includes:
- * - Root files for PlanList and StatsList at the top level (`[Aspect]/[Type]List/Root`)
- * - Year subfolders under each list (`[Aspect]/[Type]List/YYYY`)
- * - Root files for the year-level nodes (`.../YYYY/Root`)
+ * - Root structure: [Aspect]/[Plan|Stats]List/
+ * - Year subfolder: [Aspect]/[Plan|Stats]List/YYYY/
+ * - Optional RootFiles at both list and year level, resolved via `getMaybeRootName`
+ * - LeafFiles for each provided `DatePartsPeriod`, with names like:
+ *     [Aspect]-[Plan|Stats]-[yyyy_mm_dd__to__yyyy_mm_dd]
  *
- * All nodes are embedded in a clean tree structure of LightNodes.
+ * All folders and files are returned as a single `LightNode` tree rooted at the top level.
  *
- * @param year - The target year (e.g. 2025)
- * @param aspects - The list of aspects to include (e.g. Sport, Food, Money)
- * @returns A LightNode containing all list/plan/stats structures per aspect
+ * @param year - The 4-digit year to build structure under (e.g. 2025)
+ * @param aspects - The list of aspects to generate trees for (e.g. Sport, Food, Money)
+ * @param datePartsPeriods - Array of date ranges used to name LeafFiles within the year
+ * @returns A fully populated LightNode tree for the given configuration
  */
-export const getAspectLightNodesForYear = (
+export const getAspectLightNodeForYear = (
 	year: Year,
-	aspects: Aspect[]
+	aspects: Aspect[],
+	datePartsPeriods: DatePartsPeriod[]
 ): LightNode => {
 	const yyyy = formatYYYY(year);
 
@@ -279,7 +282,7 @@ export const getAspectLightNodesForYear = (
 		tree.children[aspect] = aspectFolder;
 
 		for (const ps of PlanStatsSchema.options) {
-			const list = `${ps}List`;
+			const list = `${ps}${LIST}`;
 
 			const listFolder: LightNode = {
 				type: LightNodeType.Folder,
@@ -287,9 +290,12 @@ export const getAspectLightNodesForYear = (
 			};
 			aspectFolder.children[list] = listFolder;
 
-			const root = getMaybeRootName({ section: aspect, pathParts: [list] });
-			if (!root.error) {
-				listFolder.children[root.data] = {
+			const maybeRootName = getMaybeRootName({
+				section: aspect,
+				pathParts: [list],
+			});
+			if (!maybeRootName.error) {
+				listFolder.children[maybeRootName.data] = {
 					type: LightNodeType.RootFile,
 					children: {},
 				};
@@ -305,9 +311,19 @@ export const getAspectLightNodesForYear = (
 				section: aspect,
 				pathParts: [list, yyyy],
 			});
+
 			if (!yearRoot.error) {
 				yyyyFolder.children[yearRoot.data] = {
 					type: LightNodeType.RootFile,
+					children: {},
+				};
+			}
+
+			for (const period of datePartsPeriods) {
+				const leafName = `${aspect}${DASH}${ps}${DASH}${reprFromDatePartsPeriod(period)}`;
+
+				yyyyFolder.children[leafName] = {
+					type: LightNodeType.LeafFile,
 					children: {},
 				};
 			}
@@ -316,61 +332,3 @@ export const getAspectLightNodesForYear = (
 
 	return tree;
 };
-
-/**
- * Returns the leaf file path for a single Plan or Stats file in the vault structure:
- *
- * `LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd`
- *
- * Example:
- * `LifeTracker/Food/PlanList/2024/Food-Plan-2024_01_01__to__2024_01_31`
- *
- * @param aspect - The aspect category ('Food' | 'Money' | 'Sport')
- * @param ps - Either 'Plan' or 'Stats'
- * @param datePartsPeriod - A validated date period with padded YYYY/MM/DD components
- * @returns A single fully qualified POSIX-style path to the  file
- */
-const getAspectLeafFilePathForDatePartsPeriod = (
-	aspect: Aspect,
-	ps: PlanStats,
-	datePartsPeriod: DatePartsPeriod
-): string => {
-	const rangeRepr = reprFromDatePartsPeriod(datePartsPeriod);
-	const pathParts = [
-		BASE,
-		aspect,
-		`${ps}${LIST}`,
-		datePartsPeriod.startIncl.yyyy,
-		`${aspect}${DASH}${ps}${DASH}${rangeRepr}`,
-	];
-
-	return makePathFromPathParts(pathParts);
-};
-
-/**
- * Generates all aspect-specific leaf file paths for a full year, given a list of
- * validated `DatePartsPeriod` intervals and enabled `Aspect`s.
- *
- * Each combination of:
- * - aspect ∈ aspects
- * - plan/stats ∈ ['Plan', 'Stats']
- * - date interval ∈ datePartsPeriods
- *
- * results in a file path of the form:
- * `LifeTracker/<Aspect>/<Plan|Stats>List/yyyy/<Aspect>-<Plan|Stats>-yyyy_mm_dd__to__yyyy_mm_dd`
- *
- * @param datePartsPeriods - Validated year-wide list of `DatePartsPeriod`s
- * @param aspects - Enabled aspects (e.g. 'Food', 'Sport', 'Money') to generate files for
- * @returns An array of fully qualified leaf file paths for the year
- */
-export const getAspectLeafFilePathsForYearWideDatePartsPeriod = (
-	datePartsPeriods: DatePartsPeriod[],
-	aspects: Aspect[]
-): string[] =>
-	aspects.flatMap((aspect) =>
-		PlanStatsSchema.options.flatMap((ps) =>
-			datePartsPeriods.map((period) =>
-				getAspectLeafFilePathForDatePartsPeriod(aspect, ps, period)
-			)
-		)
-	);

@@ -62,13 +62,11 @@ export function makeAspektLeavesPaths(
 
 	const cutoffDayPeriods = makeCutoffDayPeriods(cutoffDays);
 
-	const projectStructure = getProjectStructureRootsFileNames(aspects);
-
 	const maybePeriods = makeMaybeDatePartsPeriodsForWholeYear(
 		year,
 		cutoffDayPeriods
 	);
-	
+
 	if (maybePeriods.error) {
 		console.warn(
 			'[makeAspektLeavesPaths] failed to generate date parts periods:',
@@ -77,10 +75,11 @@ export function makeAspektLeavesPaths(
 		return [];
 	}
 
+	const datePartsPeriods = maybePeriods.data;
+
 	const leafPaths = getAspectLeafFilePathsForYearWideDatePartsPeriod(
-		maybePeriods.data,
+		datePartsPeriods,
 		aspects
 	);
 
-	return [...projectStructure, ...leafPaths];
 }
