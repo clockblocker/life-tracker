@@ -1,21 +1,27 @@
 import { Vault, MetadataCache } from 'obsidian';
 import { FileService } from '../../file';
-import { Aspect, AspectSchema } from '../../types/file-structure-atoms';
 import {
-	getProjectStructureRootsFileNames,
-	getAspectsSubRootsFilePathsForYear,
-	getDailySubRootsFilePathsForYear,
-	getAspectLeafFilePathsForYearWideDatePartsPeriod,
-} from './utils/paths';
+	Aspect,
+	AspectSchema,
+	Section,
+} from '../../types/file-structure-atoms';
+
 import { makeMaybeDatePartsPeriodsForWholeYear } from './utils/dates/makeDatePartsPeriodsForWholeYear';
 import {
 	CutoffDay,
 	CutoffDaySchema,
+	DatePartsPeriod,
 	Year,
 	YearSchema,
 } from '../../types/dates';
 import z from 'zod/v4';
 import { makeCutoffDayPeriods } from './utils/dates/makeCutoffDayPeriods';
+import { LightNode, LightNodeType } from '../../types/project-structure';
+import {
+	getDailyLightNodeForYear,
+	getAspectLightNodeForLibrary,
+	getAspectLightNodeForYear,
+} from './utils/paths';
 
 export default async function initProjectStructure(
 	vault: Vault,
@@ -25,24 +31,23 @@ export default async function initProjectStructure(
 	const aspects = [Aspect.Food, Aspect.Money, Aspect.Sport];
 	const year = 2025;
 	const cutoffDays = [15, 25];
-	const projectStructureRootsFileNames =
-		getProjectStructureRootsFileNames(aspects);
 
-	const aspektLeavesPaths = makeAspektLeavesPaths(year, cutoffDays, aspects);
-
-	const aspectsSubRootsFilePathsForYear = getAspectsSubRootsFilePathsForYear(
-		year,
-		aspects
-	);
-
-	const dailySubRootsFilePathsForYear = getDailySubRootsFilePathsForYear(year);
+	makeProjectLightNode({
+		unsafeYear: year,
+		unsafeCutoffDays: cutoffDays,
+		unsafeAspects: aspects,
+	});
 }
 
-export function makeAspektLeavesPaths(
-	unsafeYear: number,
-	unsafeCutoffDays: number[],
-	unsafeAspects: string[]
-): string[] {
+export function makeProjectLightNode({
+	unsafeYear,
+	unsafeCutoffDays,
+	unsafeAspects,
+}: {
+	unsafeYear: number;
+	unsafeCutoffDays: number[];
+	unsafeAspects: string[];
+}): LightNode | null {
 	const yearResult = YearSchema.safeParse(unsafeYear);
 	const cutoffsResult = z.array(CutoffDaySchema).safeParse(unsafeCutoffDays);
 	const aspectsResult = z.array(AspectSchema).safeParse(unsafeAspects);
@@ -53,7 +58,7 @@ export function makeAspektLeavesPaths(
 			cutoffs: cutoffsResult.success ? 'ok' : cutoffsResult.error.message,
 			aspects: aspectsResult.success ? 'ok' : aspectsResult.error.message,
 		});
-		return [];
+		return null;
 	}
 
 	const year = yearResult.data;
@@ -72,14 +77,42 @@ export function makeAspektLeavesPaths(
 			'[makeAspektLeavesPaths] failed to generate date parts periods:',
 			maybePeriods.errorText
 		);
-		return [];
+		return null;
 	}
 
 	const datePartsPeriods = maybePeriods.data;
 
-	const leafPaths = getAspectLeafFilePathsForYearWideDatePartsPeriod(
+	return makeProjectLightNodeInner({
+		year,
+		aspects,
 		datePartsPeriods,
-		aspects
-	);
+	});
+}
 
+function makeProjectLightNodeInner({
+	year,
+	aspects,
+	datePartsPeriods,
+}: {
+	year: Year;
+	aspects: Aspect[];
+	datePartsPeriods: DatePartsPeriod[];
+}): LightNode {
+	const tree: LightNode = {
+		type: LightNodeType.Folder,
+		children: {},
+	};
+
+	tree.children[Section.Daily] = getDailyLightNodeForYear(year, aspects);
+	tree.children[Section.Library] = getAspectLightNodeForLibrary(aspects);
+
+	for (const aspect of aspects) {
+		tree.children[aspect] = getAspectLightNodeForYear(
+			year,
+			[aspect],
+			datePartsPeriods
+		);
+	}
+
+	return tree;
 }

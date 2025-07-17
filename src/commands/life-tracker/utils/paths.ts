@@ -332,3 +332,53 @@ export const getAspectLightNodeForYear = (
 
 	return tree;
 };
+
+/**
+ * Constructs a LightNode tree representing the structure of the Library section.
+ *
+ * The structure includes:
+ * - Top-level "Library" folder
+ * - A "Library-Root" RootFile at the top level
+ * - Subfolders for each aspect (Sport, Food, Money)
+ * - A "Library-[Aspect]-Root" RootFile in each aspect subfolder
+ *
+ * No leaf files or year-based nesting; this is a static structure.
+ *
+ * @param aspects - Aspects to include under the Library section
+ * @returns A LightNode representing the full Library tree
+ */
+export const getAspectLightNodeForLibrary = (aspects: Aspect[]): LightNode => {
+	const tree: LightNode = {
+		type: LightNodeType.Folder,
+		children: {},
+	};
+
+	const section = Section.Library;
+
+	// top-level Library-Root
+	const maybeRoot = getMaybeRootName({ section, pathParts: [] });
+	if (!maybeRoot.error) {
+		tree.children[maybeRoot.data] = {
+			type: LightNodeType.RootFile,
+			children: {},
+		};
+	}
+
+	for (const aspect of aspects) {
+		const aspectFolder: LightNode = {
+			type: LightNodeType.Folder,
+			children: {},
+		};
+		tree.children[aspect] = aspectFolder;
+
+		const aspectRoot = getMaybeRootName({ section, pathParts: [aspect] });
+		if (!aspectRoot.error) {
+			aspectFolder.children[aspectRoot.data] = {
+				type: LightNodeType.RootFile,
+				children: {},
+			};
+		}
+	}
+
+	return tree;
+};
