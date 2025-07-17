@@ -1,5 +1,9 @@
 import { MarkdownView, TFile, App, Vault, Editor, TFolder } from 'obsidian';
 import { Maybe } from './types/general';
+import { PathParts } from './types/project-structure';
+import { SLASH } from './constants/format';
+
+const makePathFromPathParts = (pathParts: PathParts) => pathParts.join(SLASH);
 
 export class FileService {
 	constructor(
@@ -7,7 +11,8 @@ export class FileService {
 		private vault: Vault
 	) {}
 
-	async getMaybeFileByPath(filePath: string): Promise<Maybe<TFile>> {
+	async getMaybeFileByPathParts(pathParts: PathParts): Promise<Maybe<TFile>> {
+		const filePath = makePathFromPathParts(pathParts);
 		try {
 			const file = this.vault.getAbstractFileByPath(filePath);
 			if (!file || !(file instanceof TFile)) {
@@ -16,29 +21,6 @@ export class FileService {
 			return { data: file, error: false };
 		} catch (error) {
 			console.warn('error while getting file by path:', error);
-			return { error: true };
-		}
-	}
-
-	async getMaybeOpenedFile(): Promise<Maybe<TFile>> {
-		try {
-			const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
-
-			if (!activeView) {
-				console.warn('file not open or not active');
-				return { error: true };
-			}
-
-			const file = activeView.file;
-
-			if (!file) {
-				console.warn('file not open or not active');
-				return { error: true };
-			}
-
-			return { error: false, data: file };
-		} catch (error) {
-			console.error(`Failed to replace content: ${error}`);
 			return { error: true };
 		}
 	}
@@ -56,12 +38,7 @@ export class FileService {
 	}
 
 	async getSiblingsOfFile(file: TFile): Promise<Maybe<Array<TFile>>> {
-		const maybeFile = await this.getMaybeOpenedFile();
-		if (maybeFile.error) {
-			return maybeFile;
-		}
-
-		const parent = maybeFile.data.parent;
+		const parent = file.parent;
 
 		if (parent && parent instanceof TFolder) {
 			const siblings = parent.children
@@ -73,7 +50,7 @@ export class FileService {
 		return { error: false, data: [] };
 	}
 
-	async createFileInPath(
+	private async createFileInPath(
 		path: string,
 		content: string = ''
 	): Promise<Maybe<TFile>> {
@@ -88,7 +65,7 @@ export class FileService {
 		}
 	}
 
-	async createFolderInPath(path: string): Promise<Maybe<TFolder>> {
+	private async createFolderInPath(path: string): Promise<Maybe<TFolder>> {
 		try {
 			const fullPath = `${path}`;
 			const folder = await this.vault.createFolder(fullPath);
@@ -117,8 +94,10 @@ export class FileService {
 		return maybeFolder;
 	}
 
-	async readFileContentByPath(filePath: string): Promise<Maybe<string>> {
-		const maybeFile = await this.getMaybeFileByPath(filePath);
+	async readFileContentByPathParts(
+		pathParts: PathParts
+	): Promise<Maybe<string>> {
+		const maybeFile = await this.getMaybeFileByPathParts(pathParts);
 		if (maybeFile.error) {
 			return maybeFile;
 		}
@@ -127,40 +106,8 @@ export class FileService {
 		return { data: content, error: false };
 	}
 
-	async replaceContentInCurrentlyOpenedFile(
-		newContent: string
-	): Promise<Maybe<string>> {
-		const maybeFile = await this.getMaybeOpenedFile();
-		if (maybeFile.error) {
-			return maybeFile;
-		}
-
-		return { error: false, data: newContent };
-	}
-
-	async writeToOpenedFile(text: string): Promise<Maybe<string>> {
-		const maybeEditor = await this.getMaybeEditor();
-		if (maybeEditor.error) {
-			return maybeEditor;
-		}
-
-		const editor = maybeEditor.data;
-		editor.replaceRange(text, { line: editor.lineCount(), ch: 0 });
-
-		return { error: false, data: text };
-	}
-
-	async getPathOfOpenedFile(): Promise<Maybe<string>> {
-		const maybeFile = await this.getMaybeOpenedFile();
-		if (maybeFile.error) {
-			return maybeFile;
-		}
-
-		return { error: false, data: maybeFile.data.path };
-	}
-
-	async getParentOfFileWithPath(filePath: string): Promise<Maybe<TFolder>> {
-		const maybeFile = await this.getMaybeFileByPath(filePath);
+	async getParentOfFileWithPath(pathParts: PathParts): Promise<Maybe<TFolder>> {
+		const maybeFile = await this.getMaybeFileByPathParts(pathParts);
 		if (maybeFile.error) return maybeFile;
 
 		const parent = maybeFile.data.parent;
@@ -172,76 +119,23 @@ export class FileService {
 		return { error: false, data: parent };
 	}
 
-	async getParentOfOpenedFile(): Promise<Maybe<TFolder>> {
-		const maybeFile = await this.getMaybeOpenedFile();
-		if (maybeFile.error) return maybeFile;
-
-		const parent = maybeFile.data.parent;
-
-		if (!parent) {
-			return { error: true, errorText: 'Opened file does not have a parent' };
-		}
-
-		return { error: false, data: parent };
-	}
-
 	public async getSiblingsOfFileWithPath(
-		filePath: string
+		pathParts: PathParts
 	): Promise<Maybe<Array<TFile>>> {
-		const maybeFile = await this.getMaybeFileByPath(filePath);
+		const maybeFile = await this.getMaybeFileByPathParts(pathParts);
 		if (maybeFile.error) return maybeFile;
 
 		return this.getSiblingsOfFile(maybeFile.data);
-	}
-
-	public async getSiblingsOfOpenedFile(): Promise<Maybe<Array<TFile>>> {
-		const maybeFile = await this.getMaybeOpenedFile();
-		if (maybeFile.error) return maybeFile;
-
-		return this.getSiblingsOfFile(maybeFile.data);
-	}
-
-	public async createSiblingFileOfOpenedFile(
-		fileName: string
-	): Promise<Maybe<TFile>> {
-		const maybeParent = await this.getParentOfOpenedFile();
-		if (maybeParent.error) return maybeParent;
-
-		return this.createFileInFolder(maybeParent.data, fileName);
-	}
-
-	public async createSiblingFolderOfOpenedFolder(
-		folderName: string
-	): Promise<Maybe<TFolder>> {
-		const maybeParent = await this.getParentOfOpenedFile();
-		if (maybeParent.error) return maybeParent;
-
-		return this.createFolderInFolder(maybeParent.data, folderName);
-	}
-
-	public showLoadingOverlay(): void {
-		if (document.getElementById('fileService-loading-overlay')) {
-			return;
-		}
-		const overlay = document.createElement('div');
-		overlay.id = 'fileService-loading-overlay';
-
-		const loadingText = document.createElement('div');
-		loadingText.innerText = 'Loading...';
-		loadingText.style.fontSize = '2rem';
-		loadingText.style.color = '#fff';
-		overlay.appendChild(loadingText);
-
-		document.body.appendChild(overlay);
 	}
 
 	public async createManyFilesInExistingFolders(
-		files: Array<{ path: string; content?: string }>
+		files: Array<{ pathParts: PathParts; content?: string }>
 	): Promise<Maybe<TFile[]>> {
 		const created: TFile[] = [];
 		const errors: string[] = [];
 
-		for (const { path, content = '' } of files) {
+		for (const { pathParts, content = '' } of files) {
+			const path = makePathFromPathParts(pathParts);
 			try {
 				const existing = this.vault.getAbstractFileByPath(path);
 				if (existing instanceof TFile) {
@@ -270,12 +164,13 @@ export class FileService {
 	}
 
 	public async createManyFolders(
-		folderPaths: string[]
+		folderPathPartsArray: PathParts[]
 	): Promise<Maybe<TFolder[]>> {
 		const created: TFolder[] = [];
 		const errors: string[] = [];
 
-		for (const path of folderPaths) {
+		for (const pathParts of folderPathPartsArray) {
+			const path = makePathFromPathParts(pathParts);
 			try {
 				const existing = this.vault.getAbstractFileByPath(path);
 				if (existing instanceof TFolder) {
@@ -297,13 +192,5 @@ export class FileService {
 		}
 
 		return { error: false, data: created };
-	}
-
-	// Exposed method to hide and remove the loading overlay
-	public hideLoadingOverlay(): void {
-		const overlay = document.getElementById('fileService-loading-overlay');
-		if (overlay) {
-			overlay.remove();
-		}
 	}
 }

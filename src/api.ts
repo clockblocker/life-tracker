@@ -93,14 +93,6 @@ export class ApiService {
 		}
 	}
 
-	async fetchTemplate(word: string): Promise<string> {
-		const [dictionaryEntry, valenceBlock] = await Promise.all([
-			this.generateContent(prompts.generate_dictionary_entry, word),
-			this.generateContent(prompts.generate_valence_block, word),
-		]);
-		return `${dictionaryEntry.replace('<agent_output>', '').replace('</agent_output>', '')}\n\n---\n${valenceBlock}`;
-	}
-
 	async determineInfinitiveAndEmoji(word: string): Promise<string> {
 		return this.generateContent(
 			prompts.determine_infinitive_and_pick_emoji,
@@ -109,7 +101,7 @@ export class ApiService {
 	}
 
 	async normalize(text: string): Promise<string> {
-		return this.generateContent(prompts.normalize, text);
+		return this.generateContent(prompts.generate_dictionary_entry, text);
 	}
 
 	async translateText(text: string): Promise<string> {

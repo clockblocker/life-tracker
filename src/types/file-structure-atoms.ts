@@ -85,7 +85,7 @@ export type PlanStatsList = z.infer<typeof PlanStatsListSchema>;
 export type DailyMenuItem = z.infer<typeof DailyMenuItemSchema>;
 
 export const ROOT = RootSchema.value;
-export const BASE = LifeTrackerSchema.value;
+export const LIFE_TRACKER = LifeTrackerSchema.value;
 export const SEP = RangePartsDelimiterSchema.value;
 export const NOTES = NotesSchema.value;
 

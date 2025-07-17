@@ -2,16 +2,8 @@ import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
 import { SettingsTab } from './settings';
 import { DEFAULT_SETTINGS, TextEaterSettings } from './types';
 import { ApiService } from './api';
-import { FileService } from './file';
-import fillTemplate from './commands/fillTemplate';
-import getInfinitiveAndEmoji from './commands/getInfinitiveAndEmoji';
-import normalizeSelection from './commands/normalizeSelection';
-import translateSelection from './commands/translateSelection';
-import formatSelectionWithNumber from './commands/formatSelectionWithNumber';
-import addBacklinksToCurrentFile from './commands/addBacklinksToCurrentFile';
-import insertReplyFromKeymaker from './commands/insertReplyFromC1Richter';
-import insertReplyFromC1Richter from './commands/insertReplyFromC1Richter';
-import initProjectStructure from 'commands/life-tracker/init-project-structure';
+import { FileService } from './file-service';
+import initProjectStructure from './commands/life-tracker/init-project-structure';
 
 export default class TextEaterPlugin extends Plugin {
 	settings: TextEaterSettings;
@@ -35,7 +27,7 @@ export default class TextEaterPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'init-project-structure',
-			name: 'Add daily nones, library, etc',
+			name: 'Add daily notes, library, etc',
 			editorCheckCallback: (
 				checking: boolean,
 				editor: Editor,
@@ -55,25 +47,6 @@ export default class TextEaterPlugin extends Plugin {
 					return true;
 				}
 
-				return false;
-			},
-		});
-
-		this.addCommand({
-			id: 'format-selection-with-number',
-			name: 'Split selection into linked blocks',
-			editorCheckCallback: (
-				checking: boolean,
-				editor: Editor,
-				view: MarkdownView
-			) => {
-				const selection = editor.getSelection();
-				if (selection && view.file) {
-					if (!checking) {
-						formatSelectionWithNumber(this, editor, view.file, selection);
-					}
-					return true;
-				}
 				return false;
 			},
 		});

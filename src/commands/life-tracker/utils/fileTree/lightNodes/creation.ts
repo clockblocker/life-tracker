@@ -1,18 +1,108 @@
-import { DASH } from '../../../../constants/format';
-import { Year, DatePartsPeriod } from '../../../../types/dates';
+import { DASH } from '../../../../../constants/format';
 import {
+	YearSchema,
+	CutoffDaySchema,
+	Year,
+	DatePartsPeriod,
+} from '../../../../../types/dates';
+import {
+	AspectSchema,
 	Aspect,
 	Section,
 	PlanStatsSchema,
 	LIST,
-} from '../../../../types/file-structure-atoms';
-import { LightNode, LightNodeType } from '../../../../types/project-structure';
+} from '../../../../../types/file-structure-atoms';
+import {
+	LightNode,
+	LightNodeType,
+	PathParts,
+} from '../../../../../types/project-structure';
+import { makeCutoffDayPeriods } from '../../dates/makeCutoffDayPeriods';
+import { makeMaybeDatePartsPeriodsForWholeYear } from '../../dates/makeDatePartsPeriodsForWholeYear';
 import {
 	formatYYYY,
 	getMaybeRootName,
 	getDailyLeafFileNames,
 	reprFromDatePartsPeriod,
-} from '../paths';
+} from '../../paths';
+
+export function makeProjectLightNode({
+	unsafeYear,
+	unsafeCutoffDays,
+	unsafeAspects,
+}: {
+	unsafeYear: number;
+	unsafeCutoffDays: number[];
+	unsafeAspects: string[];
+}): LightNode | null {
+	const yearResult = YearSchema.safeParse(unsafeYear);
+	const cutoffsResult = CutoffDaySchema.array().safeParse(unsafeCutoffDays);
+	const aspectsResult = AspectSchema.array().safeParse(unsafeAspects);
+
+	if (!yearResult.success || !cutoffsResult.success || !aspectsResult.success) {
+		console.warn('[makeAspektLeavesPaths] invalid input:', {
+			year: yearResult.success ? 'ok' : yearResult.error.message,
+			cutoffs: cutoffsResult.success ? 'ok' : cutoffsResult.error.message,
+			aspects: aspectsResult.success ? 'ok' : aspectsResult.error.message,
+		});
+		return null;
+	}
+
+	const year = yearResult.data;
+	const cutoffDays = cutoffsResult.data;
+	const aspects = aspectsResult.data;
+
+	const cutoffDayPeriods = makeCutoffDayPeriods(cutoffDays);
+
+	const maybePeriods = makeMaybeDatePartsPeriodsForWholeYear(
+		year,
+		cutoffDayPeriods
+	);
+
+	if (maybePeriods.error) {
+		console.warn(
+			'[makeAspektLeavesPaths] failed to generate date parts periods:',
+			maybePeriods.errorText
+		);
+		return null;
+	}
+
+	const datePartsPeriods = maybePeriods.data;
+
+	return makeProjectLightNodeInner({
+		year,
+		aspects,
+		datePartsPeriods,
+	});
+}
+
+function makeProjectLightNodeInner({
+	year,
+	aspects,
+	datePartsPeriods,
+}: {
+	year: Year;
+	aspects: Aspect[];
+	datePartsPeriods: DatePartsPeriod[];
+}): LightNode {
+	const tree: LightNode = {
+		type: LightNodeType.Folder,
+		children: {},
+	};
+
+	tree.children[Section.Daily] = makeDailyLightNodeForYear(year, aspects);
+	tree.children[Section.Library] = makeLightNodeForLibrary(aspects);
+
+	for (const aspect of aspects) {
+		tree.children[aspect] = makeAspectLightNodeForYear(
+			year,
+			aspect,
+			datePartsPeriods
+		);
+	}
+
+	return tree;
+}
 
 /**
  * Generates the full LightNode tree structure for the "Daily" section of a given year.
@@ -30,7 +120,7 @@ import {
  * @param aspects - A list of aspects to include in daily leaf generation
  * @returns A LightNode representing the root of the yearly "Daily" section tree
  */
-export const makeDailyLightNodeForYear = (
+const makeDailyLightNodeForYear = (
 	year: Year,
 	aspects: Aspect[]
 ): LightNode => {
@@ -144,7 +234,7 @@ export const makeDailyLightNodeForYear = (
  * @param datePartsPeriods - Array of date ranges used to name LeafFiles within the year
  * @returns A fully populated LightNode tree for the given configuration
  */
-export const makeAspectLightNodeForYear = (
+const makeAspectLightNodeForYear = (
 	year: Year,
 	aspect: Aspect,
 	datePartsPeriods: DatePartsPeriod[]
@@ -221,7 +311,7 @@ export const makeAspectLightNodeForYear = (
  * @param aspects - Aspects to include under the Library section
  * @returns A LightNode representing the full Library tree
  */
-export const makeLightNodeForLibrary = (aspects: Aspect[]): LightNode => {
+const makeLightNodeForLibrary = (aspects: Aspect[]): LightNode => {
 	const tree: LightNode = {
 		type: LightNodeType.Folder,
 		children: {},
@@ -255,4 +345,30 @@ export const makeLightNodeForLibrary = (aspects: Aspect[]): LightNode => {
 	}
 
 	return tree;
+};
+
+/**
+ * Recursively collects all folder path parts from a LightNode tree.
+ *
+ * Only nodes with `type: "Folder"` are included.
+ * Paths are returned as arrays of strings (`PathParts`), relative to root.
+ *
+ * @param node - The root LightNode
+ * @param currentPath - (internal) accumulated path parts
+ * @returns An array of PathParts, one for each folder in the tree
+ */
+const getAllFoldersPathPartsFromLightNode = (
+	node: LightNode,
+	currentPath: PathParts = []
+): PathParts[] => {
+	if (node.type !== LightNodeType.Folder) return [];
+
+	const result: PathParts[] = [currentPath];
+
+	for (const [name, child] of Object.entries(node.children)) {
+		const childPath = [...currentPath, name];
+		result.push(...getAllFoldersPathPartsFromLightNode(child, childPath));
+	}
+
+	return result;
 };

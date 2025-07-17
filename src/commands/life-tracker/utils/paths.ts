@@ -1,41 +1,19 @@
-import { DASH, SLASH, USCORE } from '../../../constants/format';
-import {
-	Year,
-	DatePeriod,
-	CutoffDay,
-	DateParts,
-	DatePartsSchema,
-	DatePartsPeriod,
-} from '../../../types/dates';
+import { DASH, USCORE } from '../../../constants/format';
+import { Year, DateParts, DatePartsPeriod } from '../../../types/dates';
 import {
 	Section,
-	RootSchema,
 	YYYYRepr,
-	MMRepr,
-	DDRepr,
 	FullDateRepr,
 	FullDatePeriodRepr,
 	Aspect,
-	BASE,
 	ROOT,
-	NotesSchema,
-	PlanStats,
-	LIST,
-	PlanStatsSchema,
 	NOTES,
 } from '../../../types/file-structure-atoms';
 import { Maybe } from '../../../types/general';
 import {
-	LightNode,
-	LightNodeType,
 	PathParts,
 	structureFromSection,
 } from '../../../types/project-structure';
-import { getMaybeDatePartsFromDate } from './dates/general';
-import { makeCutoffDayPeriods } from './dates/makeCutoffDayPeriods';
-
-export const makePathFromPathParts = (pathParts: PathParts) =>
-	pathParts.join(SLASH);
 
 const makeRootFileNameFromPathParts = (pathParts: PathParts) => {
 	return [...pathParts, ROOT].join(DASH);
