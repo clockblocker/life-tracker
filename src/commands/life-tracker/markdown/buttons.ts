@@ -20,4 +20,8 @@ const addNewStuffButtonGroup = [ButtonId.NewDir, ButtonId.NewFile].map((id) =>
 	makeButtonMdFromButtonId(id)
 );
 
-export const NAV_BUTTONS_LINE = `${navButtonGroup.join(SPACE2)}${SPACE2}${PIPE}${SPACE2}${addNewStuffButtonGroup.join(SPACE2)}`;
+export const NAV_BUTTONS_LINE = `${navButtonGroup.join(SPACE2)}${SPACE2}${PIPE}${SPACE2}${addNewStuffButtonGroup.join(SPACE2)}
+
+---
+
+`;

@@ -1,31 +1,25 @@
-import {
-	LightNode,
-	PathParts,
-	LightNodeType,
-} from '../../../../../types/project-structure';
+import { LightNode, PathParts, LightNodeType } from "../../../../../types/project-structure";
 
-/**
- * Recursively collects all folder path parts from a LightNode tree.
- *
- * Only nodes with `type: "Folder"` are included.
- * Paths are returned as arrays of strings (`PathParts`), relative to root.
- *
- * @param node - The root LightNode
- * @param currentPath - (internal) accumulated path parts
- * @returns An array of PathParts, one for each folder in the tree
- */
-export const getAllFolderPathPartsFromLightNode = (
+export const flattenLightNodeByType = (
 	node: LightNode,
 	currentPath: PathParts = []
-): PathParts[] => {
-	if (node.type !== LightNodeType.Folder) return [];
+): Record<LightNodeType, PathParts[]> => {
+	const result: Record<LightNodeType, PathParts[]> = {
+		[LightNodeType.Folder]: [],
+		[LightNodeType.RootFile]: [],
+		[LightNodeType.LeafFile]: [],
+	};
 
-	const result: PathParts[] = [currentPath];
+	const walk = (node: LightNode, path: PathParts) => {
+		result[node.type].push(path);
 
-	for (const [name, child] of Object.entries(node.children)) {
-		const childPath = [...currentPath, name];
-		result.push(...getAllFolderPathPartsFromLightNode(child, childPath));
-	}
+		if (node.children && node.type !== LightNodeType.LeafFile) {
+			for (const [name, child] of Object.entries(node.children)) {
+				walk(child, [...path, name]);
+			}
+		}
+	};
 
+	walk(node, currentPath);
 	return result;
 };

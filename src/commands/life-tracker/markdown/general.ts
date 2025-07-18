@@ -1,4 +1,13 @@
-import { SPACE, WIKI_OPEN, WIKI_CLOSE, PIPE } from '../../../constants/format';
+import {
+	SPACE,
+	WIKI_OPEN,
+	WIKI_CLOSE,
+	PIPE,
+	ZERO_SPACE,
+} from '../../../constants/format';
+import { NAV_BUTTONS_LINE } from './buttons';
+
+const blockSpliter = `\n---\n\n`.trim();
 
 export function cleanMarkdownFormatting(selection: string): string {
 	return selection
@@ -10,8 +19,16 @@ export function cleanMarkdownFormatting(selection: string): string {
 		.replaceAll('*', '');
 }
 
+export function addSpaceToRight(line: string): string {
+	return `${line}${ZERO_SPACE}`;
+}
+
+export function addSpaceToLeft(line: string): string {
+	return `${ZERO_SPACE}${line}`;
+}
+
 export function wrapWithSpaces(line: string): string {
-	return `${SPACE}${line}${SPACE}`;
+	return addSpaceToRight(addSpaceToLeft(line));
 }
 
 export const makeWikilinkMD = ({
@@ -41,3 +58,13 @@ export const getMenuItemRepr = ({
 export const formatMenuItemsMarkdown = (menuItems: string[]) => {
 	return menuItems.map((item) => wrapWithSpaces(item)).join('\n');
 };
+
+export const wrapInBlock = (s: string) => s.trim() + blockSpliter;
+
+export const WORKING_BUTTONS_BLOCK = `​\`BUTTON[go-back]\`  \`BUTTON[go-to-today]\`  \`BUTTON[go-to-global-root]\`  |  \`BUTTON[create-new-file-in-this-dir]\`  \`BUTTON[create-new-folder-in-this-dir]\`​ 
+
+---
+
+`;
+
+export const BUTTONS_BLOCK = WORKING_BUTTONS_BLOCK;

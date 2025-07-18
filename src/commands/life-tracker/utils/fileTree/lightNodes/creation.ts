@@ -184,12 +184,14 @@ const makeDailyLightNodeForYear = (
 				type: LightNodeType.Folder,
 				children: {},
 			};
+
 			monthFolder.children[dd] = dayFolder;
 
 			const maybeDayRoot = getMaybeRootName({
 				section,
 				pathParts: [yyyy, mm, dd],
 			});
+
 			if (!maybeDayRoot.error) {
 				const rootName = maybeDayRoot.data;
 				dayFolder.children[rootName] = {

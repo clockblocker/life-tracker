@@ -3,7 +3,8 @@ import { FileService } from '../../file-service';
 import { Aspect, LIFE_TRACKER } from '../../types/file-structure-atoms';
 
 import { makeProjectLightNode } from './utils/fileTree/lightNodes/creation';
-import { getAllFolderPathPartsFromLightNode } from './utils/fileTree/lightNodes/mappers';
+import { flattenLightNodeByType } from './utils/fileTree/lightNodes/mappers';
+import { BUTTONS_BLOCK } from './markdown/general';
 
 export default async function initProjectStructure(
 	vault: Vault,
@@ -24,11 +25,29 @@ export default async function initProjectStructure(
 		return;
 	}
 
-	const folderPathParts = getAllFolderPathPartsFromLightNode(lightNode, [
+	const flattenedTree = flattenLightNodeByType(lightNode);
+
+	const folderPathsParts = flattenedTree.Folder.map((parts) => [
 		LIFE_TRACKER,
+		...parts,
+	]);
+	const leafFilesPathsParts = flattenedTree.LeafFile.map((parts) => [
+		LIFE_TRACKER,
+		...parts,
+	]);
+	const rootFilesPathsParts = flattenedTree.LeafFile.map((parts) => [
+		LIFE_TRACKER,
+		...parts,
 	]);
 
-	console.log('folderPathParts', folderPathParts);
+	console.log(folderPathsParts);
+	console.log(rootFilesPathsParts);
 
-	fileService.createManyFolders(folderPathParts);
+	fileService.createManyFolders(folderPathsParts);
+	fileService.createManyFilesInExistingFolders(
+		leafFilesPathsParts.map((pathParts) => ({
+			pathParts,
+			content: BUTTONS_BLOCK,
+		}))
+	);
 }

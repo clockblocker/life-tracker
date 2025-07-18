@@ -135,7 +135,7 @@ export class FileService {
 		const errors: string[] = [];
 
 		for (const { pathParts, content = '' } of files) {
-			const path = makePathFromPathParts(pathParts);
+			const path = makePathFromPathParts(pathParts) + '.md';
 			try {
 				const existing = this.vault.getAbstractFileByPath(path);
 				if (existing instanceof TFile) {

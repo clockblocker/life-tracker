@@ -1,4 +1,6 @@
-export const SPACE = ' ' as const;
+export const SPACE = '\u2002' as const;
+export const ZERO_SPACE = '\u200B' as const;
+
 export const SPACE2 = `${SPACE}${SPACE}` as const;
 
 export const DASH = '-' as const;
